@@ -1,1 +1,1 @@
-# DBMS-Project-Desktop-App
+# DBMS-Project-Desktop-Application
