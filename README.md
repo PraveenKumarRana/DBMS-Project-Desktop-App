@@ -6,11 +6,11 @@ This project is based on **Electricity Distribution System in India**.
     - And after this the particular user it will be connected like (division officer, circle officer, customer, etc.)\
     - Be sure to run this file initially before running any python file.
 
-### /Server
+### /server
     - This folder contains all the different module related to the backend.
 
-### /Client
+### /client
     - This folder contains all the different module related to the frontend.
 
 ### main.py
-    - This will be responsible to connect the database and connect both frontend and backent.
+    - This will be responsible to connect the database and connect both frontend and backend.
