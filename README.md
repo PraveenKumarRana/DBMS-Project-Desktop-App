@@ -7,10 +7,10 @@ This project is based on **Electricity Distribution System in India**.
     - Be sure to run this file initially before running any python file.
 
 ### /Server
-    - This file contains all the different module related to the backend.
+    - This folder contains all the different module related to the backend.
 
 ### /Client
-    - This file contains all the different module related to the frontend.
+    - This folder contains all the different module related to the frontend.
 
 ### main.py
     - This will be responsible to connect the database and connect both frontend and backent.
