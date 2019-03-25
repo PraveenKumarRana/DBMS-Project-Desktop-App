@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
+#homepage
 import wx
 
 class OtherFrame(wx.Frame):
     """
     Class used for creating frames other than the main one
     """
- 
+
     def __init__(self, title, parent=None):
         wx.Frame.__init__(self, parent=parent, title=title)
         self.SetSize((800, 600))
         self.Show()
-        
+
 class Example(wx.Frame):
 
     def __init__(self, *args, **kw):
@@ -31,15 +31,15 @@ class Example(wx.Frame):
         dcButton.Bind(wx.EVT_BUTTON, self.OnClose)
         tcButton.Bind(wx.EVT_BUTTON, self.OnClose)
         ebButton.Bind(wx.EVT_BUTTON, self.eb)
-        
-        l1 = wx.StaticText(pnl, -1, "CustomerID",pos=(310,40)) 
+
+        l1 = wx.StaticText(pnl, -1, "CustomerID",pos=(310,40))
         self.t1 = wx.TextCtrl(pnl,pos=(400,30),size=(200,40))
-        l1 = wx.StaticText(pnl, -1, "Password",pos=(310,90))  
-	self.t2 = wx.TextCtrl(pnl,style = wx.TE_PASSWORD,pos=(400,80),size=(200,40)) 
+        l1 = wx.StaticText(pnl, -1, "Password",pos=(310,90))
+	self.t2 = wx.TextCtrl(pnl,style = wx.TE_PASSWORD,pos=(400,80),size=(200,40))
 	loginButton = wx.Button(pnl, label='Login', pos=(515, 130))
 	loginButton.Bind(wx.EVT_BUTTON, self.OnClose)
-        
-        
+
+
         self.SetSize((800, 600))
         self.SetTitle('wx.Button')
         self.Centre()
@@ -48,8 +48,8 @@ class Example(wx.Frame):
     	title = 'ELECTRICITY BOARD'
         frame = OtherFrame(title=title)
         self.Hide()
-    	
-    	
+
+
     def OnClose(self,e):
 
         self.Close(True)
@@ -64,5 +64,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()  
-
+    main()
