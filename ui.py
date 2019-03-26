@@ -20,7 +20,7 @@ class OtherFrame(wx.Frame):
         self.Show()
 class ebPanel(wx.Panel):
     def __init__(self, parent):
-        wx.Panel.__init__(self, parent,pos,size)
+        wx.Panel.__init__(self, parent,pos=(800,800),size=(800,600))
         self.SetBackgroundColour("blue")
         self.Centre(self)
         #eb_back = wx.Button(self, label='Back')
