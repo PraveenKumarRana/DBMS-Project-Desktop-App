@@ -2,61 +2,63 @@
 # -*- coding: utf-8 -*-
 
 import wx
-'''
-class OtherFrame(wx.Frame):
-    """
-    Class used for creating frames other than the main one
-    """
-
-    def __init__(self, title, parent=None):
-        wx.Frame.__init__(self, parent=parent, title=title)
-        self.SetSize((800, 600))
-        self.Show()
-'''        
-class PanelTwo(wx.Panel):
+w=0
+h=0
+class NewPanel(wx.Panel):
     
     def __init__(self, parent):
         """Constructor"""
-        wx.Panel.__init__(self, parent=parent,size = (800,600),pos=(0,0))
-        ebButton = wx.Button(self, label='Electricity Board', pos=(40, 180),size=(200,40))
-    	l1 = wx.StaticText(self, -1, "CustomerID",pos=(310,40)) 
+        wx.Panel.__init__(self, parent=parent,size=(w,h),pos=(0,0))
+        
 
-class Example(wx.Frame):
+class MainWindow(wx.Frame):
 
-    def __init__(self, *args, **kw):
-        super(Example, self).__init__(*args, **kw)
+    def __init__(self, parent):
+        wx.Frame.__init__(self, parent=None,style=wx.DEFAULT_FRAME_STYLE & ~(wx.RESIZE_BORDER | wx.MAXIMIZE_BOX))
         self.InitUI()
 
     def InitUI(self):
 
-        self.panel1 = wx.Panel(self)
-        pcButton = wx.Button(self.panel1, label='Power Company', pos=(40, 30),size=(200,40))
-        dcButton = wx.Button(self.panel1, label='Distribution Company', pos=(40, 80),size=(200,40))
-        tcButton = wx.Button(self.panel1, label='Transmission Company', pos=(40, 130),size=(200,40))
-        ebButton = wx.Button(self.panel1, label='Electricity Board', pos=(40, 180),size=(200,40))
+        global w,h
+        self.homepnl = wx.Panel(self)
+        pcButton = wx.Button(self.homepnl, label='Power Company', pos=(40, 30),size=(200,40))
+        dcButton = wx.Button(self.homepnl, label='Distribution Company', pos=(40, 80),size=(200,40))
+        tcButton = wx.Button(self.homepnl, label='Transmission Company', pos=(40, 130),size=(200,40))
+        ebButton = wx.Button(self.homepnl, label='Electricity Board', pos=(40, 180),size=(200,40))
         pcButton.Bind(wx.EVT_BUTTON, self.OnClose)
         dcButton.Bind(wx.EVT_BUTTON, self.OnClose)
         tcButton.Bind(wx.EVT_BUTTON, self.OnClose)
         ebButton.Bind(wx.EVT_BUTTON, self.eb)
         
-        l1 = wx.StaticText(self.panel1, -1, "CustomerID",pos=(310,40)) 
-        self.t1 = wx.TextCtrl(self.panel1,pos=(400,30),size=(200,40))
-        l1 = wx.StaticText(self.panel1, -1, "Password",pos=(310,90))
-        self.t2 = wx.TextCtrl(self.panel1,style = wx.TE_PASSWORD,pos=(400,80),size=(200,40))
-        loginButton = wx.Button(self.panel1, label='Login', pos=(515, 130))
+        l1 = wx.StaticText(self.homepnl, -1, "CustomerID",pos=(310,40)) 
+        self.t1 = wx.TextCtrl(self.homepnl,pos=(400,30),size=(200,40))
+        l1 = wx.StaticText(self.homepnl, -1, "Password",pos=(310,90))
+        self.t2 = wx.TextCtrl(self.homepnl,style = wx.TE_PASSWORD,pos=(400,80),size=(200,40))
+        loginButton = wx.Button(self.homepnl, label='Login', pos=(515, 130))
         loginButton.Bind(wx.EVT_BUTTON, self.OnClose)
-        
-        
-        self.SetSize((800, 600))
+        w,h=wx.GetDisplaySize()
+        self.SetSize((w,h))
         self.SetTitle('Power Distribution System')
         self.Centre()
 
     def eb(self,e):
-    	self.panel1.Hide()
+    	self.homepnl.Hide()
+    	self.previousTitle=self.GetTitle()
     	self.SetTitle("Electricity Board")
-        self.panel2= PanelTwo(self)
-        #self.panel2.SetBackgroundColour("blue")
-        self.panel2.Show()
+        self.ebpnl= NewPanel(self)
+        ebButton = wx.Button(self.ebpnl, label='Back', pos=(10, 10))
+        self.p1=self.ebpnl
+        self.p2=self.homepnl
+    	ebButton.Bind(wx.EVT_BUTTON, self.back)
+    	#l1 = wx.StaticText(self, -1, "CustomerID",pos=(310,40)) 
+        self.ebpnl.SetBackgroundColour("blue")
+        self.ebpnl.Show()
+        
+    def back(self,e):
+    	self.p1.Hide()
+    	self.p2.Show()
+    	self.SetTitle(self.previousTitle)
+    	
         
         
         
@@ -69,10 +71,11 @@ class Example(wx.Frame):
 def main():
 
     app = wx.App()
-    ex = Example(None)
+    ex = MainWindow(None)
     ex.Show()
     app.MainLoop()
 
 
 if __name__ == '__main__':
-    main()
+    main()  
+
