@@ -7,7 +7,7 @@ class OtherFrame(wx.Frame):
     """
     Class used for creating frames other than the main one
     """
- 
+
     def __init__(self, title, parent=None):
         wx.Frame.__init__(self, parent=parent, title=title)
         self.SetSize((800, 600))
@@ -75,5 +75,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()  
-
+    main()
