@@ -1,7 +1,7 @@
-drop database project;
-create database project;
+drop database eds;
+create database eds;
 
-use project;
+use eds;
 
 
 create table employee(eid int primary key,ename varchar(50),doj date,dob date,dept varchar(50),age int,boardname varchar(50),degignation varchar(50),phone int);
