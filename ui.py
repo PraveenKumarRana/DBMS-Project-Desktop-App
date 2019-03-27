@@ -49,6 +49,8 @@ class MainWindow(wx.Frame):
         loginButton.Bind(wx.EVT_BUTTON, self.OnClose)
         w,h=wx.GetDisplaySize()
         self.SetSize((w,h))
+        self.SetMaxSize((w,h))
+        self.SetMinSize((w,h))
         self.SetTitle('Power Distribution System')
         self.Centre()
 
