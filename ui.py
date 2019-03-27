@@ -4,7 +4,6 @@
 import wx
 w=0
 h=0
-g=2
 class NewPanel(wx.Panel):
 
     def __init__(self, parent):
