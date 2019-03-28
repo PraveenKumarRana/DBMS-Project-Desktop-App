@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import MySQLdb as mdb
-con = mdb.connect('localhost', 'root', 'mohd', 'eds')
+con = mdb.connect('localhost', 'root', 'Chennai1234$', 'eds')
 import wx
 w=0
 h=0
@@ -47,15 +47,16 @@ class MainWindow(wx.Frame):
         ebButton.Bind(wx.EVT_BUTTON, self.eb)
 
         l1 = wx.StaticText(self.homepnl, -1, "Customer ID : ",pos=(510,40))
-        self.t1 = wx.TextCtrl(self.homepnl,pos=(610,30),size=(200,40))
+        self.t1 = wx.TextCtrl(self.homepnl,style= wx.TE_PROCESS_ENTER,pos=(610,30),size=(200,40))
         l1 = wx.StaticText(self.homepnl, -1, "Password    : ",pos=(510,90))
         self.t2 = wx.TextCtrl(self.homepnl,style = wx.TE_PASSWORD|wx.TE_PROCESS_ENTER,pos=(610,80),size=(200,40))
+        self.t1.Bind(wx.EVT_TEXT_ENTER,self.Login)
         self.t2.Bind(wx.EVT_TEXT_ENTER,self.Login)
         self.errormsg = wx.StaticText(self.homepnl, -1, " ",pos=(610,140))
         loginButton = wx.Button(self.homepnl, label='Log In', pos=(715, 170))
         loginButton.Bind(wx.EVT_BUTTON, self.Login)
-
-
+        NacButton = wx.Button(self.homepnl, label='Not a Consumer', pos=(515, 170))
+        NacButton.Bind(wx.EVT_BUTTON, self.EmpLogin)
         w,h=wx.GetDisplaySize()
         self.SetSize((w,h))
         self.SetMaxSize((w,h))
@@ -112,6 +113,28 @@ class MainWindow(wx.Frame):
     	BackButton.Bind(wx.EVT_BUTTON,self.back)
     	self.tcpnl.Show()
 
+    def EmpLogin(self,e):
+        self.homepnl.Hide()
+        self.previousTitle=self.GetTitle()
+    	self.SetTitle("Employee Login")
+        self.emplpnl=NewPanel(self)
+        l1 = wx.StaticText(self.emplpnl, -1, "  Employee ID : ",pos=(510,40))
+        self.t1 = wx.TextCtrl(self.emplpnl,style= wx.TE_PROCESS_ENTER,pos=(610,30),size=(200,40))
+        l1 = wx.StaticText(self.emplpnl, -1, "Password    : ",pos=(510,90))
+        self.t2 = wx.TextCtrl(self.emplpnl,style = wx.TE_PASSWORD|wx.TE_PROCESS_ENTER,pos=(610,80),size=(200,40))
+        self.t1.Bind(wx.EVT_TEXT_ENTER,self.Login)
+        self.t2.Bind(wx.EVT_TEXT_ENTER,self.Login)
+        self.errormsg = wx.StaticText(self.emplpnl, -1, " ",pos=(610,140))
+        loginButton = wx.Button(self.emplpnl, label='Log In', pos=(715, 170))
+        loginButton.Bind(wx.EVT_BUTTON, self.Login)
+
+
+        BackButton = wx.Button(self.emplpnl, label='Back', pos=(60, 420),size=(100,40))
+    	self.p1=self.emplpnl
+    	self.p2=self.homepnl
+    	BackButton.Bind(wx.EVT_BUTTON,self.back)
+    	self.emplpnl.Show()
+
     def UserProfile(self,e):
     	self.custpnl.Hide()
         self.previousTitle=self.GetTitle()
@@ -153,6 +176,18 @@ class MainWindow(wx.Frame):
             self.errormsg.SetForegroundColour((255,0,0))
             self.errormsg.SetLabel("Wrong Customer ID or Password!!")
 
+    def EmpLogin(self,e):
+        if(self.t1.GetValue()):
+            cur.execute("select password from employee where eid=%s",(self.t1.GetValue(),))
+            rows = cur.fetchall()
+            if(len(rows)!=0 and self.t2.GetValue()==rows[0][0]):
+                self.Customer(self)
+            else:
+                self.errormsg.SetForegroundColour((255,0,0))
+                self.errormsg.SetLabel("Wrong Employee ID or Password!!")
+        else:
+            self.errormsg.SetForegroundColour((255,0,0))
+            self.errormsg.SetLabel("Wrong Employee ID or Password!!")
 
     def Customer(self,e):
         self.homepnl.Hide()
