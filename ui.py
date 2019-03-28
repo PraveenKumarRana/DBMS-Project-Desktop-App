@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import MySQLdb as mdb
-con = mdb.connect('localhost', 'root', 'mohd', 'eds')
+con = mdb.connect('localhost', 'root', 'Chennai1234$', 'eds')
 import wx
 w=0
 h=0
@@ -124,7 +124,6 @@ class MainWindow(wx.Frame):
     	#self.uppnl.SetBackgroundColour("blue")
     	self.uppnl.Show()
 
-    
     def Login(self,e):
         cur.execute("select password from consumer where cid=%s",(self.t1.GetValue(),))
         rows = cur.fetchall()
