@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import MySQLdb as mdb
-con = mdb.connect('localhost', 'admin', 'admin', 'eds')
 import wx
 import MySQLdb as mdb
 con = mdb.connect('localhost', 'admin', 'admin', 'eds')
@@ -76,11 +74,11 @@ class MainWindow(wx.Frame):
         self.p2=self.homepnl
     	ebButton.Bind(wx.EVT_BUTTON, self.back)
         #l1 = wx.StaticText(self.ebpnl, -1,"hello",pos=(10,10))
-        with con:
-            cur = con.cursor(mdb.cursors.DictCursor)
-            cur.execute("SELECT * FROM electricityboard limit 4")
-            rows = cur.fetchall()
-            desc = cur.description
+
+        cur = con.cursor(mdb.cursors.DictCursor)
+        cur.execute("SELECT * FROM electricityboard limit 4")
+        rows = cur.fetchall()
+        desc = cur.description
 
         wx.StaticText(self.ebpnl, -1,"Board Name",pos=(70,50))
         wx.StaticText(self.ebpnl, -1,"No. of Consumer",pos=(270,50))
@@ -99,14 +97,6 @@ class MainWindow(wx.Frame):
             wx.StaticText(self.ebpnl, -1,str(row[desc[4][0]]),pos=(600,i))
 
             i=i+30
-
-
-
-
-
-
-
-
 
 
         self.ebpnl.Show()
@@ -177,7 +167,7 @@ class MainWindow(wx.Frame):
         self.previousTitle=self.GetTitle()
     	self.SetTitle("Profile")
         self.uppnl=NewPanel(self)
-        cur.execute("select cid,cname,phone,email,address from consumer where cid=%s",(self.t1.GetValue(),))
+        noadd=cur.execute("select cid,cname,phone,email,address,city,state from consumer where cid=%s",(self.t1.GetValue(),))
         rows=cur.fetchall()
         phone=str(rows[0][2])
         custid=str(rows[0][0])
@@ -187,12 +177,13 @@ class MainWindow(wx.Frame):
         l3 = wx.StaticText(self.uppnl, -1, "Name        :   "+rows[0][1],pos=(610,270),size=(1000,1000))
         l4 = wx.StaticText(self.uppnl, -1, "Phone Number:   "+phone,pos=(610,370),size=(1000,1000))
         l5 = wx.StaticText(self.uppnl, -1, "Email ID    :   "+rows[0][3],pos=(610,470),size=(1000,1000))
-        l6 = wx.StaticText(self.uppnl, -1, "Address     :   "+rows[0][4],pos=(610,570),size=(1000,1000))
-        l2.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
-        l3.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
-        l4.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
-        l5.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
-        l6.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
+        print noadd
+        for i in range(0,noadd):
+            l6 = wx.StaticText(self.uppnl, -1, "Address "+str(i+1)+"  :   "+rows[i][4]+", "+rows[i][5]+", "+rows[i][6],pos=(610,570+(i)*100),size=(1000,1000))
+
+
+        #l2.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
+
         BackButton = wx.Button(self.uppnl, label='Back', pos=(60, 420),size=(100,40))
     	self.p1=self.uppnl
     	self.p2=self.custpnl
@@ -240,7 +231,7 @@ class MainWindow(wx.Frame):
 
         cur.execute("select * from consumer where cid=%s",(self.t1.GetValue(),))
         rows_cust=cur.fetchall()
-        print rows_cust.count(self)
+        #print rows_cust.count(self)
         l1 = wx.StaticText(self.custpnl, -1, "Name",pos=(310,40))
         l1 = wx.StaticText(self.custpnl, -1, "Customer ID",pos=(310,70))
     	self.custpnl.Show()
