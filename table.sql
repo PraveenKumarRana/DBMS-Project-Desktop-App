@@ -19,7 +19,7 @@ insert into employee values
 	(7001,	'Amar kumar',		'2012-08-11',	'2000-11-06',	'dept',	18,	'boardname',	'designation',	844667,	'password'),
 	(7002,	'firoz mohammad',	'2010-10-08',	'1999-12-06',	'dept',	19,	'boardname',	'designation',	129748,	'password'),
 	(7003,	'saumya prakash',	'2013-12-03',	'1998-06-10',	'dept',	21,	'boardname',	'designation',	729733,	'password'),
-	(7004,	'vaibhav singhal',	'2015-07-19',	'1999-03-23',	'dept',	20,	'boardname',	'designation',	264856,	'password'),
+	(7004,	'vaibhav singhal',	'2015-09-07',	'1999-03-23',	'dept',	20,	'boardname',	'designation',	264856,	'password'),
 	(7005,	'Praveen Rana',		'2012-03-05',	'1998-12-12',	'dept',	20,	'boardname',	'designation',	197835,	'password');
 
 insert into consumer values
