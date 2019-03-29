@@ -42,10 +42,10 @@ insert into powercompany values
 	(3005,	'GPGCL',	'type',	47943,	'Haryana');
 insert into transmissioncompany values
 	(4001,	'APTransco',	2001,	500,	'Andhra Pradesh',	5),
-	(4002,	'AEGCL SLDC',	2002,	700,	'Assam',		8),
-	(4003,	'SLDC Delhi',	2003,	300,	'Delhi',		3),
-	(4004,	'GETCO',	2004,	800,	'Gujarat',		6),
-	(4005,	'HVPNL',	2005,	400,	'Haryana',		9);
+	(4002,	'AEGCL SLDC',	2002,	700,	'Assam',			8),
+	(4003,	'SLDC Delhi',	2003,	300,	'Delhi',			3),
+	(4004,	'GETCO',		2004,	800,	'Gujarat',			6),
+	(4005,	'HVPNL',		2005,	400,	'Haryana',			9);
 insert into circles values
 	('cname',	'Delhi',			201,	2001),
 	('cname',	'Gujarat',			202,	2002),
@@ -62,14 +62,14 @@ insert into subdivision values
 	(6001,	5001,	'Akshay',	'Delhi',			'sdivname'),
 	(6002,	5002,	'Ranjan',	'Assam',			'sdivname'),
 	(6003,	5003,	'Manish',	'Haryana',			'sdivname'),
-	(6004,	5004,	'Prateek',	'Andhra Pradesh',		'sdivname'),
+	(6004,	5004,	'Prateek',	'Andhra Pradesh',	'sdivname'),
 	(6005,	5005,	'Anurag',	'Gujarat',			'sdivname');
 insert into electricityboard values
 	('ASEC',	250000,	'Assam',		301,	2500),
 	('DVB',		400000,	'Delhi',		302,	3200),
 	('GUVN',	610000,	'Gujarat',		303,	4000),
 	('HPGC',	120000,	'Haryana',		304,	1600),
-	('JSEB',	320000,	'Jharkhand',		305,	5600);
+	('JSEB',	320000,	'Jharkhand',	305,	5600);
 insert into billinginfo values
 	(10001,	8001,	'2017-12-20',	165,	101,	180,	12,	'type',	2),
 	(10002,	8002,	'2018-06-15',	200,	102,	250,	16,	'type',	6),
