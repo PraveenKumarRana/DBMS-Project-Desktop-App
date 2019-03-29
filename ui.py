@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import MySQLdb as mdb
-con = mdb.connect('localhost', 'root', 'mohd', 'eds')
+con = mdb.connect('localhost', 'admin', 'admin', 'eds')
 import wx
+import MySQLdb as mdb
+con = mdb.connect('localhost', 'admin', 'admin', 'eds')
 w=0
 h=0
 with con:
@@ -69,10 +71,44 @@ class MainWindow(wx.Frame):
     	self.previousTitle=self.GetTitle()
     	self.SetTitle("Electricity Board")
         self.ebpnl= NewPanel(self)
-        ebButton = wx.Button(self.ebpnl, label='Back', pos=(10, 10))
+        ebButton = wx.Button(self.ebpnl, label='Back', pos=(1000, 10))
         self.p1=self.ebpnl
         self.p2=self.homepnl
     	ebButton.Bind(wx.EVT_BUTTON, self.back)
+        #l1 = wx.StaticText(self.ebpnl, -1,"hello",pos=(10,10))
+        with con:
+            cur = con.cursor(mdb.cursors.DictCursor)
+            cur.execute("SELECT * FROM electricityboard limit 4")
+            rows = cur.fetchall()
+            desc = cur.description
+
+        wx.StaticText(self.ebpnl, -1,"Board Name",pos=(70,50))
+        wx.StaticText(self.ebpnl, -1,"No. of Consumer",pos=(270,50))
+        wx.StaticText(self.ebpnl, -1,"State",pos=(470,50))
+        wx.StaticText(self.ebpnl, -1,"Power Consumed",pos=(600,50))
+        dc = wx.ClientDC(self)
+        dc.DrawLine(50, 60, 190, 60)
+
+        #print "%s %s %s %s %s" % (desc[0][0], desc[1][0],desc[2][0],desc[3][0],desc[4][0])
+        i=100
+        for row in rows:
+            #txt = row[desc[0][0]], row[desc[1][0]], row[desc[2][0]],row[desc[3][0]],row[desc[4][0]]
+            wx.StaticText(self.ebpnl, -1,row[desc[0][0]],pos=(80,i))
+            wx.StaticText(self.ebpnl, -1,str(row[desc[1][0]]),pos=(270,i))
+            wx.StaticText(self.ebpnl, -1,row[desc[2][0]],pos=(470,i))
+            wx.StaticText(self.ebpnl, -1,str(row[desc[4][0]]),pos=(600,i))
+
+            i=i+30
+
+
+
+
+
+
+
+
+
+
         self.ebpnl.Show()
 
     def back(self,e):
@@ -90,6 +126,7 @@ class MainWindow(wx.Frame):
     	self.p2=self.homepnl
     	BackButton.Bind(wx.EVT_BUTTON,self.back)
     	self.pcpnl.Show()
+
 
     def dc(self,e):
         self.homepnl.Hide()
@@ -200,6 +237,10 @@ class MainWindow(wx.Frame):
         ProfileButton = wx.Button(self.custpnl, label='Hi '+rows[0][0], pos=(1120, 0))
     	LogoutButton.Bind(wx.EVT_BUTTON,self.Logout)
         ProfileButton.Bind(wx.EVT_BUTTON,self.UserProfile)
+
+        cur.execute("select * from consumer where cid=%s",(self.t1.GetValue(),))
+        rows_cust=cur.fetchall()
+        print rows_cust.count(self)
         l1 = wx.StaticText(self.custpnl, -1, "Name",pos=(310,40))
         l1 = wx.StaticText(self.custpnl, -1, "Customer ID",pos=(310,70))
     	self.custpnl.Show()
