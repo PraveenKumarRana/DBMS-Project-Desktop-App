@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import MySQLdb as mdb
-con = mdb.connect('localhost', 'admin', 'admin', 'eds')
+
 import wx
 import MySQLdb as mdb
 con = mdb.connect('localhost', 'admin', 'admin', 'eds')
@@ -14,7 +13,16 @@ class NewPanel(wx.Panel):
     def __init__(self, parent):
         """Constructor"""
         wx.Panel.__init__(self, parent=parent,size=(w,h),pos=(0,0))
+class upperNewPanel(wx.Panel):
 
+    def __init__(self, parent):
+        """Constructor"""
+        wx.Panel.__init__(self, parent=parent,size=(w,165),pos=(0,0))
+class lowerNewPanel(wx.Panel):
+
+    def __init__(self, parent):
+        """Constructor"""
+        wx.Panel.__init__(self, parent=parent,size=(w,h-100),pos=(0,100))
 
 class MainWindow(wx.Frame):
 
@@ -70,46 +78,90 @@ class MainWindow(wx.Frame):
     	self.homepnl.Hide()
     	self.previousTitle=self.GetTitle()
     	self.SetTitle("Electricity Board")
-        self.ebpnl= NewPanel(self)
-        ebButton = wx.Button(self.ebpnl, label='Back', pos=(1000, 10))
-        self.p1=self.ebpnl
+        self.upnl= upperNewPanel(self)
+        self.lpnl=lowerNewPanel(self)
+        ebButton = wx.Button(self.upnl, label='Back', pos=(1000, 10))
+        self.p1=self.upnl
         self.p2=self.homepnl
     	ebButton.Bind(wx.EVT_BUTTON, self.back)
         #l1 = wx.StaticText(self.ebpnl, -1,"hello",pos=(10,10))
-        with con:
+
+
+
+        self.t1 = wx.TextCtrl(self.upnl,style= wx.TE_PROCESS_ENTER,pos=(610,50),size=(200,40))
+        self.t1.Bind(wx.EVT_TEXT_ENTER,self.ebStateSearch)
+        self.lpnl.Show()
+        if(self.t1.GetValue()==""):
             cur = con.cursor(mdb.cursors.DictCursor)
-            cur.execute("SELECT * FROM electricityboard limit 4")
+            cur.execute("SELECT * FROM electricityboard ")
             rows = cur.fetchall()
             desc = cur.description
 
-        wx.StaticText(self.ebpnl, -1,"Board Name",pos=(70,50))
-        wx.StaticText(self.ebpnl, -1,"No. of Consumer",pos=(270,50))
-        wx.StaticText(self.ebpnl, -1,"State",pos=(470,50))
-        wx.StaticText(self.ebpnl, -1,"Power Consumed",pos=(600,50))
-        dc = wx.ClientDC(self)
-        dc.DrawLine(50, 60, 190, 60)
+            wx.StaticText(self.upnl, -1,"Board Name",pos=(70,100))
+            wx.StaticText(self.upnl, -1,"No. of Consumer",pos=(270,100))
+            wx.StaticText(self.upnl, -1,"State",pos=(470,100))
+            wx.StaticText(self.upnl, -1,"Power Consumed",pos=(600,100))
+            dc = wx.ClientDC(self)
+            dc.DrawLine(50, 60, 190, 60)
 
-        #print "%s %s %s %s %s" % (desc[0][0], desc[1][0],desc[2][0],desc[3][0],desc[4][0])
-        i=100
-        for row in rows:
-            #txt = row[desc[0][0]], row[desc[1][0]], row[desc[2][0]],row[desc[3][0]],row[desc[4][0]]
-            wx.StaticText(self.ebpnl, -1,row[desc[0][0]],pos=(80,i))
-            wx.StaticText(self.ebpnl, -1,str(row[desc[1][0]]),pos=(270,i))
-            wx.StaticText(self.ebpnl, -1,row[desc[2][0]],pos=(470,i))
-            wx.StaticText(self.ebpnl, -1,str(row[desc[4][0]]),pos=(600,i))
+            #print "%s %s %s %s %s" % (desc[0][0], desc[1][0],desc[2][0],desc[3][0],desc[4][0])
+            i=140
+            for row in rows:
+                #txt = row[desc[0][0]], row[desc[1][0]], row[desc[2][0]],row[desc[3][0]],row[desc[4][0]]
+                wx.StaticText(self.lpnl, -1,row[desc[0][0]],pos=(80,i))
+                wx.StaticText(self.lpnl, -1,str(row[desc[1][0]]),pos=(270,i))
+                wx.StaticText(self.lpnl, -1,row[desc[2][0]],pos=(470,i))
+                wx.StaticText(self.lpnl, -1,str(row[desc[4][0]]),pos=(600,i))
 
-            i=i+30
-
-
+                i=i+30
 
 
 
+    def ebStateSearch(self,e):
+        if(self.t1.GetValue()):
+            self.lpnl.Hide()
+
+            lpnl=lowerNewPanel(self)
+
+            #lpnl.SetBackgroundColour("grey")
+            lpnl.Show()
+            print self.t1.GetValue()
+            cur = con.cursor(mdb.cursors.DictCursor)
+            cur.execute("SELECT * FROM electricityboard where state=%s",(self.t1.GetValue(),))
+            rows = cur.fetchall()
+            desc = cur.description
+
+            #wx.StaticText(lpnl, -1,"Board Name",pos=(70,100))
+            #wx.StaticText(lpnl, -1,"No. of Consumer",pos=(270,100))
+            #wx.StaticText(lpnl, -1,"State",pos=(470,100))
+            #wx.StaticText(lpnl, -1,"Power Consumed",pos=(600,100))
+            dc = wx.ClientDC(self)
+            dc.DrawLine(50, 60, 190, 60)
+
+            #print "%s %s %s %s %s" % (desc[0][0], desc[1][0],desc[2][0],desc[3][0],desc[4][0])
+            i=140
+            for row in rows:
+                #txt = row[desc[0][0]], row[desc[1][0]], row[desc[2][0]],row[desc[3][0]],row[desc[4][0]]
+                wx.StaticText(lpnl, -1,row[desc[0][0]],pos=(80,i))
+                wx.StaticText(lpnl, -1,str(row[desc[1][0]]),pos=(270,i))
+                wx.StaticText(lpnl, -1,row[desc[2][0]],pos=(470,i))
+                wx.StaticText(lpnl, -1,str(row[desc[4][0]]),pos=(600,i))
+
+                i=i+30
+        else:
+            self.errormsg = wx.StaticText(lpnl, -1, " ",pos=(610,140))
+            self.errormsg.SetForegroundColour((255,0,0))
+            self.errormsg.SetLabel("Can't be empty!")
 
 
 
 
 
-        self.ebpnl.Show()
+
+
+
+
+        #self.ebpnl.Show()
 
     def back(self,e):
     	self.p1.Hide()
@@ -177,7 +229,7 @@ class MainWindow(wx.Frame):
         self.previousTitle=self.GetTitle()
     	self.SetTitle("Profile")
         self.uppnl=NewPanel(self)
-        cur.execute("select cid,cname,phone,email,address from consumer where cid=%s",(self.t1.GetValue(),))
+        cur.execute("select cid,cname,phone from consumer where cid=%s",(self.t1.GetValue(),))
         rows=cur.fetchall()
         phone=str(rows[0][2])
         custid=str(rows[0][0])
@@ -186,8 +238,8 @@ class MainWindow(wx.Frame):
         l2 = wx.StaticText(self.uppnl, -1, "Consumer ID :   "+custid,pos=(610,170),size=(1000,1000))
         l3 = wx.StaticText(self.uppnl, -1, "Name        :   "+rows[0][1],pos=(610,270),size=(1000,1000))
         l4 = wx.StaticText(self.uppnl, -1, "Phone Number:   "+phone,pos=(610,370),size=(1000,1000))
-        l5 = wx.StaticText(self.uppnl, -1, "Email ID    :   "+rows[0][3],pos=(610,470),size=(1000,1000))
-        l6 = wx.StaticText(self.uppnl, -1, "Address     :   "+rows[0][4],pos=(610,570),size=(1000,1000))
+        l5 = wx.StaticText(self.uppnl, -1, "Email ID    :   ",pos=(610,470),size=(1000,1000))
+        l6 = wx.StaticText(self.uppnl, -1, "Address     :   ",pos=(610,570),size=(1000,1000))
         l2.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
         l3.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
         l4.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
@@ -237,10 +289,6 @@ class MainWindow(wx.Frame):
         ProfileButton = wx.Button(self.custpnl, label='Hi '+rows[0][0], pos=(1120, 0))
     	LogoutButton.Bind(wx.EVT_BUTTON,self.Logout)
         ProfileButton.Bind(wx.EVT_BUTTON,self.UserProfile)
-
-        cur.execute("select * from consumer where cid=%s",(self.t1.GetValue(),))
-        rows_cust=cur.fetchall()
-        print rows_cust.count(self)
         l1 = wx.StaticText(self.custpnl, -1, "Name",pos=(310,40))
         l1 = wx.StaticText(self.custpnl, -1, "Customer ID",pos=(310,70))
     	self.custpnl.Show()
