@@ -200,6 +200,10 @@ class MainWindow(wx.Frame):
         ProfileButton = wx.Button(self.custpnl, label='Hi '+rows[0][0], pos=(1120, 0))
     	LogoutButton.Bind(wx.EVT_BUTTON,self.Logout)
         ProfileButton.Bind(wx.EVT_BUTTON,self.UserProfile)
+
+        cur.execute("select * from consumer where cid=%s",(self.t1.GetValue(),))
+        rows_cust=cur.fetchall()
+        print rows_cust.count(self)
         l1 = wx.StaticText(self.custpnl, -1, "Name",pos=(310,40))
         l1 = wx.StaticText(self.custpnl, -1, "Customer ID",pos=(310,70))
     	self.custpnl.Show()
