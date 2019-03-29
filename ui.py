@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import wx
-import wx.lib.scrolledpanel
+import wx.lib.scrolledpanel as scrolled
 import MySQLdb as mdb
 con = mdb.connect('localhost', 'admin', 'admin', 'eds')
 w=0
@@ -301,10 +301,6 @@ class MainWindow(wx.Frame):
     	self.SetTitle("User")
         self.custpnl=NewPanel(self)
 
-        #self.scrolled_panel = scrolled.ScrolledPanel(self.panel, -1,style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER, name="custpnl")
-        #self.scrolled_panel.SetAutoLayout(1)
-        #self.scrolled_panel.SetupScrolling()
-
         LogoutButton = wx.Button(self.custpnl, label='Logout', pos=(1270, 0),size=(80,30))
         cur.execute("select cname from consumer where cid=%s",(self.t1.GetValue(),))
         rows=cur.fetchall()
@@ -317,7 +313,7 @@ class MainWindow(wx.Frame):
         for i in range(0,no_of_meter):
             cur.execute("select * from billinginfo where meterno=%s",(rows_cust[i][8],))
             rows_cust_bill=cur.fetchall()
-            l0 = wx.StaticText(self.custpnl, -1, str(rows_cust[i][3]),pos=(200,0),size=(1000,1000),style=wx.ALIGN_CENTER)
+            l0 = wx.StaticText(self.custpnl, -1, str(rows_cust[i][3]),pos=(200,0+i*400),size=(1000,1000),style=wx.ALIGN_CENTER)
             l0.SetFont(wx.Font(23, wx.MODERN, wx.NORMAL, wx.BOLD))
             l1 = wx.StaticText(self.custpnl, -1, "Customer Id :     "+str(rows_cust[i][0]),pos=(100,100+i*400),size=(1000,1000))
             l2 = wx.StaticText(self.custpnl, -1, "Name        :     "+rows_cust[i][1],pos=(100,160+i*400),size=(1000,1000))
