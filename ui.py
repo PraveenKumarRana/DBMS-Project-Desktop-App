@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
+import MySQLdb as mdb
+con = mdb.connect('localhost', 'root', 'mohd', 'eds')
 import wx
 w=0
 h=0
+with con:
+    cur=con.cursor()
 class NewPanel(wx.Panel):
 
     def __init__(self, parent):
@@ -36,6 +39,8 @@ class MainWindow(wx.Frame):
         dcButton = wx.Button(self.homepnl, label='Distribution Company', pos=(40, 80),size=(200,40))
         tcButton = wx.Button(self.homepnl, label='Transmission Company', pos=(40, 130),size=(200,40))
         ebButton = wx.Button(self.homepnl, label='Electricity Board', pos=(40, 180),size=(200,40))
+        loginButton = wx.Button(self.homepnl, label='Login', pos=(515, 130))
+
         pcButton.Bind(wx.EVT_BUTTON, self.pc)
         dcButton.Bind(wx.EVT_BUTTON, self.dc)
         tcButton.Bind(wx.EVT_BUTTON, self.tc)
@@ -45,8 +50,8 @@ class MainWindow(wx.Frame):
         self.t1 = wx.TextCtrl(self.homepnl,pos=(400,30),size=(200,40))
         l1 = wx.StaticText(self.homepnl, -1, "Password",pos=(310,90))
         self.t2 = wx.TextCtrl(self.homepnl,style = wx.TE_PASSWORD,pos=(400,80),size=(200,40))
-        loginButton = wx.Button(self.homepnl, label='Login', pos=(515, 130))
-        loginButton.Bind(wx.EVT_BUTTON, self.OnClose)
+        loginButton.Bind(wx.EVT_BUTTON, self.Login)
+
         w,h=wx.GetDisplaySize()
         self.SetSize((w,h))
         self.SetMaxSize((w,h))
@@ -103,12 +108,37 @@ class MainWindow(wx.Frame):
     	BackButton.Bind(wx.EVT_BUTTON,self.back)
     	self.tcpnl.Show()
 
+    def Login(self,e):
+        cur.execute("select password from consumer where cid=%s",(self.t1.GetValue(),))
+        rows = cur.fetchall()
+        if(self.t2.GetValue()==rows[0][0]):
+            self.Customer(self)
+        else:
+            print 'Login Failed !!'
 
+    def Customer(self,e):
+        self.homepnl.Hide()
+        self.previousTitle=self.GetTitle()
+    	self.SetTitle("User")
+        self.custpnl=NewPanel(self)
+        LogoutButton = wx.Button(self.custpnl, label='Logout', pos=(1270, 0),size=(80,30))
+        cur.execute("select cname from consumer where cid=%s",(self.t1.GetValue(),))
+        rows=cur.fetchall()
+        ProfileButton = wx.Button(self.custpnl, label='Hi '+rows[0][0], pos=(1120, 0))
+    	self.p1=self.custpnl
+    	self.p2=self.homepnl
+    	LogoutButton.Bind(wx.EVT_BUTTON,self.Logout)
+        #ProfileButton.Bind(wx.EVT_BUTTON,self.UserProfile)
+        l1 = wx.StaticText(self.custpnl, -1, "Name",pos=(310,40))
+        l1 = wx.StaticText(self.custpnl, -1, "Customer ID",pos=(310,70))
+    	self.custpnl.Show()
 
-
+    def Logout(self,e):
+        self.t1.Clear()
+        self.t2.Clear()
+        self.back(self)
 
     def OnClose(self,e):
-
         self.Close(True)
 
 
