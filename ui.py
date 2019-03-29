@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import MySQLdb as mdb
-con = mdb.connect('localhost', 'root', 'Chennai1234$', 'eds')
+con = mdb.connect('localhost', 'root', 'mohd', 'eds')
 import wx
 w=0
 h=0
@@ -56,7 +56,7 @@ class MainWindow(wx.Frame):
         loginButton = wx.Button(self.homepnl, label='Log In', pos=(715, 170))
         loginButton.Bind(wx.EVT_BUTTON, self.Login)
         NacButton = wx.Button(self.homepnl, label='Not a Consumer', pos=(515, 170))
-        NacButton.Bind(wx.EVT_BUTTON, self.EmpLogin)
+        NacButton.Bind(wx.EVT_BUTTON, self.EmpLoginForm)
         w,h=wx.GetDisplaySize()
         self.SetSize((w,h))
         self.SetMaxSize((w,h))
@@ -113,7 +113,7 @@ class MainWindow(wx.Frame):
     	BackButton.Bind(wx.EVT_BUTTON,self.back)
     	self.tcpnl.Show()
 
-    def EmpLogin(self,e):
+    def EmpLoginForm(self,e):
         self.homepnl.Hide()
         self.previousTitle=self.GetTitle()
     	self.SetTitle("Employee Login")
@@ -122,11 +122,11 @@ class MainWindow(wx.Frame):
         self.t1 = wx.TextCtrl(self.emplpnl,style= wx.TE_PROCESS_ENTER,pos=(610,30),size=(200,40))
         l1 = wx.StaticText(self.emplpnl, -1, "Password    : ",pos=(510,90))
         self.t2 = wx.TextCtrl(self.emplpnl,style = wx.TE_PASSWORD|wx.TE_PROCESS_ENTER,pos=(610,80),size=(200,40))
-        self.t1.Bind(wx.EVT_TEXT_ENTER,self.Login)
-        self.t2.Bind(wx.EVT_TEXT_ENTER,self.Login)
+        self.t1.Bind(wx.EVT_TEXT_ENTER,self.EmpLogin)
+        self.t2.Bind(wx.EVT_TEXT_ENTER,self.EmpLogin)
         self.errormsg = wx.StaticText(self.emplpnl, -1, " ",pos=(610,140))
         loginButton = wx.Button(self.emplpnl, label='Log In', pos=(715, 170))
-        loginButton.Bind(wx.EVT_BUTTON, self.Login)
+        loginButton.Bind(wx.EVT_BUTTON, self.EmpLogin)
 
 
         BackButton = wx.Button(self.emplpnl, label='Back', pos=(60, 420),size=(100,40))
