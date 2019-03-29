@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
 import wx
+import wx.lib.scrolledpanel
 import MySQLdb as mdb
 con = mdb.connect('localhost', 'admin', 'admin', 'eds')
 w=0
@@ -283,14 +283,51 @@ class MainWindow(wx.Frame):
         self.previousTitle=self.GetTitle()
     	self.SetTitle("User")
         self.custpnl=NewPanel(self)
+
+        #self.scrolled_panel = scrolled.ScrolledPanel(self.panel, -1,style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER, name="custpnl")
+        #self.scrolled_panel.SetAutoLayout(1)
+        #self.scrolled_panel.SetupScrolling()
+
         LogoutButton = wx.Button(self.custpnl, label='Logout', pos=(1270, 0),size=(80,30))
         cur.execute("select cname from consumer where cid=%s",(self.t1.GetValue(),))
         rows=cur.fetchall()
         ProfileButton = wx.Button(self.custpnl, label='Hi '+rows[0][0], pos=(1120, 0))
     	LogoutButton.Bind(wx.EVT_BUTTON,self.Logout)
         ProfileButton.Bind(wx.EVT_BUTTON,self.UserProfile)
-        l1 = wx.StaticText(self.custpnl, -1, "Name",pos=(310,40))
-        l1 = wx.StaticText(self.custpnl, -1, "Customer ID",pos=(310,70))
+
+        no_of_meter=cur.execute("select * from consumer where cid=%s",(self.t1.GetValue(),))
+        rows_cust=cur.fetchall()
+        for i in range(0,no_of_meter):
+            cur.execute("select * from billinginfo where meterno=%s",(rows_cust[i][8],))
+            rows_cust_bill=cur.fetchall()
+            l0 = wx.StaticText(self.custpnl, -1, str(rows_cust[i][3]),pos=(200,0),size=(1000,1000),style=wx.ALIGN_CENTER)
+            l0.SetFont(wx.Font(23, wx.MODERN, wx.NORMAL, wx.BOLD))
+            l1 = wx.StaticText(self.custpnl, -1, "Customer Id :     "+str(rows_cust[i][0]),pos=(100,100+i*400),size=(1000,1000))
+            l2 = wx.StaticText(self.custpnl, -1, "Name        :     "+rows_cust[i][1],pos=(100,160+i*400),size=(1000,1000))
+            l3 = wx.StaticText(self.custpnl, -1, "Address     :     "+rows_cust[i][11],pos=(100,220+i*400),size=(1000,1000))
+            l4 = wx.StaticText(self.custpnl, -1, "Division    :     "+rows_cust[i][6],pos=(100,280+i*400),size=(1000,1000))
+            l5 = wx.StaticText(self.custpnl, -1, "SubDivision :     "+rows_cust[i][5],pos=(100,340+i*400),size=(1000,1000))
+            l6 = wx.StaticText(self.custpnl, -1, "Meter No.   :     "+str(rows_cust[i][8]),pos=(100,400+i*400),size=(1000,1000))
+
+            l7 = wx.StaticText(self.custpnl, -1, "Bill No.         :     "+str(rows_cust_bill[0][0]),pos=(700,100+i*400),size=(1000,1000))
+            l8 = wx.StaticText(self.custpnl, -1, "IssueDate        :     "+str(rows_cust_bill[0][2]),pos=(700,160+i*400),size=(1000,1000))
+            l9 = wx.StaticText(self.custpnl, -1, "Previous Reading :     "+str(rows_cust_bill[0][3]),pos=(700,220+i*400),size=(1000,1000))
+            l10 = wx.StaticText(self.custpnl, -1, "Current Reading :     "+str(rows_cust_bill[0][5]),pos=(700,280+i*400),size=(1000,1000))
+            l11 = wx.StaticText(self.custpnl, -1, "Unit Consumed   :     "+str(rows_cust_bill[0][5]-rows_cust_bill[0][3]),pos=(700,340+i*400),size=(1000,1000))
+
+            l1.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
+            l2.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
+            l3.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
+            l4.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
+            l5.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
+            l6.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
+            l7.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
+            l8.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
+            l9.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
+            l10.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
+            l11.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
+
+
     	self.custpnl.Show()
 
     def Logout(self,e):
