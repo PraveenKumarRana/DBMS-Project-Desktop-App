@@ -3,7 +3,7 @@
 import wx
 import wx.lib.scrolledpanel as scrolled
 import MySQLdb as mdb
-con = mdb.connect('localhost', 'root', 'mohd', 'eds')
+con = mdb.connect('localhost', 'admin', 'admin', 'eds')
 w=0
 h=0
 with con:
@@ -186,7 +186,29 @@ class MainWindow(wx.Frame):
 
                 i=i+30
 
+    def tcStateSearch(self,e):
+        if(self.t1.GetValue()):
+            self.temppnl.Hide()
+            self.temppnl=lowerNewPanel(self)
+            self.temppnl.Show()
 
+            #self.currentpnl.SetBackgroundColour("pink")
+            cur = con.cursor(mdb.cursors.DictCursor)
+            cur.execute("SELECT * FROM transmissioncompany where state=%s",(self.t1.GetValue(),))
+            rows = cur.fetchall()
+            desc = cur.description
+            i=20
+            for row in rows:
+                #txt = row[desc[0][0]], row[desc[1][0]], row[desc[2][0]],row[desc[3][0]],row[desc[4][0]]
+                wx.StaticText(self.temppnl, -1,row[desc[1][0]],pos=(100,i))
+                wx.StaticText(self.temppnl, -1,row[desc[4][0]],pos=(300,i))
+                wx.StaticText(self.temppnl, -1,str(row[desc[3][0]]),pos=(500,i))
+                wx.StaticText(self.temppnl, -1,str(row[desc[5][0]]),pos=(700,i))
+
+    def tcAll(self,e):
+        self.temppnl.Hide()
+        self.tcpnl.Hide()
+        self.tc(self)
 
 
 
@@ -200,6 +222,11 @@ class MainWindow(wx.Frame):
     	self.p2.Show()
     	self.SetTitle(self.previousTitle)
         self.lpnl.Hide()
+    def backtc(self,e):
+    	self.p1.Hide()
+    	self.p2.Show()
+        self.temppnl.Hide()
+    	self.SetTitle(self.previousTitle)
 
 
     def pc(self,e):
@@ -225,16 +252,41 @@ class MainWindow(wx.Frame):
     	BackButton.Bind(wx.EVT_BUTTON,self.back)
     	self.dcpnl.Show()
 
+
     def tc(self,e):
         self.homepnl.Hide()
         self.previousTitle=self.GetTitle()
     	self.SetTitle("Transmission Company")
         self.tcpnl=NewPanel(self)
-        BackButton = wx.Button(self.tcpnl, label='Back', pos=(60, 420),size=(100,40))
-    	self.p1=self.tcpnl
+        self.temppnl=lowerNewPanel(self)
+        BackButton = wx.Button(self.tcpnl, label='Back', pos=(1000, 10),size=(100,40))
+        ShowAllButton = wx.Button(self.tcpnl, label='Show All', pos=(200, 10),size=(100,40))
+        self.p1=self.tcpnl
     	self.p2=self.homepnl
-    	BackButton.Bind(wx.EVT_BUTTON,self.back)
-    	self.tcpnl.Show()
+    	BackButton.Bind(wx.EVT_BUTTON,self.backtc)
+        ShowAllButton.Bind(wx.EVT_BUTTON,self.tcAll)
+        self.t1 = wx.TextCtrl(self.tcpnl,style= wx.TE_PROCESS_ENTER,pos=(500,20),size=(200,40))
+        self.t1.Bind(wx.EVT_TEXT_ENTER,self.tcStateSearch)
+        wx.StaticText(self.tcpnl, -1,"Name",pos=(100,80))
+        wx.StaticText(self.tcpnl, -1,"State",pos=(300,80))
+        wx.StaticText(self.tcpnl, -1,"Capacity",pos=(500,80))
+        wx.StaticText(self.tcpnl, -1,"Tenure(in years)",pos=(700,80))
+        cur = con.cursor(mdb.cursors.DictCursor)
+        cur.execute("SELECT * FROM transmissioncompany ")
+        rows = cur.fetchall()
+        desc = cur.description
+        # print rows[0][desc[1][0]]
+        # print rows[0][desc[3][0]]
+        # print rows[0][desc[4][0]]
+        i=20
+        for row in rows:
+            #txt = row[desc[0][0]], row[desc[1][0]], row[desc[2][0]],row[desc[3][0]],row[desc[4][0]]
+            wx.StaticText(self.temppnl, -1,row[desc[1][0]],pos=(100,i))
+            wx.StaticText(self.temppnl, -1,row[desc[4][0]],pos=(300,i))
+            wx.StaticText(self.temppnl, -1,str(row[desc[3][0]]),pos=(500,i))
+            wx.StaticText(self.temppnl, -1,str(row[desc[5][0]]),pos=(700,i))
+            i=i+30
+        self.tcpnl.Show()
 
     def EmpLoginForm(self,e):
         self.homepnl.Hide()
