@@ -27,7 +27,8 @@ insert into consumer values
 	(8002,	'Andrew',	961315,	'boardname',	'Assam',			'subdiv',	'divis',	'dispur',	102,	'password',	'Andrew@gmail.com',		'Ak sahaylane dispur'	),
 	(8003,	'Peterson',	487964,	'boardname',	'Gujarat',			'subdiv',	'divis',	'surat',	103,	'password',	'Peterson@gmail.com',		'ps road surat'		),
 	(8004,	'David',	479368,	'boardname',	'Andhra Pradesh',		'subdiv',	'divis',	'hyderabad',	104,	'password',	'David@gmail.com',		'sn colony hyderabad'	),
-	(8005,	'Michael',	169893,	'boardname',	'Haryana',			'subdiv',	'divis',	'chandigarh',	105,	'password',	'Michael@gmail.com',		'pk colony chandigarh'	);
+	(8005,	'Michael',	169893,	'boardname',	'Haryana',			'subdiv',	'divis',	'chandigarh',	105,	'password',	'Michael@gmail.com',		'pk colony chandigarh'	),
+	(8001,	'John',		254789,	'boardname',	'Delhi',			'subdiv',	'divis',	'delhi-NCR',	106,	'password',	'john@gmail.com',		'Punjabi Bagh'		),;
 insert into distributioncompany values
 	(2001,	'APEPDCL',	5,	'Andhra Pradesh',	4001),
 	(2002,	'LAEDCL',	8,	'Assam',			4002),
