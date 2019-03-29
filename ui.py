@@ -3,7 +3,7 @@
 import wx
 import wx.lib.scrolledpanel
 import MySQLdb as mdb
-con = mdb.connect('localhost', 'root', 'mohd', 'eds')
+con = mdb.connect('localhost', 'admin', 'admin', 'eds')
 w=0
 h=0
 with con:
