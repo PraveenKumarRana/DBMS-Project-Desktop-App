@@ -22,7 +22,7 @@ class lowerNewPanel(wx.Panel):
 
     def __init__(self, parent):
         """Constructor"""
-        wx.Panel.__init__(self, parent=parent,size=(w,h-100),pos=(0,100))
+        wx.Panel.__init__(self, parent=parent,size=(w,h-100),pos=(0,120))
 
 class MainWindow(wx.Frame):
 
@@ -74,12 +74,14 @@ class MainWindow(wx.Frame):
         self.SetTitle('Power Distribution System')
         self.Centre()
 
+
     def eb(self,e):
     	self.homepnl.Hide()
     	self.previousTitle=self.GetTitle()
     	self.SetTitle("Electricity Board")
         self.upnl= upperNewPanel(self)
         self.lpnl=lowerNewPanel(self)
+        #self.lpnl.SetBackgroundColour("blue")
         ebButton = wx.Button(self.upnl, label='Back', pos=(1000, 10))
         self.p1=self.upnl
         self.p2=self.homepnl
@@ -90,7 +92,6 @@ class MainWindow(wx.Frame):
 
         self.t1 = wx.TextCtrl(self.upnl,style= wx.TE_PROCESS_ENTER,pos=(610,50),size=(200,40))
         self.t1.Bind(wx.EVT_TEXT_ENTER,self.ebStateSearch)
-        self.lpnl.Show()
         if(self.t1.GetValue()==""):
             cur = con.cursor(mdb.cursors.DictCursor)
             cur.execute("SELECT * FROM electricityboard ")
@@ -101,11 +102,9 @@ class MainWindow(wx.Frame):
             wx.StaticText(self.upnl, -1,"No. of Consumer",pos=(270,100))
             wx.StaticText(self.upnl, -1,"State",pos=(470,100))
             wx.StaticText(self.upnl, -1,"Power Consumed",pos=(600,100))
-            dc = wx.ClientDC(self)
-            dc.DrawLine(50, 60, 190, 60)
 
             #print "%s %s %s %s %s" % (desc[0][0], desc[1][0],desc[2][0],desc[3][0],desc[4][0])
-            i=140
+            i=20
             for row in rows:
                 #txt = row[desc[0][0]], row[desc[1][0]], row[desc[2][0]],row[desc[3][0]],row[desc[4][0]]
                 wx.StaticText(self.lpnl, -1,row[desc[0][0]],pos=(80,i))
@@ -114,6 +113,8 @@ class MainWindow(wx.Frame):
                 wx.StaticText(self.lpnl, -1,str(row[desc[4][0]]),pos=(600,i))
 
                 i=i+30
+        self.lpnl.Show()
+
 
 
 
@@ -121,38 +122,52 @@ class MainWindow(wx.Frame):
         if(self.t1.GetValue()):
             self.lpnl.Hide()
 
-            lpnl=lowerNewPanel(self)
+            self.lpnl=lowerNewPanel(self)
 
             #lpnl.SetBackgroundColour("grey")
-            lpnl.Show()
+            print "hello"
+            self.lpnl.Show()
             print self.t1.GetValue()
             cur = con.cursor(mdb.cursors.DictCursor)
             cur.execute("SELECT * FROM electricityboard where state=%s",(self.t1.GetValue(),))
             rows = cur.fetchall()
             desc = cur.description
-
+            if(len(rows)==0):
+                msg=wx.StaticText(self.lpnl, -1,"Not available !!",pos=(300,30))
+                msg.SetForegroundColour((255,0,0))
             #wx.StaticText(lpnl, -1,"Board Name",pos=(70,100))
             #wx.StaticText(lpnl, -1,"No. of Consumer",pos=(270,100))
             #wx.StaticText(lpnl, -1,"State",pos=(470,100))
             #wx.StaticText(lpnl, -1,"Power Consumed",pos=(600,100))
             dc = wx.ClientDC(self)
             dc.DrawLine(50, 60, 190, 60)
-
             #print "%s %s %s %s %s" % (desc[0][0], desc[1][0],desc[2][0],desc[3][0],desc[4][0])
-            i=140
+            i=20
             for row in rows:
                 #txt = row[desc[0][0]], row[desc[1][0]], row[desc[2][0]],row[desc[3][0]],row[desc[4][0]]
-                wx.StaticText(lpnl, -1,row[desc[0][0]],pos=(80,i))
-                wx.StaticText(lpnl, -1,str(row[desc[1][0]]),pos=(270,i))
-                wx.StaticText(lpnl, -1,row[desc[2][0]],pos=(470,i))
-                wx.StaticText(lpnl, -1,str(row[desc[4][0]]),pos=(600,i))
+                wx.StaticText(self.lpnl, -1,row[desc[0][0]],pos=(80,i))
+                wx.StaticText(self.lpnl, -1,str(row[desc[1][0]]),pos=(270,i))
+                wx.StaticText(self.lpnl, -1,row[desc[2][0]],pos=(470,i))
+                wx.StaticText(self.lpnl, -1,str(row[desc[4][0]]),pos=(600,i))
 
                 i=i+30
-        else:
-            self.errormsg = wx.StaticText(lpnl, -1, " ",pos=(610,140))
-            self.errormsg.SetForegroundColour((255,0,0))
-            self.errormsg.SetLabel("Can't be empty!")
+        if(self.t1.GetValue()==""):
+            self.lpnl.Hide()
+            self.lpnl=lowerNewPanel(self)
+            cur = con.cursor(mdb.cursors.DictCursor)
+            cur.execute("SELECT * FROM electricityboard ")
+            rows = cur.fetchall()
+            desc = cur.description
+            #print "%s %s %s %s %s" % (desc[0][0], desc[1][0],desc[2][0],desc[3][0],desc[4][0])
+            i=20
+            for row in rows:
+                #txt = row[desc[0][0]], row[desc[1][0]], row[desc[2][0]],row[desc[3][0]],row[desc[4][0]]
+                wx.StaticText(self.lpnl, -1,row[desc[0][0]],pos=(80,i))
+                wx.StaticText(self.lpnl, -1,str(row[desc[1][0]]),pos=(270,i))
+                wx.StaticText(self.lpnl, -1,row[desc[2][0]],pos=(470,i))
+                wx.StaticText(self.lpnl, -1,str(row[desc[4][0]]),pos=(600,i))
 
+                i=i+30
 
 
 
@@ -167,6 +182,8 @@ class MainWindow(wx.Frame):
     	self.p1.Hide()
     	self.p2.Show()
     	self.SetTitle(self.previousTitle)
+        self.lpnl.Hide()
+
 
     def pc(self,e):
         self.homepnl.Hide()
