@@ -77,13 +77,76 @@ class MainWindow(wx.Frame):
         loginButton.Bind(wx.EVT_BUTTON, self.Login)
         NacButton = wx.Button(self.homepnl, label='Not a Consumer', pos=(515, 370))
         NacButton.Bind(wx.EVT_BUTTON, self.EmpLoginForm)
-        newConButton = wx.Button(self.homepnl, label='Apply New Connection', pos=(1000,20),size=(200,40))   #220
+        newConButton = wx.Button(self.homepnl, label='Apply New Connection', pos=(1000,20),size=(200,40))
+        newConButton.Bind(wx.EVT_BUTTON,self.newConnection)   #220
         #w,h=wx.GetDisplaySize()
         self.SetSize((w,h))
         self.SetMaxSize((w,h))
         self.SetMinSize((w,h))
         self.SetTitle('Power Distribution System')
         self.Centre()
+
+    def newConnection(self,e):
+        self.homepnl.Hide()
+        self.previousTitle=self.GetTitle()
+        self.SetTitle("Application for New Connection")
+        self.ncpnl=NewPanel(self)
+        cur = con.cursor(mdb.cursors.DictCursor)
+        cur.execute("select state from distributioncompany")
+        rows=cur.fetchall()
+        #desc = cur.description()
+        stateList=list()
+        for row in rows:
+            stateList.append(row["state"])
+        print stateList
+        self.cbState=wx.ComboBox(self.ncpnl,pos=(w/2,50),choices=stateList)
+        self.cbState.Bind(wx.EVT_COMBOBOX, self.ncDcSelect)
+
+
+
+    def ncDcSelect(self,e):
+        self.state=e.GetString()
+        print self.state
+        cur = con.cursor(mdb.cursors.DictCursor)
+        cur.execute("select dname from distributioncompany where state = %s",(self.state,))
+        rows=cur.fetchall()
+        dcList=list()
+        for row in rows:
+            dcList.append(row["dname"])
+        print dcList
+        self.cbDc=wx.ComboBox(self.ncpnl,pos=(w/2,100),choices=dcList)
+        self.cbDc.Bind(wx.EVT_COMBOBOX, self.ncDivSelect)
+
+    def ncDivSelect(self,e):
+        self.Dc=e.GetString()
+        print self.Dc
+        cur = con.cursor(mdb.cursors.DictCursor)
+        cur.execute("select divname from division as d1,distributioncompany as d2 where d1.did=d2.did and d2.dname=%s and d2.state=%s ",(self.Dc,self.state))
+        rows=cur.fetchall()
+        divList=list()
+        for row in rows:
+            divList.append(row["divname"])
+        print divList
+        self.cbDc=wx.ComboBox(self.ncpnl,pos=(w/2,150),choices=divList)
+        self.cbDc.Bind(wx.EVT_COMBOBOX, self.ncSubdivSelect)
+    def ncSubdivSelect(self,e):
+        self.Div=e.GetString()
+        print self.Div
+        cur = con.cursor(mdb.cursors.DictCursor)
+        cur.execute("select sdivname from subdivision as d1,division as d2 where d1.divid=d2.divid and d1.state=%s and d2.divname=%s",("Delhi","divname3"))
+        rows=cur.fetchall()
+        sdivList=list()
+        for row in rows:
+            sdivList.append(row["sdivname"])
+        print sdivList
+        self.cbDc=wx.ComboBox(self.ncpnl,pos=(w/2,200),choices=sdivList)
+        self.cbDc.Bind(wx.EVT_COMBOBOX, self.nn)
+
+    def nn(self,e):
+        self.Subdiv=e.GetString()
+        print self.Subdiv
+        submitForm=wx.Button(self.ncpnl, label='Submit', pos=(w/2, 300))
+        submitForm.Bind(wx.EVT_BUTTON,self.NewconForm)
 
     def eb(self,e):
     	self.homepnl.Hide()
