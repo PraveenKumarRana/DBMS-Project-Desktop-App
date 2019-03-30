@@ -67,6 +67,7 @@ class MainWindow(wx.Frame):
         loginButton.Bind(wx.EVT_BUTTON, self.Login)
         NacButton = wx.Button(self.homepnl, label='Not a Consumer', pos=(515, 170))
         NacButton.Bind(wx.EVT_BUTTON, self.EmpLoginForm)
+        newConButton = wx.Button(self.homepnl, label='Apply New Connection', pos=(715, 220))
         w,h=wx.GetDisplaySize()
         self.SetSize((w,h))
         self.SetMaxSize((w,h))
