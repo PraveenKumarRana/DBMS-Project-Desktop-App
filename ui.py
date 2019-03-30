@@ -88,9 +88,11 @@ class MainWindow(wx.Frame):
     	ebButton.Bind(wx.EVT_BUTTON, self.back)
         #l1 = wx.StaticText(self.ebpnl, -1,"hello",pos=(10,10))
 
-
-
-        self.t1 = wx.TextCtrl(self.upnl,style= wx.TE_PROCESS_ENTER,pos=(610,50),size=(200,40))
+        #[select all] buttom
+        ebAll = wx.Button(self.upnl, label='Show all', pos=(10, 50))
+        ebAll.Bind(wx.EVT_BUTTON, self.ebAll)
+        wx.StaticText(self.upnl, -1,"State/UT:",pos=(500,60))
+        self.t1 = wx.TextCtrl(self.upnl,style= wx.TE_PROCESS_ENTER,pos=(570,50),size=(200,40))
         self.t1.Bind(wx.EVT_TEXT_ENTER,self.ebStateSearch)
         if(self.t1.GetValue()==""):
             cur = con.cursor(mdb.cursors.DictCursor)
@@ -100,7 +102,7 @@ class MainWindow(wx.Frame):
 
             wx.StaticText(self.upnl, -1,"Board Name",pos=(70,100))
             wx.StaticText(self.upnl, -1,"No. of Consumer",pos=(270,100))
-            wx.StaticText(self.upnl, -1,"State",pos=(470,100))
+            wx.StaticText(self.upnl, -1,"State/UT",pos=(470,100))
             wx.StaticText(self.upnl, -1,"Power Consumed",pos=(600,100))
 
             #print "%s %s %s %s %s" % (desc[0][0], desc[1][0],desc[2][0],desc[3][0],desc[4][0])
@@ -117,7 +119,22 @@ class MainWindow(wx.Frame):
 
 
 
-
+    def ebAll(self,e):
+        self.lpnl.Hide()
+        self.lpnl=lowerNewPanel(self)
+        cur = con.cursor(mdb.cursors.DictCursor)
+        cur.execute("SELECT * FROM electricityboard ")
+        rows = cur.fetchall()
+        desc = cur.description
+        #print "%s %s %s %s %s" % (desc[0][0], desc[1][0],desc[2][0],desc[3][0],desc[4][0])
+        i=20
+        for row in rows:
+            #txt = row[desc[0][0]], row[desc[1][0]], row[desc[2][0]],row[desc[3][0]],row[desc[4][0]]
+            wx.StaticText(self.lpnl, -1,row[desc[0][0]],pos=(80,i))
+            wx.StaticText(self.lpnl, -1,str(row[desc[1][0]]),pos=(270,i))
+            wx.StaticText(self.lpnl, -1,row[desc[2][0]],pos=(470,i))
+            wx.StaticText(self.lpnl, -1,str(row[desc[4][0]]),pos=(600,i))
+            i=i+30
     def ebStateSearch(self,e):
         if(self.t1.GetValue()):
             self.lpnl.Hide()
