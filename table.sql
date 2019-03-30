@@ -1,18 +1,24 @@
-drop database eds;
-create database eds;
-
 use eds;
 
-
+drop table employee;
 create table employee(eid int primary key,ename varchar(50),doj date,dob date,dept varchar(50),age int,boardname varchar(50),designation varchar(50),phone int,password varchar(50));
+drop table consumer;
 create table consumer(cid int,cname varchar(50),phone int,boardname varchar(50),state varchar(50),subdiv varchar(50),divis varchar(50),city varchar(50),meterno int primary key,password varchar(50),email varchar(50),address varchar(50));
+drop table distributioncompany;
 create table distributioncompany(did int primary key,dname varchar(50),tenure int,state varchar(50),tid int);
+	drop table powercompany;
 create table powercompany(pid int primary key,pname varchar(50),type varchar(50),totalpower int,state varchar(50));
+	drop table transmissioncompany;
 create table transmissioncompany(tid int primary key,tname varchar(50),did int,tcapacity int,state varchar(50),tenure int);
+	drop table circles;
 create table circles(cname varchar(50),state varchar(50),managerid int,did int);
-create table division(divid int primary key,divname varchar(50),headname varchar(50),state varchar(50),did int);
+	drop table division;
+create table division(divid int primary key,divname varchar(50),headname varchar(50),state varchar(50), did int);
+	drop table subdivision;
 create table subdivision(sdivid int primary key,divid int,headname varchar(50),state varchar(50),sdivname varchar(50));
+	drop table electricityboard;
 create table electricityboard(boardname varchar(50) primary key,noofconsumer int,state varchar(50),chairmanid int,powerconsumed int);
+	drop table billinginfo;
 create table billinginfo(billid int primary key,cid int,issuedate date,prevreading int,meterno int,curreading int,rate int,type varchar(50),unit int);
 
 insert into employee values
@@ -23,12 +29,13 @@ insert into employee values
 	(7005,	'Praveen Rana',		'2012-03-05',	'1998-12-12',	'dept',	20,	'boardname',	'designation',	197835,	'password');
 
 insert into consumer values
-	(8001,	'John',		254789,	'boardname',	'Delhi',			'subdiv',	'divis',	'delhi-NCR',	101,	'password',	'john@gmail.com',		'GT road noida'		),
-	(8002,	'Andrew',	961315,	'boardname',	'Assam',			'subdiv',	'divis',	'dispur',	102,	'password',	'Andrew@gmail.com',		'Ak sahaylane dispur'	),
-	(8003,	'Peterson',	487964,	'boardname',	'Gujarat',			'subdiv',	'divis',	'surat',	103,	'password',	'Peterson@gmail.com',		'ps road surat'		),
-	(8004,	'David',	479368,	'boardname',	'Andhra Pradesh',		'subdiv',	'divis',	'hyderabad',	104,	'password',	'David@gmail.com',		'sn colony hyderabad'	),
-	(8005,	'Michael',	169893,	'boardname',	'Haryana',			'subdiv',	'divis',	'chandigarh',	105,	'password',	'Michael@gmail.com',		'pk colony chandigarh'	),
-	(8001,	'John',		254789,	'boardname',	'Delhi',			'subdiv',	'divis',	'delhi-NCR',	106,	'password',	'john@gmail.com',		'Punjabi Bagh'		),;
+	(8001,	'John',		254789,	'boardname1',	'Delhi',			'subdiv1',	'divis',	'delhi-NCR',	101,	'password',	'john@gmail.com',		'GT road noida'		),
+	(8002,	'Andrew',	961315,	'boardname2',	'Assam',			'subdiv2',	'divis',	'dispur',	102,	'password',	'Andrew@gmail.com',		'Ak sahaylane dispur'	),
+	(8003,	'Peterson',	487964,	'boardname3',	'Gujarat',			'subdiv3',	'divis',	'surat',	103,	'password',	'Peterson@gmail.com',		'ps road surat'		),
+	(8004,	'David',	479368,	'boardname4',	'Andhra Pradesh',	'subdiv4',	'divis',	'hyderabad',	104,	'password',	'David@gmail.com',		'sn colony hyderabad'	),
+	(8005,	'Michael',	169893,	'boardname5',	'Haryana',			'subdiv5',	'divis',	'chandigarh',	105,	'password',	'Michael@gmail.com',		'pk colony chandigarh'	);
+
+
 insert into distributioncompany values
 	(2001,	'APEPDCL',	5,	'Andhra Pradesh',	4001),
 	(2002,	'LAEDCL',	8,	'Assam',			4002),
@@ -48,23 +55,24 @@ insert into transmissioncompany values
 	(4004,	'GETCO',		2004,	800,	'Gujarat',			6),
 	(4005,	'HVPNL',		2005,	400,	'Haryana',			9);
 insert into circles values
-	('cname',	'Delhi',			201,	2001),
-	('cname',	'Gujarat',			202,	2002),
-	('cname',	'Assam',			203,	2003),
-	('cname',	'Andhra Pradesh',		204,	2004),
-	('cname',	'Haryana',			205,	2005);
+	('cname1',	'Delhi',			201,	2001),
+	('cname2',	'Gujarat',			202,	2002),
+	('cname3',	'Assam',			203,	2003),
+	('cname4',	'Andhra Pradesh',		204,	2004),
+	('cname5',	'Haryana',			205,	2005);
 insert into division values
-	(5001,	'divname',	'Akshay',	'Delhi'),
-	(5002,	'divname',	'Ranjan',	'Assam'),
-	(5003,	'divname',	'Manish',	'Haryana'),
-	(5004,	'divname',	'Prateek',	'Andhra Pradesh'),
-	(5005,	'divname',	'Anurag',	'Gujarat');
+	(5001,	'divname1',	'Akshay',	'Haryana', 2001),
+	(5002,	'divname2',	'Ranjan',	'Assam',2002),
+	(5003,	'divname3',	'Manish',	'Delhi',2003),
+	(5004,	'divname4',	'Prateek',	'Andhra Pradesh',2003),
+	(5005,	'divname5',	'Anurag',	'Gujarat',2001);
+
 insert into subdivision values
-	(6001,	5001,	'Akshay',	'Delhi',			'sdivname'),
-	(6002,	5002,	'Ranjan',	'Assam',			'sdivname'),
-	(6003,	5003,	'Manish',	'Haryana',			'sdivname'),
-	(6004,	5004,	'Prateek',	'Andhra Pradesh',	'sdivname'),
-	(6005,	5005,	'Anurag',	'Gujarat',			'sdivname');
+	(6001,	5001,	'Akshay',	'Haryana',			'sdivname1'),
+	(6002,	5003,	'Ranjan',	'Delhi',			'sdivname2'),
+	(6003,	5003,	'Manish',	'Delhi',			'sdivname3'),
+	(6004,	5003,	'Prateek',	'Delhi',	'sdivname4'),
+	(6005,	5005,	'Anurag',	'Gujarat',			'sdivname5');
 insert into electricityboard values
 	('ASEC',	250000,	'Assam',		301,	2500),
 	('DVB',		400000,	'Delhi',		302,	3200),
@@ -76,6 +84,5 @@ insert into billinginfo values
 	(10002,	8002,	'2018-06-15',	200,	102,	250,	16,	'type',	6),
 	(10003,	8003,	'2018-10-30',	240,	103,	260,	18,	'type',	5),
 	(10004,	8004,	'2017-11-01',	350,	104,	370,	26,	'type',	9),
-	(10005,	8005,	'2019-01-06',	120,	105,	200,	15,	'type',	4);
-
-insert into billinginfo values (10006,8001,'2017-12-20',165,106,180,12,'type',2);
+	(10005,	8005,	'2019-01-06',	120,	105,	200,	15,	'type',	4),
+	(10006,8001,'2017-12-20',165,106,180,12,'type',2);
