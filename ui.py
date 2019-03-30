@@ -41,8 +41,6 @@ class MainWindow(wx.Frame):
 
     def InitUI(self):
 
-
-
         menubar = wx.MenuBar()
         fileMenu = wx.Menu()
         fileItem = fileMenu.Append(wx.ID_EXIT, 'Quit', 'Quit application')
@@ -65,6 +63,7 @@ class MainWindow(wx.Frame):
         dcButton.Bind(wx.EVT_BUTTON, self.dc)
         tcButton.Bind(wx.EVT_BUTTON, self.tc)
         ebButton.Bind(wx.EVT_BUTTON, self.eb)
+
 
         l1 = wx.StaticText(self.homepnl, -1, "Customer ID : ",pos=(510,240))
         self.t1 = wx.TextCtrl(self.homepnl,style= wx.TE_PROCESS_ENTER,pos=(610,230),size=(200,40))
@@ -91,6 +90,7 @@ class MainWindow(wx.Frame):
         self.previousTitle=self.GetTitle()
         self.SetTitle("Application for New Connection")
         self.ncpnl=NewPanel(self)
+        #self.ncpnl.SetBackgroundColour("gray")
         cur = con.cursor(mdb.cursors.DictCursor)
         cur.execute("select state from distributioncompany")
         rows=cur.fetchall()
@@ -158,6 +158,7 @@ class MainWindow(wx.Frame):
         ebButton = wx.Button(self.upnl, label='Back', pos=(1000, 10))
         self.p1=self.upnl
         self.p2=self.homepnl
+        print "firoz  1"
     	ebButton.Bind(wx.EVT_BUTTON, self.back_tc_pc_dc_eb)
         #l1 = wx.StaticText(self.ebpnl, -1,"hello",pos=(10,10))
 
@@ -479,6 +480,40 @@ class MainWindow(wx.Frame):
     	self.p2=self.homepnl
     	BackButton.Bind(wx.EVT_BUTTON,self.back)
     	self.emplpnl.Show()
+
+    def NewconForm(self,e):
+        self.ncpnl.Hide()
+        self.formpnl=NewPanel(self)
+        #self.formpnl.SetBackgroundColour("green")
+        l0 = wx.StaticText(self.formpnl, -1, " New Connection Form  ",pos=(450,10),size=(500,500),style=wx.ALIGN_CENTER)
+        l0.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.BOLD))
+
+        l1 = wx.StaticText(self.formpnl, -1, " Name of Applicant    :   ",pos=(100,100))
+        self.t11 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,100),size=(200,30))
+        l2 = wx.StaticText(self.formpnl, -1, " Father's Name        :   ",pos=(100,150))
+        self.t12 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,150),size=(200,30))
+        l3 = wx.StaticText(self.formpnl, -1, " Installation Address :   ",pos=(100,200))
+        self.t13 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,200),size=(200,30))
+        l5 = wx.StaticText(self.formpnl, -1, " Mobile No.           :   ",pos=(100,250))
+        self.t14 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,250),size=(200,30))
+        l6 = wx.StaticText(self.formpnl, -1, " Email                :   ",pos=(100,300))
+        self.t15 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,300),size=(200,30))
+        l7 = wx.StaticText(self.formpnl, -1, " Purpose of Supply    :   ",pos=(100,350))
+        self.t16 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,350),size=(200,30))
+
+        SubmitButton = wx.Button(self.formpnl, label='Submit', pos=(500, 450),size=(100,40))
+        SubmitButton.Bind(wx.EVT_BUTTON,self.Submit)
+
+    def Submit(self,e):
+        if(self.t11.GetValue() and self.t12.GetValue() and self.t13.GetValue() and self.t14.GetValue() and self.t15.GetValue() and self.t16.GetValue() ):
+            self.p1=self.formpnl
+            print "haider"
+            self.p2=self.homepnl
+            wx.MessageBox(message='Succesfuly Submitted',caption='Info',style=wx.OK | wx.ICON_INFORMATION)
+            self.back(self)
+        else:
+            msg=wx.StaticText(self.formpnl, -1, "Any field can not be empty !!",pos=(w/2,300),size=(300,300))
+            msg.SetForegroundColour((255,0,0))
 
     def UserProfile(self,e):
     	self.custpnl.Hide()
