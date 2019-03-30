@@ -96,7 +96,7 @@ class MainWindow(wx.Frame):
         ebButton = wx.Button(self.upnl, label='Back', pos=(1000, 10))
         self.p1=self.upnl
         self.p2=self.homepnl
-    	ebButton.Bind(wx.EVT_BUTTON, self.back)
+    	ebButton.Bind(wx.EVT_BUTTON, self.back_tc_pc_dc_eb)
         #l1 = wx.StaticText(self.ebpnl, -1,"hello",pos=(10,10))
 
         #[select all] buttom
@@ -199,9 +199,9 @@ class MainWindow(wx.Frame):
 
     def tcStateSearch(self,e):
         if(self.t1.GetValue()):
-            self.temppnl.Hide()
-            self.temppnl=lowerNewPanel(self)
-            self.temppnl.Show()
+            self.lpnl.Hide()
+            self.lpnl=lowerNewPanel(self)
+            self.lpnl.Show()
 
             #self.currentpnl.SetBackgroundColour("pink")
             cur = con.cursor(mdb.cursors.DictCursor)
@@ -211,17 +211,17 @@ class MainWindow(wx.Frame):
             i=20
             for row in rows:
                 #txt = row[desc[0][0]], row[desc[1][0]], row[desc[2][0]],row[desc[3][0]],row[desc[4][0]]
-                wx.StaticText(self.temppnl, -1,row[desc[1][0]],pos=(100,i))
-                wx.StaticText(self.temppnl, -1,row[desc[4][0]],pos=(300,i))
-                wx.StaticText(self.temppnl, -1,str(row[desc[3][0]]),pos=(500,i))
-                wx.StaticText(self.temppnl, -1,str(row[desc[5][0]]),pos=(700,i))
+                wx.StaticText(self.lpnl, -1,row[desc[1][0]],pos=(100,i))
+                wx.StaticText(self.lpnl, -1,row[desc[4][0]],pos=(300,i))
+                wx.StaticText(self.lpnl, -1,str(row[desc[3][0]]),pos=(500,i))
+                wx.StaticText(self.lpnl, -1,str(row[desc[5][0]]),pos=(700,i))
                 i=i+30
 
     def pcStateSearch(self,e):
         if(self.t1.GetValue()):
-            self.temppnl.Hide()
-            self.temppnl=lowerNewPanel(self)
-            self.temppnl.Show()
+            self.lpnl.Hide()
+            self.lpnl=lowerNewPanel(self)
+            self.lpnl.Show()
 
             #self.currentpnl.SetBackgroundColour("pink")
             cur = con.cursor(mdb.cursors.DictCursor)
@@ -231,17 +231,17 @@ class MainWindow(wx.Frame):
             i=20
             for row in rows:
                 #txt = row[desc[0][0]], row[desc[1][0]], row[desc[2][0]],row[desc[3][0]],row[desc[4][0]]
-                wx.StaticText(self.temppnl, -1,row[desc[1][0]],pos=(100,i))
-                wx.StaticText(self.temppnl, -1,row[desc[4][0]],pos=(300,i))
-                wx.StaticText(self.temppnl, -1,row[desc[2][0]],pos=(500,i))
-                wx.StaticText(self.temppnl, -1,str(row[desc[3][0]]),pos=(700,i))
+                wx.StaticText(self.lpnl, -1,row[desc[1][0]],pos=(100,i))
+                wx.StaticText(self.lpnl, -1,row[desc[4][0]],pos=(300,i))
+                wx.StaticText(self.lpnl, -1,row[desc[2][0]],pos=(500,i))
+                wx.StaticText(self.lpnl, -1,str(row[desc[3][0]]),pos=(700,i))
                 i=i+30
 
     def dcStateSearch(self,e):
         if(self.t1.GetValue()):
-            self.temppnl.Hide()
-            self.temppnl=lowerNewPanel(self)
-            self.temppnl.Show()
+            self.lpnl.Hide()
+            self.lpnl=lowerNewPanel(self)
+            self.lpnl.Show()
 
             #self.currentpnl.SetBackgroundColour("pink")
             cur = con.cursor(mdb.cursors.DictCursor)
@@ -251,24 +251,24 @@ class MainWindow(wx.Frame):
             i=20
             for row in rows:
                 #txt = row[desc[0][0]], row[desc[1][0]], row[desc[2][0]],row[desc[3][0]],row[desc[4][0]]
-                wx.StaticText(self.temppnl, -1,row[desc[1][0]],pos=(100,i))
-                wx.StaticText(self.temppnl, -1,row[desc[3][0]],pos=(300,i))
-                wx.StaticText(self.temppnl, -1,str(row[desc[2][0]]),pos=(500,i))
+                wx.StaticText(self.lpnl, -1,row[desc[1][0]],pos=(100,i))
+                wx.StaticText(self.lpnl, -1,row[desc[3][0]],pos=(300,i))
+                wx.StaticText(self.lpnl, -1,str(row[desc[2][0]]),pos=(500,i))
                 i=i+30
 
     def tcAll(self,e):
-        self.temppnl.Hide()
+        self.lpnl.Hide()
         self.tcpnl.Hide()
         self.tc(self)
 
 
     def pcAll(self,e):
-        self.temppnl.Hide()
-        self.pcpnl.Hide()
+        self.lpnl.Hide()
+        self.upnl.Hide()
         self.pc(self)
 
     def dcAll(self,e):
-        self.temppnl.Hide()
+        self.lpnl.Hide()
         self.dcpnl.Hide()
         self.dc(self)
 
@@ -283,12 +283,12 @@ class MainWindow(wx.Frame):
     	self.p1.Hide()
     	self.p2.Show()
     	self.SetTitle(self.previousTitle)
-        self.lpnl.Hide()
 
-    def backtc(self,e):
+
+    def back_tc_pc_dc_eb(self,e):
     	self.p1.Hide()
     	self.p2.Show()
-        self.temppnl.Hide()
+        self.lpnl.Hide()
     	self.SetTitle(self.previousTitle)
 
 
@@ -296,21 +296,21 @@ class MainWindow(wx.Frame):
         self.homepnl.Hide()
         self.previousTitle=self.GetTitle()
     	self.SetTitle("Power Company")
-        self.pcpnl=NewPanel(self)
-        self.temppnl=lowerNewPanel(self)
-        BackButton = wx.Button(self.pcpnl, label='Back', pos=(1000, 10),size=(100,40))
-        ShowAllButton = wx.Button(self.pcpnl, label='Show All', pos=(10, 50),size=(100,40))
+        self.upnl=NewPanel(self)
+        self.lpnl=lowerNewPanel(self)
+        BackButton = wx.Button(self.upnl, label='Back', pos=(1000, 10),size=(100,40))
+        ShowAllButton = wx.Button(self.upnl, label='Show All', pos=(10, 50),size=(100,40))
 
-    	self.p1=self.pcpnl
+    	self.p1=self.upnl
     	self.p2=self.homepnl
-    	BackButton.Bind(wx.EVT_BUTTON,self.backtc)
+    	BackButton.Bind(wx.EVT_BUTTON,self.back_tc_pc_dc_eb)
         ShowAllButton.Bind(wx.EVT_BUTTON,self.pcAll)
-        self.t1 = wx.TextCtrl(self.pcpnl,style= wx.TE_PROCESS_ENTER,pos=(500,20),size=(200,40))
+        self.t1 = wx.TextCtrl(self.upnl,style= wx.TE_PROCESS_ENTER,pos=(500,20),size=(200,40))
         self.t1.Bind(wx.EVT_TEXT_ENTER,self.pcStateSearch)
-        wx.StaticText(self.pcpnl, -1,"Name",pos=(100,100))
-        wx.StaticText(self.pcpnl, -1,"State",pos=(300,100))
-        wx.StaticText(self.pcpnl, -1,"Type",pos=(500,100))
-        wx.StaticText(self.pcpnl, -1,"Total power",pos=(700,100))
+        wx.StaticText(self.upnl, -1,"Name",pos=(100,100))
+        wx.StaticText(self.upnl, -1,"State",pos=(300,100))
+        wx.StaticText(self.upnl, -1,"Type",pos=(500,100))
+        wx.StaticText(self.upnl, -1,"Total power",pos=(700,100))
         cur = con.cursor(mdb.cursors.DictCursor)
         cur.execute("SELECT * FROM powercompany ")
         rows = cur.fetchall()
@@ -319,13 +319,13 @@ class MainWindow(wx.Frame):
         i=20
         for row in rows:
             #txt = row[desc[0][0]], row[desc[1][0]], row[desc[2][0]],row[desc[3][0]],row[desc[4][0]]
-            wx.StaticText(self.temppnl, -1,row[desc[1][0]],pos=(100,i))
-            wx.StaticText(self.temppnl, -1,row[desc[4][0]],pos=(300,i))
-            wx.StaticText(self.temppnl, -1,row[desc[2][0]],pos=(500,i))
-            wx.StaticText(self.temppnl, -1,str(row[desc[3][0]]),pos=(700,i))
+            wx.StaticText(self.lpnl, -1,row[desc[1][0]],pos=(100,i))
+            wx.StaticText(self.lpnl, -1,row[desc[4][0]],pos=(300,i))
+            wx.StaticText(self.lpnl, -1,row[desc[2][0]],pos=(500,i))
+            wx.StaticText(self.lpnl, -1,str(row[desc[3][0]]),pos=(700,i))
             i=i+30
 
-    	self.pcpnl.Show()
+    	self.upnl.Show()
 
 
     def dc(self,e):
@@ -333,13 +333,13 @@ class MainWindow(wx.Frame):
         self.previousTitle=self.GetTitle()
     	self.SetTitle("Distribution Company")
         self.dcpnl=NewPanel(self)
-        self.temppnl=lowerNewPanel(self)
+        self.lpnl=lowerNewPanel(self)
         BackButton = wx.Button(self.dcpnl, label='Back', pos=(1000, 10),size=(100,40))
         ShowAllButton = wx.Button(self.dcpnl, label='Show All', pos=(10, 50),size=(100,40))
 
         self.p1=self.dcpnl
     	self.p2=self.homepnl
-    	BackButton.Bind(wx.EVT_BUTTON,self.backtc)
+    	BackButton.Bind(wx.EVT_BUTTON,self.back_tc_pc_dc_eb)
         ShowAllButton.Bind(wx.EVT_BUTTON,self.dcAll)
         self.t1 = wx.TextCtrl(self.dcpnl,style= wx.TE_PROCESS_ENTER,pos=(500,20),size=(200,40))
         self.t1.Bind(wx.EVT_TEXT_ENTER,self.dcStateSearch)
@@ -354,9 +354,9 @@ class MainWindow(wx.Frame):
         i=20
         for row in rows:
             #txt = row[desc[0][0]], row[desc[1][0]], row[desc[2][0]],row[desc[3][0]],row[desc[4][0]]
-            wx.StaticText(self.temppnl, -1,row[desc[1][0]],pos=(100,i))
-            wx.StaticText(self.temppnl, -1,row[desc[3][0]],pos=(300,i))
-            wx.StaticText(self.temppnl, -1,str(row[desc[2][0]]),pos=(500,i))
+            wx.StaticText(self.lpnl, -1,row[desc[1][0]],pos=(100,i))
+            wx.StaticText(self.lpnl, -1,row[desc[3][0]],pos=(300,i))
+            wx.StaticText(self.lpnl, -1,str(row[desc[2][0]]),pos=(500,i))
             i=i+30
     	self.dcpnl.Show()
 
@@ -366,12 +366,12 @@ class MainWindow(wx.Frame):
         self.previousTitle=self.GetTitle()
     	self.SetTitle("Transmission Company")
         self.tcpnl=NewPanel(self)
-        self.temppnl=lowerNewPanel(self)
+        self.lpnl=lowerNewPanel(self)
         BackButton = wx.Button(self.tcpnl, label='Back', pos=(1000, 10),size=(100,40))
         ShowAllButton = wx.Button(self.tcpnl, label='Show All', pos=(10, 50),size=(100,40))
         self.p1=self.tcpnl
     	self.p2=self.homepnl
-    	BackButton.Bind(wx.EVT_BUTTON,self.backtc)
+    	BackButton.Bind(wx.EVT_BUTTON,self.back_tc_pc_dc_eb)
         ShowAllButton.Bind(wx.EVT_BUTTON,self.tcAll)
         self.t1 = wx.TextCtrl(self.tcpnl,style= wx.TE_PROCESS_ENTER,pos=(500,20),size=(200,40))
         self.t1.Bind(wx.EVT_TEXT_ENTER,self.tcStateSearch)
@@ -389,10 +389,10 @@ class MainWindow(wx.Frame):
         i=20
         for row in rows:
             #txt = row[desc[0][0]], row[desc[1][0]], row[desc[2][0]],row[desc[3][0]],row[desc[4][0]]
-            wx.StaticText(self.temppnl, -1,row[desc[1][0]],pos=(100,i))
-            wx.StaticText(self.temppnl, -1,row[desc[4][0]],pos=(300,i))
-            wx.StaticText(self.temppnl, -1,str(row[desc[3][0]]),pos=(500,i))
-            wx.StaticText(self.temppnl, -1,str(row[desc[5][0]]),pos=(700,i))
+            wx.StaticText(self.lpnl, -1,row[desc[1][0]],pos=(100,i))
+            wx.StaticText(self.lpnl, -1,row[desc[4][0]],pos=(300,i))
+            wx.StaticText(self.lpnl, -1,str(row[desc[3][0]]),pos=(500,i))
+            wx.StaticText(self.lpnl, -1,str(row[desc[5][0]]),pos=(700,i))
             i=i+30
         self.tcpnl.Show()
 
