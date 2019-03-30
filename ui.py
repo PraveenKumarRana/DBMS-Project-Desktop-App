@@ -77,14 +77,13 @@ class MainWindow(wx.Frame):
         loginButton.Bind(wx.EVT_BUTTON, self.Login)
         NacButton = wx.Button(self.homepnl, label='Not a Consumer', pos=(515, 370))
         NacButton.Bind(wx.EVT_BUTTON, self.EmpLoginForm)
-        newConButton = wx.Button(self.homepnl, label='Apply New Connection', pos=(40,350),size=(200,40))   #220
+        newConButton = wx.Button(self.homepnl, label='Apply New Connection', pos=(1000,20),size=(200,40))   #220
         #w,h=wx.GetDisplaySize()
         self.SetSize((w,h))
         self.SetMaxSize((w,h))
         self.SetMinSize((w,h))
         self.SetTitle('Power Distribution System')
         self.Centre()
-
 
     def eb(self,e):
     	self.homepnl.Hide()
