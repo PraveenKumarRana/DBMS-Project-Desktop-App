@@ -1,19 +1,26 @@
-drop database eds;
-create database eds;
-
 use eds;
 
-
+drop table employee;
 create table employee(eid int primary key,ename varchar(50),doj date,dob date,dept varchar(50),age int,boardname varchar(50),designation varchar(50),phone int,password varchar(50));
+drop table consumer;
 create table consumer(cid int,cname varchar(50),phone int,boardname varchar(50),state varchar(50),subdiv varchar(50),divis varchar(50),city varchar(50),meterno int primary key,password varchar(50),email varchar(50),address varchar(50));
+drop table distributioncompany;
 create table distributioncompany(did int primary key,dname varchar(50),tenure int,state varchar(50),tid int);
+	drop table powercompany;
 create table powercompany(pid int primary key,pname varchar(50),type varchar(50),totalpower int,state varchar(50));
+	drop table transmissioncompany;
 create table transmissioncompany(tid int primary key,tname varchar(50),did int,tcapacity int,state varchar(50),tenure int);
+	drop table circles;
 create table circles(cname varchar(50),state varchar(50),managerid int,did int);
-create table division(divid int primary key,divname varchar(50),hid int,state varchar(50),did int);
-create table subdivision(sdivid int primary key,divid int,hid int,state varchar(50),sdivname varchar(50));
+	drop table division;
+create table division(divid int primary key,divname varchar(50),headname varchar(50),state varchar(50), did int);
+	drop table subdivision;
+create table subdivision(sdivid int primary key,divid int,headname varchar(50),state varchar(50),sdivname varchar(50));
+	drop table electricityboard;
 create table electricityboard(boardname varchar(50) primary key,noofconsumer int,state varchar(50),chairmanid int,powerconsumed int);
+	drop table billinginfo;
 create table billinginfo(billid int primary key,cid int,issuedate date,prevreading int,meterno int,curreading int,rate int,type varchar(50),unit int);
+	drop table newconnection;
 create table newconnection(cname varchar(50),phone int,boardname varchar(50),state varchar(50),subdiv varchar(50),divis varchar(50),city varchar(50),email varchar(50));
 
 insert into employee values
@@ -69,11 +76,11 @@ insert into transmissioncompany values
 	(4003,	'SLDC Delhi',	2003,	300,	'Delhi',			3),
 	(4004,	'GETCO',		2004,	800,	'Gujarat',			6),
 	(4005,	'HVPNL',		2005,	700,	'Haryana',			9),
-	(4005,	'GUAA',			2006,	200,	'tamil nadu',		5),
-	(4005,	'DASJH',		2007,	500,	'uttar pradesh',	6),
-	(4005,	'AHAKL',		2008,	300,	'Bihar',			9),
-	(4005,	'IUYQW',		2009,	600,	'maharastra',		7),
-	(4005,	'AKHSDA',		2010,	400,	'jharkhand',		2);
+	(4006,	'GUAA',			2006,	200,	'tamil nadu',		5),
+	(4007,	'DASJH',		2007,	500,	'uttar pradesh',	6),
+	(4008,	'AHAKL',		2008,	300,	'Bihar',			9),
+	(4009,	'IUYQW',		2009,	600,	'maharastra',		7),
+	(4010,	'AKHSDA',		2010,	400,	'jharkhand',		2);
 
 insert into circles values
 	('cname1',	'Delhi',			201,	2001),
@@ -87,22 +94,22 @@ insert into circles values
 	('cname9',	'maharastra',		209,	2009),
 	('cname10',	'jharkhand',		210,	2010);
 insert into division values
-	(5001,	'divname1',	7001	'Delhi',			2001),
-	(5002,	'divname2',	7002 	'Assam',			2002),
-	(5003,	'divname3',	7003	'Haryana',			2003),
-	(5004,	'divname4',	7004	'Andhra Pradesh',	2004),
-	(5005,	'divname5',	7005	'Gujarat',			2005),
-	(5006,	'divname6',	7006	'tamil nadu',		2006),
-	(5007,	'divname7',	7007	'uttar pradesh',	2007),
-	(5008,	'divname8',	7008	'Bihar',			2008),
-	(5009,	'divname9',	7009	'maharastra',		2009),
-	(5010,	'divname10',7010	'jharkhand',		2010);
+	(5001,	'divname1',	7001,	'Delhi',			2001),
+	(5002,	'divname2',	7002, 	'Assam',			2002),
+	(5003,	'divname3',	7003,	'Haryana',			2003),
+	(5004,	'divname4',	7004,	'Andhra Pradesh',	2004),
+	(5005,	'divname5',	7005,	'Gujarat',			2005),
+	(5006,	'divname6',	7006,	'tamil nadu',		2006),
+	(5007,	'divname7',	7007,	'uttar pradesh',	2007),
+	(5008,	'divname8',	7008,	'Bihar',			2008),
+	(5009,	'divname9',	7009,	'maharastra',		2009),
+	(5010,	'divname10',7010,	'jharkhand',		2010);
 insert into subdivision values
-	(6001,	5001,	'Akshay',	'Delhi',			'sdivname'),
-	(6002,	5002,	'Ranjan',	'Assam',			'sdivname'),
-	(6003,	5003,	'Manish',	'Haryana',			'sdivname'),
-	(6004,	5004,	'Prateek',	'Andhra Pradesh',	'sdivname'),
-	(6005,	5005,	'Anurag',	'Gujarat',			'sdivname');
+	(6001,	5001,	'Akshay',	'Haryana',			'sdivname1'),
+	(6002,	5003,	'Ranjan',	'Delhi',			'sdivname2'),
+	(6003,	5003,	'Manish',	'Delhi',			'sdivname3'),
+	(6004,	5003,	'Prateek',	'Delhi',	'sdivname4'),
+	(6005,	5005,	'Anurag',	'Gujarat',			'sdivname5');
 insert into electricityboard values
 	('ASEC',	250000,	'Assam',		301,	2500),
 	('DVB',		400000,	'Delhi',		302,	3200),
