@@ -204,11 +204,62 @@ class MainWindow(wx.Frame):
                 wx.StaticText(self.temppnl, -1,row[desc[4][0]],pos=(300,i))
                 wx.StaticText(self.temppnl, -1,str(row[desc[3][0]]),pos=(500,i))
                 wx.StaticText(self.temppnl, -1,str(row[desc[5][0]]),pos=(700,i))
+                i=i+30
+
+    def pcStateSearch(self,e):
+        if(self.t1.GetValue()):
+            self.temppnl.Hide()
+            self.temppnl=lowerNewPanel(self)
+            self.temppnl.Show()
+
+            #self.currentpnl.SetBackgroundColour("pink")
+            cur = con.cursor(mdb.cursors.DictCursor)
+            cur.execute("SELECT * FROM powercompany where state=%s",(self.t1.GetValue(),))
+            rows = cur.fetchall()
+            desc = cur.description
+            i=20
+            for row in rows:
+                #txt = row[desc[0][0]], row[desc[1][0]], row[desc[2][0]],row[desc[3][0]],row[desc[4][0]]
+                wx.StaticText(self.temppnl, -1,row[desc[1][0]],pos=(100,i))
+                wx.StaticText(self.temppnl, -1,row[desc[4][0]],pos=(300,i))
+                wx.StaticText(self.temppnl, -1,row[desc[2][0]],pos=(500,i))
+                wx.StaticText(self.temppnl, -1,str(row[desc[3][0]]),pos=(700,i))
+                i=i+30
+
+    def dcStateSearch(self,e):
+        if(self.t1.GetValue()):
+            self.temppnl.Hide()
+            self.temppnl=lowerNewPanel(self)
+            self.temppnl.Show()
+
+            #self.currentpnl.SetBackgroundColour("pink")
+            cur = con.cursor(mdb.cursors.DictCursor)
+            cur.execute("SELECT * FROM distributioncompany where state=%s",(self.t1.GetValue(),))
+            rows = cur.fetchall()
+            desc = cur.description
+            i=20
+            for row in rows:
+                #txt = row[desc[0][0]], row[desc[1][0]], row[desc[2][0]],row[desc[3][0]],row[desc[4][0]]
+                wx.StaticText(self.temppnl, -1,row[desc[1][0]],pos=(100,i))
+                wx.StaticText(self.temppnl, -1,row[desc[3][0]],pos=(300,i))
+                wx.StaticText(self.temppnl, -1,str(row[desc[2][0]]),pos=(500,i))
+                i=i+30
 
     def tcAll(self,e):
         self.temppnl.Hide()
         self.tcpnl.Hide()
         self.tc(self)
+
+
+    def pcAll(self,e):
+        self.temppnl.Hide()
+        self.pcpnl.Hide()
+        self.pc(self)
+
+    def dcAll(self,e):
+        self.temppnl.Hide()
+        self.dcpnl.Hide()
+        self.dc(self)
 
 
 
@@ -222,6 +273,7 @@ class MainWindow(wx.Frame):
     	self.p2.Show()
     	self.SetTitle(self.previousTitle)
         self.lpnl.Hide()
+
     def backtc(self,e):
     	self.p1.Hide()
     	self.p2.Show()
@@ -234,10 +286,34 @@ class MainWindow(wx.Frame):
         self.previousTitle=self.GetTitle()
     	self.SetTitle("Power Company")
         self.pcpnl=NewPanel(self)
-        BackButton = wx.Button(self.pcpnl, label='Back', pos=(60, 420),size=(100,40))
+        self.temppnl=lowerNewPanel(self)
+        BackButton = wx.Button(self.pcpnl, label='Back', pos=(1000, 10),size=(100,40))
+        ShowAllButton = wx.Button(self.pcpnl, label='Show All', pos=(200, 10),size=(100,40))
+
     	self.p1=self.pcpnl
     	self.p2=self.homepnl
-    	BackButton.Bind(wx.EVT_BUTTON,self.back)
+    	BackButton.Bind(wx.EVT_BUTTON,self.backtc)
+        ShowAllButton.Bind(wx.EVT_BUTTON,self.pcAll)
+        self.t1 = wx.TextCtrl(self.pcpnl,style= wx.TE_PROCESS_ENTER,pos=(500,20),size=(200,40))
+        self.t1.Bind(wx.EVT_TEXT_ENTER,self.pcStateSearch)
+        wx.StaticText(self.pcpnl, -1,"Name",pos=(100,80))
+        wx.StaticText(self.pcpnl, -1,"State",pos=(300,80))
+        wx.StaticText(self.pcpnl, -1,"Type",pos=(500,80))
+        wx.StaticText(self.pcpnl, -1,"Total power",pos=(700,80))
+        cur = con.cursor(mdb.cursors.DictCursor)
+        cur.execute("SELECT * FROM powercompany ")
+        rows = cur.fetchall()
+        desc = cur.description
+
+        i=20
+        for row in rows:
+            #txt = row[desc[0][0]], row[desc[1][0]], row[desc[2][0]],row[desc[3][0]],row[desc[4][0]]
+            wx.StaticText(self.temppnl, -1,row[desc[1][0]],pos=(100,i))
+            wx.StaticText(self.temppnl, -1,row[desc[4][0]],pos=(300,i))
+            wx.StaticText(self.temppnl, -1,row[desc[2][0]],pos=(500,i))
+            wx.StaticText(self.temppnl, -1,str(row[desc[3][0]]),pos=(700,i))
+            i=i+30
+
     	self.pcpnl.Show()
 
 
@@ -246,10 +322,31 @@ class MainWindow(wx.Frame):
         self.previousTitle=self.GetTitle()
     	self.SetTitle("Distribution Company")
         self.dcpnl=NewPanel(self)
-        BackButton = wx.Button(self.dcpnl, label='Back', pos=(60, 420),size=(100,40))
-    	self.p1=self.dcpnl
+        self.temppnl=lowerNewPanel(self)
+        BackButton = wx.Button(self.dcpnl, label='Back', pos=(1000, 10),size=(100,40))
+        ShowAllButton = wx.Button(self.dcpnl, label='Show All', pos=(200, 10),size=(100,40))
+
+        self.p1=self.dcpnl
     	self.p2=self.homepnl
-    	BackButton.Bind(wx.EVT_BUTTON,self.back)
+    	BackButton.Bind(wx.EVT_BUTTON,self.backtc)
+        ShowAllButton.Bind(wx.EVT_BUTTON,self.dcAll)
+        self.t1 = wx.TextCtrl(self.dcpnl,style= wx.TE_PROCESS_ENTER,pos=(500,20),size=(200,40))
+        self.t1.Bind(wx.EVT_TEXT_ENTER,self.dcStateSearch)
+        wx.StaticText(self.dcpnl, -1,"Name",pos=(100,80))
+        wx.StaticText(self.dcpnl, -1,"State",pos=(300,80))
+        wx.StaticText(self.dcpnl, -1,"Tenure(in years)",pos=(500,80))
+        cur = con.cursor(mdb.cursors.DictCursor)
+        cur.execute("SELECT * FROM distributioncompany ")
+        rows = cur.fetchall()
+        desc = cur.description
+
+        i=20
+        for row in rows:
+            #txt = row[desc[0][0]], row[desc[1][0]], row[desc[2][0]],row[desc[3][0]],row[desc[4][0]]
+            wx.StaticText(self.temppnl, -1,row[desc[1][0]],pos=(100,i))
+            wx.StaticText(self.temppnl, -1,row[desc[3][0]],pos=(300,i))
+            wx.StaticText(self.temppnl, -1,str(row[desc[2][0]]),pos=(500,i))
+            i=i+30
     	self.dcpnl.Show()
 
 
