@@ -90,7 +90,12 @@ class MainWindow(wx.Frame):
         self.previousTitle=self.GetTitle()
         self.SetTitle("Application for New Connection")
         self.ncpnl=NewPanel(self)
-        #self.ncpnl.SetBackgroundColour("gray")
+        self.ncpnl.SetBackgroundColour((232,232,232))
+        ebButton = wx.Button(self.ncpnl, label='Back', pos=(1000, 10))
+        self.p1=self.ncpnl
+        self.p2=self.homepnl
+        ebButton.Bind(wx.EVT_BUTTON, self.back)
+
         cur = con.cursor(mdb.cursors.DictCursor)
         cur.execute("select state from distributioncompany")
         rows=cur.fetchall()
@@ -503,6 +508,10 @@ class MainWindow(wx.Frame):
 
         SubmitButton = wx.Button(self.formpnl, label='Submit', pos=(500, 450),size=(100,40))
         SubmitButton.Bind(wx.EVT_BUTTON,self.Submit)
+        backButton = wx.Button(self.formpnl, label='Cancel', pos=(1000, 10))
+        self.p1=self.formpnl
+        self.p2=self.homepnl
+        backButton.Bind(wx.EVT_BUTTON, self.Cancel)
 
     def Submit(self,e):
         if(self.t11.GetValue() and self.t12.GetValue() and self.t13.GetValue() and self.t14.GetValue() and self.t15.GetValue() and self.t16.GetValue() ):
@@ -514,7 +523,12 @@ class MainWindow(wx.Frame):
         else:
             msg=wx.StaticText(self.formpnl, -1, "Any field can not be empty !!",pos=(w/2,300),size=(300,300))
             msg.SetForegroundColour((255,0,0))
-
+    def Cancel(self,e):
+        dial=wx.MessageBox(message='Do you want to cancel it?',caption='Cancel',style=wx.YES_NO | wx.ICON_INFORMATION)
+        self.p1=self.formpnl
+        self.p2=self.homepnl
+        if (dial==2):
+            self.back(self)
     def UserProfile(self,e):
     	self.custpnl.Hide()
         self.previousTitle=self.GetTitle()
