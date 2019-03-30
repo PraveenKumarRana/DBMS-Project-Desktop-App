@@ -41,8 +41,6 @@ class MainWindow(wx.Frame):
 
     def InitUI(self):
 
-
-
         menubar = wx.MenuBar()
         fileMenu = wx.Menu()
         fileItem = fileMenu.Append(wx.ID_EXIT, 'Quit', 'Quit application')
@@ -66,6 +64,7 @@ class MainWindow(wx.Frame):
         tcButton.Bind(wx.EVT_BUTTON, self.tc)
         ebButton.Bind(wx.EVT_BUTTON, self.eb)
 
+
         l1 = wx.StaticText(self.homepnl, -1, "Customer ID : ",pos=(510,240))
         self.t1 = wx.TextCtrl(self.homepnl,style= wx.TE_PROCESS_ENTER,pos=(610,230),size=(200,40))
         l1 = wx.StaticText(self.homepnl, -1, "Password    : ",pos=(510,290))
@@ -85,6 +84,7 @@ class MainWindow(wx.Frame):
         self.SetTitle('Power Distribution System')
         self.Centre()
 
+
     def eb(self,e):
     	self.homepnl.Hide()
     	self.previousTitle=self.GetTitle()
@@ -95,6 +95,7 @@ class MainWindow(wx.Frame):
         ebButton = wx.Button(self.upnl, label='Back', pos=(1000, 10))
         self.p1=self.upnl
         self.p2=self.homepnl
+        print "firoz  1"
     	ebButton.Bind(wx.EVT_BUTTON, self.back_tc_pc_dc_eb)
         #l1 = wx.StaticText(self.ebpnl, -1,"hello",pos=(10,10))
 
@@ -416,6 +417,25 @@ class MainWindow(wx.Frame):
     	self.p2=self.homepnl
     	BackButton.Bind(wx.EVT_BUTTON,self.back)
     	self.emplpnl.Show()
+
+    """def NewconForm(self,e):
+        self.formpnl=NewPanel(self)
+        l0 = wx.StaticText(self.formpnl, -1, " New Connection Form  ",pos=(20,110))
+        l0.SetFont(wx.Font(20, wx.MODERN, wx.NORMAL, wx.BOLD))
+
+        l1 = wx.StaticText(self.formpnl, -1, " Name of Applicant    :   ",pos=(40,150))
+        l2 = wx.StaticText(self.formpnl, -1, " Father's Name        :   ",pos=(40,200))
+        l3 = wx.StaticText(self.formpnl, -1, " Installation Address :   ",pos=(40,250))
+        l5 = wx.StaticText(self.formpnl, -1, " Mobile No.           :   ",pos=(40,300))
+        l6 = wx.StaticText(self.formpnl, -1, " Email                :   ",pos=(40,350))
+        l7 = wx.StaticText(self.formpnl, -1, " Purpose of Supply    :   ",pos=(40,400))
+
+        SubmitButton = wx.Button(self.formpnl, label='Submit', pos=(500, 450),size=(100,40))
+        SubmitButton.Bind(wx.EVT_BUTTON,self.Submit)"""
+
+    def Submit(self,e):
+        wx.MessageBox(message='Succesfuly Submitted',caption='Info',style=wx.OK | wx.ICON_INFORMATION)
+        self.back(self)
 
     def UserProfile(self,e):
     	self.custpnl.Hide()
