@@ -4,37 +4,44 @@ import wx
 import wx.lib.scrolledpanel as scrolled
 import MySQLdb as mdb
 con = mdb.connect('localhost', 'admin', 'admin', 'eds')
-w=0
-h=0
+
 with con:
     cur=con.cursor()
+class HeadNewPanel(wx.Panel):
+
+    def __init__(self, parent):
+        """Constructor"""
+        wx.Panel.__init__(self, parent=parent,size=(w,100),pos=(0,0))
+
 class NewPanel(wx.Panel):
 
     def __init__(self, parent):
         """Constructor"""
-        wx.Panel.__init__(self, parent=parent,size=(w,h),pos=(0,0))
+        wx.Panel.__init__(self, parent=parent,size=(w,h-100),pos=(0,100))
 class upperNewPanel(wx.Panel):
 
     def __init__(self, parent):
         """Constructor"""
-        wx.Panel.__init__(self, parent=parent,size=(w,165),pos=(0,0))
+        wx.Panel.__init__(self, parent=parent,size=(w,165),pos=(0,100))
 class lowerNewPanel(wx.Panel):
 
     def __init__(self, parent):
         """Constructor"""
-        wx.Panel.__init__(self, parent=parent,size=(w,h-100),pos=(0,120))
+        wx.Panel.__init__(self, parent=parent,size=(w,h-265),pos=(0,220))
 
 class MainWindow(wx.Frame):
 
     def __init__(self, parent):
         wx.Frame.__init__(self, parent=None,style=wx.DEFAULT_FRAME_STYLE & ~(wx.RESIZE_BORDER | wx.MAXIMIZE_BOX))
         self.SetIcon(wx.Icon("display1.ico"))
+        global w,h
+        w,h=wx.GetDisplaySize()
         self.InitUI()
 
 
     def InitUI(self):
 
-        global w,h
+
 
         menubar = wx.MenuBar()
         fileMenu = wx.Menu()
@@ -44,11 +51,14 @@ class MainWindow(wx.Frame):
 
         self.Bind(wx.EVT_MENU, self.OnClose, fileItem)
 
-        self.homepnl = wx.Panel(self)
-        pcButton = wx.Button(self.homepnl, label='Power Company', pos=(40, 30),size=(200,40))
-        dcButton = wx.Button(self.homepnl, label='Distribution Company', pos=(40, 80),size=(200,40))
-        tcButton = wx.Button(self.homepnl, label='Transmission Company', pos=(40, 130),size=(200,40))
-        ebButton = wx.Button(self.homepnl, label='Electricity Board', pos=(40, 180),size=(200,40))
+        self.headpnl=HeadNewPanel(self)
+        self.headpnl.SetBackgroundColour("blue")
+
+        self.homepnl = NewPanel(self)
+        pcButton = wx.Button(self.homepnl, label='Power Company', pos=(40, 150),size=(200,40))
+        dcButton = wx.Button(self.homepnl, label='Distribution Company', pos=(40, 200),size=(200,40))
+        tcButton = wx.Button(self.homepnl, label='Transmission Company', pos=(40, 250),size=(200,40))
+        ebButton = wx.Button(self.homepnl, label='Electricity Board', pos=(40, 300),size=(200,40))
 
 
         pcButton.Bind(wx.EVT_BUTTON, self.pc)
@@ -56,20 +66,19 @@ class MainWindow(wx.Frame):
         tcButton.Bind(wx.EVT_BUTTON, self.tc)
         ebButton.Bind(wx.EVT_BUTTON, self.eb)
 
-        l1 = wx.StaticText(self.homepnl, -1, "Customer ID : ",pos=(510,40))
-        self.t1 = wx.TextCtrl(self.homepnl,style= wx.TE_PROCESS_ENTER,pos=(610,30),size=(200,40))
-        l1 = wx.StaticText(self.homepnl, -1, "Password    : ",pos=(510,90))
-        self.t2 = wx.TextCtrl(self.homepnl,style = wx.TE_PASSWORD|wx.TE_PROCESS_ENTER,pos=(610,80),size=(200,40))
+        l1 = wx.StaticText(self.homepnl, -1, "Customer ID : ",pos=(510,240))
+        self.t1 = wx.TextCtrl(self.homepnl,style= wx.TE_PROCESS_ENTER,pos=(610,230),size=(200,40))
+        l1 = wx.StaticText(self.homepnl, -1, "Password    : ",pos=(510,290))
+        self.t2 = wx.TextCtrl(self.homepnl,style = wx.TE_PASSWORD|wx.TE_PROCESS_ENTER,pos=(610,280),size=(200,40))
         self.t1.Bind(wx.EVT_TEXT_ENTER,self.Login)
         self.t2.Bind(wx.EVT_TEXT_ENTER,self.Login)
-        self.errormsg = wx.StaticText(self.homepnl, -1, " ",pos=(610,140))
-        loginButton = wx.Button(self.homepnl, label='Log In', pos=(715, 170))
+        self.errormsg = wx.StaticText(self.homepnl, -1, " ",pos=(610,340))
+        loginButton = wx.Button(self.homepnl, label='Log In', pos=(715, 370))
         loginButton.Bind(wx.EVT_BUTTON, self.Login)
-        NacButton = wx.Button(self.homepnl, label='Not a Consumer', pos=(515, 170))
+        NacButton = wx.Button(self.homepnl, label='Not a Consumer', pos=(515, 370))
         NacButton.Bind(wx.EVT_BUTTON, self.EmpLoginForm)
-        newConButton = wx.Button(self.homepnl, label='Apply New Connection', pos=(715, 220))
-        newConButton.Bind(wx.EVT_BUTTON, self.newConnection)
-        w,h=wx.GetDisplaySize()
+        newConButton = wx.Button(self.homepnl, label='Apply New Connection', pos=(40,350),size=(200,40))   #220
+        #w,h=wx.GetDisplaySize()
         self.SetSize((w,h))
         self.SetMaxSize((w,h))
         self.SetMinSize((w,h))
@@ -289,7 +298,7 @@ class MainWindow(wx.Frame):
         self.pcpnl=NewPanel(self)
         self.temppnl=lowerNewPanel(self)
         BackButton = wx.Button(self.pcpnl, label='Back', pos=(1000, 10),size=(100,40))
-        ShowAllButton = wx.Button(self.pcpnl, label='Show All', pos=(200, 10),size=(100,40))
+        ShowAllButton = wx.Button(self.pcpnl, label='Show All', pos=(10, 50),size=(100,40))
 
     	self.p1=self.pcpnl
     	self.p2=self.homepnl
@@ -297,10 +306,10 @@ class MainWindow(wx.Frame):
         ShowAllButton.Bind(wx.EVT_BUTTON,self.pcAll)
         self.t1 = wx.TextCtrl(self.pcpnl,style= wx.TE_PROCESS_ENTER,pos=(500,20),size=(200,40))
         self.t1.Bind(wx.EVT_TEXT_ENTER,self.pcStateSearch)
-        wx.StaticText(self.pcpnl, -1,"Name",pos=(100,80))
-        wx.StaticText(self.pcpnl, -1,"State",pos=(300,80))
-        wx.StaticText(self.pcpnl, -1,"Type",pos=(500,80))
-        wx.StaticText(self.pcpnl, -1,"Total power",pos=(700,80))
+        wx.StaticText(self.pcpnl, -1,"Name",pos=(100,100))
+        wx.StaticText(self.pcpnl, -1,"State",pos=(300,100))
+        wx.StaticText(self.pcpnl, -1,"Type",pos=(500,100))
+        wx.StaticText(self.pcpnl, -1,"Total power",pos=(700,100))
         cur = con.cursor(mdb.cursors.DictCursor)
         cur.execute("SELECT * FROM powercompany ")
         rows = cur.fetchall()
@@ -325,7 +334,7 @@ class MainWindow(wx.Frame):
         self.dcpnl=NewPanel(self)
         self.temppnl=lowerNewPanel(self)
         BackButton = wx.Button(self.dcpnl, label='Back', pos=(1000, 10),size=(100,40))
-        ShowAllButton = wx.Button(self.dcpnl, label='Show All', pos=(200, 10),size=(100,40))
+        ShowAllButton = wx.Button(self.dcpnl, label='Show All', pos=(10, 50),size=(100,40))
 
         self.p1=self.dcpnl
     	self.p2=self.homepnl
@@ -333,9 +342,9 @@ class MainWindow(wx.Frame):
         ShowAllButton.Bind(wx.EVT_BUTTON,self.dcAll)
         self.t1 = wx.TextCtrl(self.dcpnl,style= wx.TE_PROCESS_ENTER,pos=(500,20),size=(200,40))
         self.t1.Bind(wx.EVT_TEXT_ENTER,self.dcStateSearch)
-        wx.StaticText(self.dcpnl, -1,"Name",pos=(100,80))
-        wx.StaticText(self.dcpnl, -1,"State",pos=(300,80))
-        wx.StaticText(self.dcpnl, -1,"Tenure(in years)",pos=(500,80))
+        wx.StaticText(self.dcpnl, -1,"Name",pos=(100,100))
+        wx.StaticText(self.dcpnl, -1,"State",pos=(300,100))
+        wx.StaticText(self.dcpnl, -1,"Tenure(in years)",pos=(500,100))
         cur = con.cursor(mdb.cursors.DictCursor)
         cur.execute("SELECT * FROM distributioncompany ")
         rows = cur.fetchall()
@@ -358,17 +367,17 @@ class MainWindow(wx.Frame):
         self.tcpnl=NewPanel(self)
         self.temppnl=lowerNewPanel(self)
         BackButton = wx.Button(self.tcpnl, label='Back', pos=(1000, 10),size=(100,40))
-        ShowAllButton = wx.Button(self.tcpnl, label='Show All', pos=(200, 10),size=(100,40))
+        ShowAllButton = wx.Button(self.tcpnl, label='Show All', pos=(10, 50),size=(100,40))
         self.p1=self.tcpnl
     	self.p2=self.homepnl
     	BackButton.Bind(wx.EVT_BUTTON,self.backtc)
         ShowAllButton.Bind(wx.EVT_BUTTON,self.tcAll)
         self.t1 = wx.TextCtrl(self.tcpnl,style= wx.TE_PROCESS_ENTER,pos=(500,20),size=(200,40))
         self.t1.Bind(wx.EVT_TEXT_ENTER,self.tcStateSearch)
-        wx.StaticText(self.tcpnl, -1,"Name",pos=(100,80))
-        wx.StaticText(self.tcpnl, -1,"State",pos=(300,80))
-        wx.StaticText(self.tcpnl, -1,"Capacity",pos=(500,80))
-        wx.StaticText(self.tcpnl, -1,"Tenure(in years)",pos=(700,80))
+        wx.StaticText(self.tcpnl, -1,"Name",pos=(100,100))
+        wx.StaticText(self.tcpnl, -1,"State",pos=(300,100))
+        wx.StaticText(self.tcpnl, -1,"Capacity",pos=(500,100))
+        wx.StaticText(self.tcpnl, -1,"Tenure(in years)",pos=(700,100))
         cur = con.cursor(mdb.cursors.DictCursor)
         cur.execute("SELECT * FROM transmissioncompany ")
         rows = cur.fetchall()
