@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import wx
+import wx.lib.scrolledpanel
 import wx.lib.scrolledpanel as scrolled
 import MySQLdb as mdb
 con = mdb.connect('localhost', 'admin', 'admin', 'eds')
@@ -12,7 +13,8 @@ class HeadNewPanel(wx.Panel):
     def __init__(self, parent):
         """Constructor"""
         wx.Panel.__init__(self, parent=parent,size=(w,100),pos=(0,0))
-
+        l1=wx.StaticText(self, -1,"Electricity Distriution System",pos=(0,0),size=(300,30))
+        l1.SetFont(wx.Font(12,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
 class NewPanel(wx.Panel):
 
     def __init__(self, parent):
@@ -657,6 +659,7 @@ class MainWindow(wx.Frame):
         l1Add.Bind(wx.EVT_BUTTON,self.addDc)
         l1Update=wx.Button(self.emppnl, label='UPDATE', pos=(200,80),size=(100,40))
         l1Delete=wx.Button(self.emppnl, label='DELETE', pos=(330,80),size=(100,40))
+        l1Delete.Bind(wx.EVT_BUTTON,self.DelDc)
 
         l1=wx.StaticText(self.emppnl, -1,"Transmission Company",pos=(80,150),size=(300,30))
         l1.SetFont(wx.Font(12,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
@@ -673,6 +676,48 @@ class MainWindow(wx.Frame):
         l3Add.Bind(wx.EVT_BUTTON,self.addPc)
         l3Update=wx.Button(self.emppnl, label='UPDATE', pos=(200,320),size=(100,40))
         l3Delete=wx.Button(self.emppnl, label='DELETE', pos=(330,320),size=(100,40))
+    def DelDc(self,e):
+        self.emppnl.Hide()
+        self.delpnl=NewPanel(self)
+
+        l0 = wx.StaticText(self.delpnl, -1, " Deleting Distriution Company  ",pos=(450,10),size=(500,500),style=wx.ALIGN_CENTER)
+        l0.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.BOLD))
+
+        cur=con.cursor(mdb.cursors.DictCursor)
+        cur.execute("select * from distributioncompany")
+        self.rows=cur.fetchall()
+        wx.StaticText(self.delpnl, -1, "Id",pos=(150,50))
+        wx.StaticText(self.delpnl, -1, "Name",pos=(300,50))
+        wx.StaticText(self.delpnl, -1, "Tenure",pos=(580,50))
+        wx.StaticText(self.delpnl, -1, "State",pos=(650,50))
+        wx.StaticText(self.delpnl, -1, "T.C. Id",pos=(830,50))
+        #self.delpnl.SetupScrolling()
+        i=80
+        j=0
+        for row in self.rows:
+            wx.StaticText(self.delpnl, -1,str(row['did']),pos=(150,i))
+            wx.StaticText(self.delpnl, -1,row['dname'],pos=(200,i))
+            wx.StaticText(self.delpnl, -1,str(row['tenure']),pos=(600,i))
+            wx.StaticText(self.delpnl, -1,row['state'],pos=(660,i))
+            wx.StaticText(self.delpnl, -1,str(row['tid']),pos=(830,i))
+            delButton = wx.Button(self.delpnl, label='DELETE', pos=(880, i),size=(100,20))
+            delButton.Bind(wx.EVT_BUTTON,self.delBut,delButton)
+            delButton.id=j
+            j=j+1
+            i=i+30
+        backButton = wx.Button(self.delpnl, label='Back', pos=(1000, 10),size = (100,40))
+        self.p1=self.delpnl
+        self.p2=self.emppnl
+        backButton.Bind(wx.EVT_BUTTON, self.back)
+
+    def delBut(self,e):
+        id=e.GetEventObject().id
+        deldid=self.rows[id]['did']
+        cur = con.cursor(mdb.cursors.DictCursor)
+        cur.execute("delete from distributioncompany where did =%s",(deldid,))
+        con.commit()
+        self.delpnl.Hide()
+        self.DelDc(self)
 
     def addDc(self,e):
         self.emppnl.Hide()
