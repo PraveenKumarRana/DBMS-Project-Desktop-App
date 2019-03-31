@@ -505,9 +505,12 @@ class MainWindow(wx.Frame):
         self.t15 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,300),size=(200,30))
         l7 = wx.StaticText(self.formpnl, -1, " Purpose of Supply    :   ",pos=(100,350))
         self.t16 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,350),size=(200,30))
+        l8 = wx.StaticText(self.formpnl, -1, " City    :   ",              pos=(100,400))
+        self.t17 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,400),size=(200,30))
 
         SubmitButton = wx.Button(self.formpnl, label='Submit', pos=(500, 450),size=(100,40))
         SubmitButton.Bind(wx.EVT_BUTTON,self.Submit)
+
         backButton = wx.Button(self.formpnl, label='Cancel', pos=(1000, 10))
         self.p1=self.formpnl
         self.p2=self.homepnl
@@ -515,6 +518,13 @@ class MainWindow(wx.Frame):
 
     def Submit(self,e):
         if(self.t11.GetValue() and self.t12.GetValue() and self.t13.GetValue() and self.t14.GetValue() and self.t15.GetValue() and self.t16.GetValue() ):
+            cur = con.cursor(mdb.cursors.DictCursor)
+            cur.execute("select boardname from consumer where state=%s",(self.state,))
+            rows=cur.fetchall()
+            cur = con.cursor()
+            fi='dbwoi'
+            cur.execute("insert into newconnection values (%s,%s,%s,%s,%s,%s,%s,%s)",(self.t11.GetValue(),self.t14.GetValue(),rows[0]['boardname'],self.state,self.Subdiv,self.Div,self.t17.GetValue(),self.t15.GetValue(),))
+            con.commit()
             self.p1=self.formpnl
             print "haider"
             self.p2=self.homepnl
@@ -536,18 +546,18 @@ class MainWindow(wx.Frame):
         self.uppnl=NewPanel(self)
         cur.execute("select cid,cname,phone,email,address from consumer where cid=%s",(self.t1.GetValue(),))
         rows=cur.fetchall()
-        l1=wx.StaticText(self.uppnl, -1, rows[0][1]+"'s Profile",pos=(310,70),size=(1000,1000),style=wx.ALIGN_CENTER)
+        l1=wx.StaticText(self.uppnl, -1, rows[0][1]+"'s Profile",pos=(220,10),size=(1000,1000),style=wx.ALIGN_CENTER)
         l1.SetFont(wx.Font(18, wx.MODERN, wx.NORMAL, wx.BOLD))
-        l2 = wx.StaticText(self.uppnl, -1, "Consumer ID :   "+str(rows[0][0]),pos=(610,170),size=(1000,1000))
-        l3 = wx.StaticText(self.uppnl, -1, "Name        :   "+rows[0][1],pos=(610,270),size=(1000,1000))
-        l4 = wx.StaticText(self.uppnl, -1, "Phone Number:   "+str(rows[0][2]),pos=(610,370),size=(1000,1000))
-        l5 = wx.StaticText(self.uppnl, -1, "Email ID    :   "+rows[0][3],pos=(610,470),size=(1000,1000))
-        l6 = wx.StaticText(self.uppnl, -1, "Address     :   "+rows[0][4],pos=(610,570),size=(1000,1000))
-        l2.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
-        l3.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
-        l4.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
-        l5.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
-        l6.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
+        l2 = wx.StaticText(self.uppnl, -1, "Consumer ID :   "+str(rows[0][0]),pos=(50,50),size=(1000,1000))
+        l3 = wx.StaticText(self.uppnl, -1, "Name        :   "+rows[0][1],     pos=(50,100),size=(1000,1000))
+        l4 = wx.StaticText(self.uppnl, -1, "Phone Number:   "+str(rows[0][2]),pos=(50,150),size=(1000,1000))
+        l5 = wx.StaticText(self.uppnl, -1, "Email ID    :   "+rows[0][3],     pos=(50,200),size=(1000,1000))
+        l6 = wx.StaticText(self.uppnl, -1, "Address     :   "+rows[0][4],     pos=(50,250),size=(1000,1000))
+        l2.SetFont(wx.Font(13, wx.MODERN, wx.NORMAL, wx.NORMAL))
+        l3.SetFont(wx.Font(13, wx.MODERN, wx.NORMAL, wx.NORMAL))
+        l4.SetFont(wx.Font(13, wx.MODERN, wx.NORMAL, wx.NORMAL))
+        l5.SetFont(wx.Font(13, wx.MODERN, wx.NORMAL, wx.NORMAL))
+        l6.SetFont(wx.Font(13, wx.MODERN, wx.NORMAL, wx.NORMAL))
         BackButton = wx.Button(self.uppnl, label='Back', pos=(60, 420),size=(100,40))
     	self.p1=self.uppnl
     	self.p2=self.custpnl
@@ -566,17 +576,21 @@ class MainWindow(wx.Frame):
         l1.SetFont(wx.Font(18, wx.MODERN, wx.NORMAL, wx.BOLD))
         l2 = wx.StaticText(self.epnl, -1, "Employee ID       :   "+str(rows[0][0]),      pos=(50,50),size=(1000,1000))
         l3 = wx.StaticText(self.epnl, -1, "Name              :   "+rows[0][1],           pos=(50,100),size=(1000,1000))
-        l3 = wx.StaticText(self.epnl, -1, "Departmet         :   "+rows[0][4],           pos=(50,150),size=(1000,1000))
-        l3 = wx.StaticText(self.epnl, -1, "Designation       :   "+rows[0][7],           pos=(50,200),size=(1000,1000))
-        l3 = wx.StaticText(self.epnl, -1, "Elect. board name :   "+rows[0][6],           pos=(50,250),size=(1000,1000))
-        l4 = wx.StaticText(self.epnl, -1, "Date of Jioning   :   "+str(rows[0][2]),      pos=(50,300),size=(1000,1000))
-        l5 = wx.StaticText(self.epnl, -1, "Phone no.         :   "+str(rows[0][8]),       pos=(50,350),size=(1000,1000))
-        l6 = wx.StaticText(self.epnl, -1, "Date of birth     :   "+str(rows[0][3]),      pos=(50,400),size=(1000,1000))
-        """l2.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
-        l3.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
-        l4.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
-        l5.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
-        l6.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))"""
+        l4 = wx.StaticText(self.epnl, -1, "Departmet         :   "+rows[0][4],           pos=(50,150),size=(1000,1000))
+        l5 = wx.StaticText(self.epnl, -1, "Designation       :   "+rows[0][7],           pos=(50,200),size=(1000,1000))
+        l6 = wx.StaticText(self.epnl, -1, "Elect. board name :   "+rows[0][6],           pos=(50,250),size=(1000,1000))
+        l7 = wx.StaticText(self.epnl, -1, "Date of Jioning   :   "+str(rows[0][2]),      pos=(50,300),size=(1000,1000))
+        l8 = wx.StaticText(self.epnl, -1, "Phone no.         :   "+str(rows[0][8]),       pos=(50,350),size=(1000,1000))
+        l9 = wx.StaticText(self.epnl, -1, "Date of birth     :   "+str(rows[0][3]),      pos=(50,400),size=(1000,1000))
+        l2.SetFont(wx.Font(12, wx.MODERN, wx.NORMAL, wx.NORMAL))
+        l3.SetFont(wx.Font(12, wx.MODERN, wx.NORMAL, wx.NORMAL))
+        l4.SetFont(wx.Font(12, wx.MODERN, wx.NORMAL, wx.NORMAL))
+        l5.SetFont(wx.Font(12, wx.MODERN, wx.NORMAL, wx.NORMAL))
+        l6.SetFont(wx.Font(12, wx.MODERN, wx.NORMAL, wx.NORMAL))
+        l7.SetFont(wx.Font(12, wx.MODERN, wx.NORMAL, wx.NORMAL))
+        l8.SetFont(wx.Font(12, wx.MODERN, wx.NORMAL, wx.NORMAL))
+        l9.SetFont(wx.Font(12, wx.MODERN, wx.NORMAL, wx.NORMAL))
+
         BackButton = wx.Button(self.epnl, label='Back', pos=(1200, 420),size=(100,40))
     	self.p1=self.epnl
     	self.p2=self.emppnl
