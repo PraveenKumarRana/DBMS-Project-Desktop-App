@@ -520,17 +520,15 @@ class MainWindow(wx.Frame):
         self.previousTitle=self.GetTitle()
     	self.SetTitle("Profile")
         self.uppnl=NewPanel(self)
-        cur.execute("select cid,cname,phone from consumer where cid=%s",(self.t1.GetValue(),))
+        cur.execute("select cid,cname,phone,email,address from consumer where cid=%s",(self.t1.GetValue(),))
         rows=cur.fetchall()
-        phone=str(rows[0][2])
-        custid=str(rows[0][0])
         l1=wx.StaticText(self.uppnl, -1, rows[0][1]+"'s Profile",pos=(310,70),size=(1000,1000),style=wx.ALIGN_CENTER)
         l1.SetFont(wx.Font(18, wx.MODERN, wx.NORMAL, wx.BOLD))
-        l2 = wx.StaticText(self.uppnl, -1, "Consumer ID :   "+custid,pos=(610,170),size=(1000,1000))
+        l2 = wx.StaticText(self.uppnl, -1, "Consumer ID :   "+str(rows[0][0]),pos=(610,170),size=(1000,1000))
         l3 = wx.StaticText(self.uppnl, -1, "Name        :   "+rows[0][1],pos=(610,270),size=(1000,1000))
-        l4 = wx.StaticText(self.uppnl, -1, "Phone Number:   "+phone,pos=(610,370),size=(1000,1000))
-        l5 = wx.StaticText(self.uppnl, -1, "Email ID    :   ",pos=(610,470),size=(1000,1000))
-        l6 = wx.StaticText(self.uppnl, -1, "Address     :   ",pos=(610,570),size=(1000,1000))
+        l4 = wx.StaticText(self.uppnl, -1, "Phone Number:   "+str(rows[0][2]),pos=(610,370),size=(1000,1000))
+        l5 = wx.StaticText(self.uppnl, -1, "Email ID    :   "+rows[0][3],pos=(610,470),size=(1000,1000))
+        l6 = wx.StaticText(self.uppnl, -1, "Address     :   "+rows[0][4],pos=(610,570),size=(1000,1000))
         l2.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
         l3.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
         l4.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
@@ -542,6 +540,36 @@ class MainWindow(wx.Frame):
     	BackButton.Bind(wx.EVT_BUTTON,self.back)
     	#self.uppnl.SetBackgroundColour("blue")
     	self.uppnl.Show()
+
+    def EmpProfile(self,e):
+    	self.emppnl.Hide()
+        self.previousTitle=self.GetTitle()
+    	self.SetTitle("Profile")
+        self.epnl=NewPanel(self)
+        cur.execute("select * from employee where eid=%s",(self.t1.GetValue(),))
+        rows=cur.fetchall()
+        l1=wx.StaticText(self.epnl, -1, rows[0][1]+"'s Profile",pos=(210,20),size=(1000,1000),style=wx.ALIGN_CENTER)
+        l1.SetFont(wx.Font(18, wx.MODERN, wx.NORMAL, wx.BOLD))
+        l2 = wx.StaticText(self.epnl, -1, "Employee ID       :   "+str(rows[0][0]),      pos=(50,50),size=(1000,1000))
+        l3 = wx.StaticText(self.epnl, -1, "Name              :   "+rows[0][1],           pos=(50,100),size=(1000,1000))
+        l3 = wx.StaticText(self.epnl, -1, "Departmet         :   "+rows[0][4],           pos=(50,150),size=(1000,1000))
+        l3 = wx.StaticText(self.epnl, -1, "Designation       :   "+rows[0][7],           pos=(50,200),size=(1000,1000))
+        l3 = wx.StaticText(self.epnl, -1, "Elect. board name :   "+rows[0][6],           pos=(50,250),size=(1000,1000))
+        l4 = wx.StaticText(self.epnl, -1, "Date of Jioning   :   "+str(rows[0][2]),      pos=(50,300),size=(1000,1000))
+        l5 = wx.StaticText(self.epnl, -1, "Phone no.         :   "+str(rows[0][8]),       pos=(50,350),size=(1000,1000))
+        l6 = wx.StaticText(self.epnl, -1, "Date of birth     :   "+str(rows[0][3]),      pos=(50,400),size=(1000,1000))
+        """l2.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
+        l3.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
+        l4.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
+        l5.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
+        l6.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))"""
+        BackButton = wx.Button(self.epnl, label='Back', pos=(1200, 420),size=(100,40))
+    	self.p1=self.epnl
+    	self.p2=self.emppnl
+    	BackButton.Bind(wx.EVT_BUTTON,self.back)
+    	#self.uppnl.SetBackgroundColour("blue")
+    	#self.uppnl.Show()
+
 
     def Login(self,e):
         if(self.t1.GetValue()):
@@ -561,13 +589,28 @@ class MainWindow(wx.Frame):
             cur.execute("select password from employee where eid=%s",(self.t1.GetValue(),))
             rows = cur.fetchall()
             if(len(rows)!=0 and self.t2.GetValue()==rows[0][0]):
-                self.Customer(self)
+                self.Employee(self)
             else:
                 self.errormsg.SetForegroundColour((255,0,0))
                 self.errormsg.SetLabel("Wrong Employee ID or Password!!")
         else:
             self.errormsg.SetForegroundColour((255,0,0))
             self.errormsg.SetLabel("Wrong Employee ID or Password!!")
+
+    def Employee(self,e):
+        self.emplpnl.Hide()
+        self.previousTitle=self.GetTitle()
+        self.SetTitle("Employee")
+        self.emppnl=NewPanel(self)
+
+        LogoutButton = wx.Button(self.emppnl, label='Logout', pos=(1270, 0),size=(80,30))
+        LogoutButton.Bind(wx.EVT_BUTTON,self.EmpLogout)
+        cur.execute("select ename from employee where eid=%s",(self.t1.GetValue(),))
+        rows=cur.fetchall()
+        ProfileButton = wx.Button(self.emppnl, label='Hi '+rows[0][0], pos=(1120, 0))
+        ProfileButton.Bind(wx.EVT_BUTTON,self.EmpProfile)
+
+        #cur.execute("select * from  where  and ")
 
     def Customer(self,e):
         self.homepnl.Hide()
@@ -579,7 +622,7 @@ class MainWindow(wx.Frame):
         cur.execute("select cname from consumer where cid=%s",(self.t1.GetValue(),))
         rows=cur.fetchall()
         ProfileButton = wx.Button(self.custpnl, label='Hi '+rows[0][0], pos=(1120, 0))
-    	LogoutButton.Bind(wx.EVT_BUTTON,self.Logout)
+    	LogoutButton.Bind(wx.EVT_BUTTON,self.CustLogout)
         ProfileButton.Bind(wx.EVT_BUTTON,self.UserProfile)
 
         no_of_meter=cur.execute("select * from consumer where cid=%s",(self.t1.GetValue(),))
@@ -617,11 +660,19 @@ class MainWindow(wx.Frame):
 
     	self.custpnl.Show()
 
-    def Logout(self,e):
+    def CustLogout(self,e):
         self.t1.Clear()
         self.t2.Clear()
         self.errormsg.SetLabel(" ")
         self.p1=self.custpnl
+    	self.p2=self.homepnl
+        self.back(self)
+
+    def EmpLogout(self,e):
+        self.t1.Clear()
+        self.t2.Clear()
+        self.errormsg.SetLabel(" ")
+        self.p1=self.emppnl
     	self.p2=self.homepnl
         self.back(self)
 
