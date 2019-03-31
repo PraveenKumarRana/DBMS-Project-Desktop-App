@@ -759,7 +759,6 @@ class MainWindow(wx.Frame):
             cur = con.cursor()
             cur.execute("insert into transmissioncompany values (%s,%s,%s,%s,%s,%s,%s)",(self.newid,self.t11.GetValue(),self.t15.GetValue(),self.t14.GetValue(),self.t13.GetValue(),self.t12.GetValue(),self.t16.GetValue()))
             con.commit()
-
             self.p1=self.formpnl
             self.p2=self.emppnl
             wx.MessageBox(message='Succesfuly Submitted',caption='Info',style=wx.OK | wx.ICON_INFORMATION)
