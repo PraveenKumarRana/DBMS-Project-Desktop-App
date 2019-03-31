@@ -522,11 +522,9 @@ class MainWindow(wx.Frame):
             cur.execute("select boardname from consumer where state=%s",(self.state,))
             rows=cur.fetchall()
             cur = con.cursor()
-            fi='dbwoi'
             cur.execute("insert into newconnection values (%s,%s,%s,%s,%s,%s,%s,%s)",(self.t11.GetValue(),self.t14.GetValue(),rows[0]['boardname'],self.state,self.Subdiv,self.Div,self.t17.GetValue(),self.t15.GetValue(),))
             con.commit()
             self.p1=self.formpnl
-            print "haider"
             self.p2=self.homepnl
             wx.MessageBox(message='Succesfuly Submitted',caption='Info',style=wx.OK | wx.ICON_INFORMATION)
             self.back(self)
@@ -617,7 +615,10 @@ class MainWindow(wx.Frame):
             cur.execute("select password from employee where eid=%s",(self.t1.GetValue(),))
             rows = cur.fetchall()
             if(len(rows)!=0 and self.t2.GetValue()==rows[0][0]):
-                self.Employee(self)
+                cur.execute("select designation from employee where eid=%s",(self.t1.GetValue(),))
+                eboard=cur.fetchall()
+                if(eboard[0][0]=='designation6'):
+                    self.XXEmployee(self)
             else:
                 self.errormsg.SetForegroundColour((255,0,0))
                 self.errormsg.SetLabel("Wrong Employee ID or Password!!")
@@ -625,7 +626,7 @@ class MainWindow(wx.Frame):
             self.errormsg.SetForegroundColour((255,0,0))
             self.errormsg.SetLabel("Wrong Employee ID or Password!!")
 
-    def Employee(self,e):
+    def XXEmployee(self,e):
         self.emplpnl.Hide()
         self.previousTitle=self.GetTitle()
         self.SetTitle("Employee")
@@ -638,7 +639,33 @@ class MainWindow(wx.Frame):
         ProfileButton = wx.Button(self.emppnl, label='Hi '+rows[0][0], pos=(1120, 0))
         ProfileButton.Bind(wx.EVT_BUTTON,self.EmpProfile)
 
-        #cur.execute("select * from  where  and ")
+        cur.execute("select * from newconnection where boardname in ( select boardname from employee where eid=%s )",(self.t1.GetValue(),))
+        ncrows=cur.fetchall()
+        print ncrows
+        desc = cur.description
+        wx.StaticText(self.emppnl, -1,'Applicant Name',     pos=(10,100),size=(500,500))
+        wx.StaticText(self.emppnl, -1,'Phone no',          pos=(150,100),size=(500,500))
+        wx.StaticText(self.emppnl, -1,'Boardname',         pos=(250,100),size=(500,500))
+        wx.StaticText(self.emppnl, -1,'State',             pos=(600,100),size=(500,500))
+        wx.StaticText(self.emppnl, -1,'Subdivision',       pos=(700,100),size=(500,500))
+        wx.StaticText(self.emppnl, -1,'Division',          pos=(800,100),size=(500,500))
+        wx.StaticText(self.emppnl, -1,'City',              pos=(900,100),size=(500,500))
+        wx.StaticText(self.emppnl, -1,'Email id',          pos=(1000,100),size=(500,500))
+        i=160
+        for r in ncrows:
+            wx.StaticText(self.emppnl, -1,r[0],pos=(10,i),size=(500,500))
+            wx.StaticText(self.emppnl, -1,str(r[1]),pos=(150,i),size=(500,500))
+            wx.StaticText(self.emppnl, -1,r[2],pos=(250,i),size=(500,500))
+            wx.StaticText(self.emppnl, -1,r[3],pos=(600,i),size=(500,500))
+            wx.StaticText(self.emppnl, -1,r[4],pos=(700,i),size=(500,500))
+            wx.StaticText(self.emppnl, -1,r[5],pos=(800,i),size=(500,500))
+            wx.StaticText(self.emppnl, -1,r[6],pos=(900,i),size=(500,500))
+            wx.StaticText(self.emppnl, -1,r[7],pos=(1000,i),size=(500,500))
+            AproveButton = wx.Button(self.emppnl, label='Aprove', pos=(1160, i),size=(80,25))
+            AproveButton.SetBackgroundColour(wx.Colour(115,230,0))
+            RejectButton = wx.Button(self.emppnl, label='Reject', pos=(1270, i),size=(80,25))
+            RejectButton.SetBackgroundColour(wx.Colour(255, 71, 26))
+            i=i+40
 
     def Customer(self,e):
         self.homepnl.Hide()
