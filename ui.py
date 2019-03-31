@@ -14,8 +14,8 @@ class HeadNewPanel(wx.Panel):
     def __init__(self, parent):
         """Constructor"""
         wx.Panel.__init__(self, parent=parent,size=(w,100),pos=(0,0))
-        l1=wx.StaticText(self, -1,"Electricity Distriution System",pos=(0,0),size=(300,30))
-        l1.SetFont(wx.Font(12,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+        l1=wx.StaticText(self, -1,"Power Distriution System",pos=(430,30),size=(300,30),style = wx.ALIGN_CENTER)
+        l1.SetFont(wx.Font(30,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_ITALIC, wx.FONTWEIGHT_BOLD))
 class NewPanel(wx.Panel):
 
     def __init__(self, parent):
