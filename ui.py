@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import wx
-import wx.lib.scrolledpanel
+import random
+import string
 import wx.lib.scrolledpanel as scrolled
 import MySQLdb as mdb
 con = mdb.connect('localhost', 'admin', 'admin', 'eds')
@@ -79,7 +80,9 @@ class MainWindow(wx.Frame):
         NacButton = wx.Button(self.homepnl, label='Not a Consumer', pos=(515, 370))
         NacButton.Bind(wx.EVT_BUTTON, self.EmpLoginForm)
         newConButton = wx.Button(self.homepnl, label='Apply New Connection', pos=(1000,20),size=(200,40))
-        newConButton.Bind(wx.EVT_BUTTON,self.newConnection)   #220
+        newConButton.Bind(wx.EVT_BUTTON,self.newConnection)
+        statusButton = wx.Button(self.homepnl, label='Know Your Conn. status', pos=(1000,80),size=(200,40))
+        #statusButton.Bind(wx.EVT_BUTTON,self.conStatus)
         #w,h=wx.GetDisplaySize()
         self.SetSize((w,h))
         self.SetMaxSize((w,h))
@@ -876,6 +879,61 @@ class MainWindow(wx.Frame):
         self.emplpnl.Hide()
         self.previousTitle=self.GetTitle()
         self.SetTitle("Employee")
+
+
+
+
+
+        """self.panel =NewPanel(self)
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
+
+        self.listbox = wx.ListBox(self.panel)
+        hbox.Add(self.listbox, wx.ID_ANY, wx.EXPAND | wx.ALL, 80)
+
+        self.btnPanel = wx.Panel(self.panel)
+        vbox = wx.BoxSizer(wx.VERTICAL)
+
+        LogoutButton = wx.Button(self.btnPanel, wx.ID_ANY, 'Logout', size=(90, 40))
+        LogoutButton.Bind(wx.EVT_BUTTON,self.EmpLogout)
+        cur.execute("select ename from employee where eid=%s",(self.t1.GetValue(),))
+        rows=cur.fetchall()
+        ProfileButton = wx.Button(self.btnPanel, label='Hi '+rows[0][0])
+        ProfileButton.Bind(wx.EVT_BUTTON,self.EmpProfile)
+
+
+        delBtn = wx.Button(self.btnPanel, wx.ID_ANY, 'Delete', size=(90, 40))
+        clrBtn = wx.Button(self.btnPanel, wx.ID_ANY, 'Clear', size=(90, 40))
+
+        #self.Bind(wx.EVT_BUTTON, self.NewItem, id=newBtn.GetId())
+
+        #self.Bind(wx.EVT_BUTTON, self.NewItem, id=newBtn.GetId())
+        #self.Bind(wx.EVT_BUTTON, self.OnRename, id=renBtn.GetId())
+        #self.Bind(wx.EVT_BUTTON, self.OnDelete, id=delBtn.GetId())
+        #self.Bind(wx.EVT_BUTTON, self.OnClear, id=clrBtn.GetId())
+        #self.Bind(wx.EVT_LISTBOX_DCLICK, self.OnRename)
+
+        #vbox.Add((-1, 20))
+        vbox.Add(LogoutButton)
+        vbox.Add(ProfileButton, 0, wx.TOP, 5)
+        vbox.Add(delBtn, 0, wx.TOP, 5)
+        vbox.Add(clrBtn, 0, wx.TOP, 5)
+
+        self.btnPanel.SetSizer(vbox)
+        hbox.Add(self.btnPanel, 0.4, wx.EXPAND | wx.RIGHT, 20)
+        self.panel.SetSizer(hbox)
+
+        #self.SetTitle('wx.ListBox')
+        #self.Centre()
+
+    def NewItem(self, event):
+
+        text = wx.GetTextFromUser('Enter a new item', 'Insert dialog')
+        if text != '':
+            self.listbox.Append(text)"""
+
+
+
+
         self.emppnl=NewPanel(self)
 
         LogoutButton = wx.Button(self.emppnl, label='Logout', pos=(1270, 0),size=(80,30))
@@ -886,8 +944,8 @@ class MainWindow(wx.Frame):
         ProfileButton.Bind(wx.EVT_BUTTON,self.EmpProfile)
 
         cur.execute("select * from newconnection where boardname in ( select boardname from employee where eid=%s )",(self.t1.GetValue(),))
-        ncrows=cur.fetchall()
-        print ncrows
+        self.ncrows=cur.fetchall()
+        print self.ncrows
         desc = cur.description
         wx.StaticText(self.emppnl, -1,'Applicant Name',     pos=(10,100),size=(500,500))
         wx.StaticText(self.emppnl, -1,'Phone no',          pos=(150,100),size=(500,500))
@@ -898,7 +956,9 @@ class MainWindow(wx.Frame):
         wx.StaticText(self.emppnl, -1,'City',              pos=(900,100),size=(500,500))
         wx.StaticText(self.emppnl, -1,'Email id',          pos=(1000,100),size=(500,500))
         i=160
-        for r in ncrows:
+        j=0
+        k=0
+        for r in self.ncrows:
             wx.StaticText(self.emppnl, -1,r[0],pos=(10,i),size=(500,500))
             wx.StaticText(self.emppnl, -1,str(r[1]),pos=(150,i),size=(500,500))
             wx.StaticText(self.emppnl, -1,r[2],pos=(250,i),size=(500,500))
@@ -907,13 +967,64 @@ class MainWindow(wx.Frame):
             wx.StaticText(self.emppnl, -1,r[5],pos=(800,i),size=(500,500))
             wx.StaticText(self.emppnl, -1,r[6],pos=(900,i),size=(500,500))
             wx.StaticText(self.emppnl, -1,r[7],pos=(1000,i),size=(500,500))
-            AproveButton = wx.Button(self.emppnl, label='Aprove', pos=(1160, i),size=(80,25))
-            AproveButton.SetBackgroundColour(wx.Colour(115,230,0))
-            #AproveButton.Bind(wx.EVT_BUTTON,self.ncAprove)
-            RejectButton = wx.Button(self.emppnl, label='Reject', pos=(1270, i),size=(80,25))
-            RejectButton.SetBackgroundColour(wx.Colour(255, 71, 26))
-            #RejectButton.Bind(wx.EVT_BUTTON,self.ncDisaprove)
+
+            apButton = wx.Button(self.emppnl, label='Aprove', pos=(1160, i),size=(80,25))
+            apButton.id=j
+            apButton.SetBackgroundColour(wx.Colour(115,230,0))
+            apButton.Bind(wx.EVT_BUTTON,self.ncAprove,apButton)
+            j=j+1
+            rejButton = wx.Button(self.emppnl, label='Reject', pos=(1270, i),size=(80,25))
+            rejButton.id=j
+            rejButton.SetBackgroundColour(wx.Colour(255, 71, 26))
+            rejButton.Bind(wx.EVT_BUTTON,self.ncReject,rejButton)
             i=i+40
+            j=j+1
+            k=k+1
+
+
+    def ncAprove(self,e):
+        print e.GetEventObject().id
+        j=0
+        k=0
+        for i in range(0,len(self.ncrows)):
+            if e.GetEventObject().id==2*j :
+                cur=con.cursor()
+                cur.execute("select max(cid) from consumer")
+                c=cur.fetchall()
+                cid=c[0][0]+1
+                cur=con.cursor()
+                cur.execute("select max(meterno) from consumer")
+                m=cur.fetchall()
+                meterno=m[0][0]+1
+                cur=con.cursor()
+                cur.execute("insert into consumer values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(cid,self.ncrows[k][0],self.ncrows[k][1],self.ncrows[k][2],self.ncrows[k][3],self.ncrows[k][4],self.ncrows[k][5],self.ncrows[k][6], meterno,'firoz123',self.ncrows[k][7],'address',))
+                con.commit()
+                cur=con.cursor()
+                cur.execute("delete from newconnection where cname=%s",(self.ncrows[k][0],))
+                con.commit()
+                self.emppnl.Hide()
+                self.XXEmployee(self)
+                break
+            j=j+1
+            k=k+1
+
+    def ncReject(self,e):
+        print e.GetEventObject().id
+        j=0
+        k=0
+        for i in range(0,len(self.ncrows)):
+            if e.GetEventObject().id== (2*j+1) :
+                cur=con.cursor()
+                cur.execute("delete from newconnection where cname=%s",(self.ncrows[k][0],))
+                con.commit()
+                self.emppnl.Hide()
+                self.XXEmployee(self)
+                break
+            j=j+1
+            k=k+1
+
+    def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
+        return ''.join(random.choice(chars) for _ in range(6))
 
     def Customer(self,e):
         self.homepnl.Hide()
@@ -975,6 +1086,7 @@ class MainWindow(wx.Frame):
         self.t1.Clear()
         self.t2.Clear()
         self.errormsg.SetLabel(" ")
+        #self.panel.Hide()
         self.p1=self.emppnl
     	self.p2=self.homepnl
         self.back(self)
