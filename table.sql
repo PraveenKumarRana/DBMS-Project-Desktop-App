@@ -109,7 +109,8 @@ insert into subdivision values
 	(6002,	5003,	'Ranjan',	'Delhi',			'sdivname2'),
 	(6003,	5003,	'Manish',	'Delhi',			'sdivname3'),
 	(6004,	5003,	'Prateek',	'Delhi',	'sdivname4'),
-	(6005,	5005,	'Anurag',	'Gujarat',			'sdivname5');
+	(6005,	5005,	'Anurag',	'Gujarat',			'sdivname5'),
+	(6007,	5007,	'Manish',	'uttar pradesh',			'sdivname5');
 insert into electricityboard values
 	('ASEC',	250000,	'Assam',		301,	2500),
 	('DVB',		400000,	'Delhi',		302,	3200),
