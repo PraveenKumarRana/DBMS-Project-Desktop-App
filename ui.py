@@ -79,7 +79,9 @@ class MainWindow(wx.Frame):
         NacButton = wx.Button(self.homepnl, label='Not a Consumer', pos=(515, 370))
         NacButton.Bind(wx.EVT_BUTTON, self.EmpLoginForm)
         newConButton = wx.Button(self.homepnl, label='Apply New Connection', pos=(1000,20),size=(200,40))
-        newConButton.Bind(wx.EVT_BUTTON,self.newConnection)   #220
+        newConButton.Bind(wx.EVT_BUTTON,self.newConnection)
+        statusButton = wx.Button(self.homepnl, label='Know Your Conn. status', pos=(1000,80),size=(200,40))
+        #statusButton.Bind(wx.EVT_BUTTON,self.conStatus)
         #w,h=wx.GetDisplaySize()
         self.SetSize((w,h))
         self.SetMaxSize((w,h))
