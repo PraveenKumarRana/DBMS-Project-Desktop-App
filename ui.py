@@ -96,6 +96,15 @@ class MainWindow(wx.Frame):
         self.p2=self.homepnl
         ebButton.Bind(wx.EVT_BUTTON, self.back)
 
+        l1=wx.StaticText(self.ncpnl, -1, "State/UT :",pos=(w/2-200,50),size=(500,500))
+        l2=wx.StaticText(self.ncpnl, -1, "Distribution Company :",pos=(w/2-200,100),size=(500,500))
+        l3=wx.StaticText(self.ncpnl, -1, "Division :",pos=(w/2-200,150),size=(500,500))
+        l4=wx.StaticText(self.ncpnl, -1, "Sub Division :",pos=(w/2-200,200),size=(500,500))
+        l1.SetFont(wx.Font(12,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+        l2.SetFont(wx.Font(12,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+        l3.SetFont(wx.Font(12,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+        l4.SetFont(wx.Font(12,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+
         cur = con.cursor(mdb.cursors.DictCursor)
         cur.execute("select state from distributioncompany")
         rows=cur.fetchall()
@@ -138,7 +147,7 @@ class MainWindow(wx.Frame):
         self.Div=e.GetString()
         print self.Div
         cur = con.cursor(mdb.cursors.DictCursor)
-        cur.execute("select sdivname from subdivision as d1,division as d2 where d1.divid=d2.divid and d1.state=%s and d2.divname=%s",("Delhi","divname3"))
+        cur.execute("select sdivname from subdivision as d1,division as d2 where d1.divid=d2.divid and d1.state=%s and d2.divname=%s",(self.state,self.Div))
         rows=cur.fetchall()
         sdivList=list()
         for row in rows:
