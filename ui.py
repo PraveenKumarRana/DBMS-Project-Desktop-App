@@ -865,8 +865,10 @@ class MainWindow(wx.Frame):
             wx.StaticText(self.emppnl, -1,r[7],pos=(1000,i),size=(500,500))
             AproveButton = wx.Button(self.emppnl, label='Aprove', pos=(1160, i),size=(80,25))
             AproveButton.SetBackgroundColour(wx.Colour(115,230,0))
+            #AproveButton.Bind(wx.EVT_BUTTON,self.ncAprove)
             RejectButton = wx.Button(self.emppnl, label='Reject', pos=(1270, i),size=(80,25))
             RejectButton.SetBackgroundColour(wx.Colour(255, 71, 26))
+            #RejectButton.Bind(wx.EVT_BUTTON,self.ncDisaprove)
             i=i+40
 
     def Customer(self,e):
