@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import wx
+import random
+import string
 import wx.lib.scrolledpanel as scrolled
 import MySQLdb as mdb
 con = mdb.connect('localhost', 'admin', 'admin', 'eds')
@@ -896,8 +898,8 @@ class MainWindow(wx.Frame):
         ProfileButton.Bind(wx.EVT_BUTTON,self.EmpProfile)
 
         cur.execute("select * from newconnection where boardname in ( select boardname from employee where eid=%s )",(self.t1.GetValue(),))
-        ncrows=cur.fetchall()
-        print ncrows
+        self.ncrows=cur.fetchall()
+        print self.ncrows
         desc = cur.description
         wx.StaticText(self.emppnl, -1,'Applicant Name',     pos=(10,100),size=(500,500))
         wx.StaticText(self.emppnl, -1,'Phone no',          pos=(150,100),size=(500,500))
@@ -908,8 +910,9 @@ class MainWindow(wx.Frame):
         wx.StaticText(self.emppnl, -1,'City',              pos=(900,100),size=(500,500))
         wx.StaticText(self.emppnl, -1,'Email id',          pos=(1000,100),size=(500,500))
         i=160
-        j=1
-        for r in ncrows:
+        j=0
+        k=0
+        for r in self.ncrows:
             wx.StaticText(self.emppnl, -1,r[0],pos=(10,i),size=(500,500))
             wx.StaticText(self.emppnl, -1,str(r[1]),pos=(150,i),size=(500,500))
             wx.StaticText(self.emppnl, -1,r[2],pos=(250,i),size=(500,500))
@@ -919,22 +922,63 @@ class MainWindow(wx.Frame):
             wx.StaticText(self.emppnl, -1,r[6],pos=(900,i),size=(500,500))
             wx.StaticText(self.emppnl, -1,r[7],pos=(1000,i),size=(500,500))
 
-            self.apButton = wx.Button(self.emppnl,id=j, label='Aprove', pos=(1160, i),size=(80,25))
-            self.apButton.SetBackgroundColour(wx.Colour(115,230,0))
-            self.apButton.Bind(wx.EVT_BUTTON,self.ncAprove,id=self.apButton.GetId())
-
-            rejButton = wx.Button(self.emppnl,id=j, label='Reject', pos=(1270, i),size=(80,25))
+            apButton = wx.Button(self.emppnl, label='Aprove', pos=(1160, i),size=(80,25))
+            apButton.id=j
+            apButton.SetBackgroundColour(wx.Colour(115,230,0))
+            apButton.Bind(wx.EVT_BUTTON,self.ncAprove,apButton)
+            j=j+1
+            rejButton = wx.Button(self.emppnl, label='Reject', pos=(1270, i),size=(80,25))
+            rejButton.id=j
             rejButton.SetBackgroundColour(wx.Colour(255, 71, 26))
-            #rejButton.Bind(wx.EVT_BUTTON,self.ncAprove,id=apButton.GetId())
-            #RejectButton.Bind(wx.EVT_BUTTON,self.ncDisaprove)
+            rejButton.Bind(wx.EVT_BUTTON,self.ncReject,rejButton)
             i=i+40
             j=j+1
-        #print AproveButton
+            k=k+1
+
 
     def ncAprove(self,e):
-        print self.apButton.GetId()
-        #cur.execute("select ")
+        print e.GetEventObject().id
+        j=0
+        k=0
+        for i in range(0,len(self.ncrows)):
+            if e.GetEventObject().id==2*j :
+                cur=con.cursor()
+                cur.execute("select max(cid) from consumer")
+                c=cur.fetchall()
+                cid=c[0][0]+1
+                cur=con.cursor()
+                cur.execute("select max(meterno) from consumer")
+                m=cur.fetchall()
+                meterno=m[0][0]+1
+                cur=con.cursor()
+                cur.execute("insert into consumer values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(cid,self.ncrows[k][0],self.ncrows[k][1],self.ncrows[k][2],self.ncrows[k][3],self.ncrows[k][4],self.ncrows[k][5],self.ncrows[k][6], meterno,'firoz123',self.ncrows[k][7],'address',))
+                con.commit()
+                cur=con.cursor()
+                cur.execute("delete from newconnection where cname=%s",(self.ncrows[k][0],))
+                con.commit()
+                self.emppnl.Hide()
+                self.XXEmployee(self)
+                break
+            j=j+1
+            k=k+1
 
+    def ncReject(self,e):
+        print e.GetEventObject().id
+        j=0
+        k=0
+        for i in range(0,len(self.ncrows)):
+            if e.GetEventObject().id== (2*j+1) :
+                cur=con.cursor()
+                cur.execute("delete from newconnection where cname=%s",(self.ncrows[k][0],))
+                con.commit()
+                self.emppnl.Hide()
+                self.XXEmployee(self)
+                break
+            j=j+1
+            k=k+1
+
+    def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
+        return ''.join(random.choice(chars) for _ in range(6))
 
     def Customer(self,e):
         self.homepnl.Hide()
