@@ -628,12 +628,205 @@ class MainWindow(wx.Frame):
                 eboard=cur.fetchall()
                 if(eboard[0][0]=='designation6'):
                     self.XXEmployee(self)
+                if(eboard[0][0]=='designation3'):
+                    self.designation3(self)
+
             else:
                 self.errormsg.SetForegroundColour((255,0,0))
                 self.errormsg.SetLabel("Wrong Employee ID or Password!!")
         else:
             self.errormsg.SetForegroundColour((255,0,0))
             self.errormsg.SetLabel("Wrong Employee ID or Password!!")
+
+    def designation3(self,e):
+        self.emplpnl.Hide()
+        self.emppnl=NewPanel(self)
+        self.previousTitle=self.GetTitle()
+
+        LogoutButton = wx.Button(self.emppnl, label='Logout', pos=(1270, 0),size=(80,30))
+        LogoutButton.Bind(wx.EVT_BUTTON,self.EmpLogout)
+        cur.execute("select ename from employee where eid=%s",(self.t1.GetValue(),))
+        rows=cur.fetchall()
+        ProfileButton = wx.Button(self.emppnl, label='Hi '+rows[0][0], pos=(1120, 0))
+        ProfileButton.Bind(wx.EVT_BUTTON,self.EmpProfile)
+
+        l1=wx.StaticText(self.emppnl, -1,"Distribution Company",pos=(80,30),size=(300,30))
+        l1.SetFont(wx.Font(12,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+
+        l1Add=wx.Button(self.emppnl, label='ADD', pos=(70,80),size=(100,40))
+        l1Add.Bind(wx.EVT_BUTTON,self.addDc)
+        l1Update=wx.Button(self.emppnl, label='UPDATE', pos=(200,80),size=(100,40))
+        l1Delete=wx.Button(self.emppnl, label='DELETE', pos=(330,80),size=(100,40))
+
+        l1=wx.StaticText(self.emppnl, -1,"Transmission Company",pos=(80,150),size=(300,30))
+        l1.SetFont(wx.Font(12,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+
+        l2Add=wx.Button(self.emppnl, label='ADD', pos=(70,200),size=(100,40))
+        l2Add.Bind(wx.EVT_BUTTON,self.addTc)
+        l2Update=wx.Button(self.emppnl, label='UPDATE', pos=(200,200),size=(100,40))
+        l2Delete=wx.Button(self.emppnl, label='DELETE', pos=(330,200),size=(100,40))
+
+        l3=wx.StaticText(self.emppnl, -1,"Power Company",pos=(80,270),size=(300,30))
+        l3.SetFont(wx.Font(12,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+
+        l3Add=wx.Button(self.emppnl, label='ADD', pos=(70,320),size=(100,40))
+        l3Add.Bind(wx.EVT_BUTTON,self.addPc)
+        l3Update=wx.Button(self.emppnl, label='UPDATE', pos=(200,320),size=(100,40))
+        l3Delete=wx.Button(self.emppnl, label='DELETE', pos=(330,320),size=(100,40))
+
+    def addDc(self,e):
+        self.emppnl.Hide()
+        self.formpnl=NewPanel(self)
+
+        l0 = wx.StaticText(self.formpnl, -1, " Adding New Distriution Company  ",pos=(450,10),size=(500,500),style=wx.ALIGN_CENTER)
+        l0.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.BOLD))
+
+        l1 = wx.StaticText(self.formpnl, -1, " Name of D.C. :   ",pos=(100,100))
+        self.t11 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,100),size=(200,30))
+        l2 = wx.StaticText(self.formpnl, -1, " Tenure       :   ",pos=(100,150))
+        self.t12 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,150),size=(200,30))
+        l3 = wx.StaticText(self.formpnl, -1, " State        :   ",pos=(100,200))
+        self.t13 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,200),size=(200,30))
+        l4 = wx.StaticText(self.formpnl, -1, " T.C. Id      :   ",pos=(100,250))
+        self.t14 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,250),size=(200,30))
+        SubmitButton = wx.Button(self.formpnl, label='Submit', pos=(500, 450),size=(100,40))
+        SubmitButton.Bind(wx.EVT_BUTTON,self.addDcSubmit)
+
+        backButton = wx.Button(self.formpnl, label='Cancel', pos=(630, 450),size = (100,40))
+        self.p1=self.formpnl
+        self.p2=self.emppnl
+        backButton.Bind(wx.EVT_BUTTON, self.addDcCancel)
+
+    def addDcSubmit(self,e):
+        if(self.t11.GetValue() and self.t12.GetValue() and self.t13.GetValue() and self.t14.GetValue()):
+            cur = con.cursor(mdb.cursors.DictCursor)
+            cur.execute("select did from distributioncompany ")
+            rows=cur.fetchall()
+            self.newid=rows[-1]['did'] + 1
+            cur = con.cursor()
+            cur.execute("insert into distributioncompany values (%s,%s,%s,%s,%s)",(self.newid,self.t11.GetValue(),self.t12.GetValue(),self.t13.GetValue(),self.t14.GetValue()))
+            con.commit()
+
+            self.p1=self.formpnl
+            self.p2=self.emppnl
+            wx.MessageBox(message='Succesfuly Submitted',caption='Info',style=wx.OK | wx.ICON_INFORMATION)
+            self.back(self)
+        else:
+            msg=wx.StaticText(self.formpnl, -1, "Any field can not be empty !!",pos=(w/2,300),size=(300,300))
+            msg.SetForegroundColour((255,0,0))
+
+    def addDcCancel(self,e):
+        dial=wx.MessageBox(message='Do you want to cancel it?',caption='Cancel',style=wx.YES_NO | wx.ICON_INFORMATION)
+        self.p1=self.formpnl
+        self.p2=self.emppnl
+        if (dial==2):
+            self.back(self)
+
+    def addTc(self,e):
+        self.emppnl.Hide()
+        self.formpnl=NewPanel(self)
+
+        l0 = wx.StaticText(self.formpnl, -1, " Adding New Transmission Company  ",pos=(450,10),size=(500,500),style=wx.ALIGN_CENTER)
+        l0.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.BOLD))
+
+        l1 = wx.StaticText(self.formpnl, -1, " Name of T.C. :   ",pos=(100,100))
+        self.t11 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,100),size=(200,30))
+        l2 = wx.StaticText(self.formpnl, -1, " Tenure       :   ",pos=(100,150))
+        self.t12 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,150),size=(200,30))
+        l3 = wx.StaticText(self.formpnl, -1, " State        :   ",pos=(100,200))
+        self.t13 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,200),size=(200,30))
+        l4 = wx.StaticText(self.formpnl, -1, " Capacity     :   ",pos=(100,250))
+        self.t14 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,250),size=(200,30))
+        l5 = wx.StaticText(self.formpnl, -1, " D.C. Id      :   ",pos=(100,300))
+        self.t15 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,300),size=(200,30))
+        l6 = wx.StaticText(self.formpnl, -1, " P.C. Id      :   ",pos=(100,350))
+        self.t16 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,350),size=(200,30))
+
+        SubmitButton = wx.Button(self.formpnl, label='Submit', pos=(500, 450),size=(100,40))
+        SubmitButton.Bind(wx.EVT_BUTTON,self.addTcSubmit)
+
+        backButton = wx.Button(self.formpnl, label='Cancel', pos=(630, 450),size = (100,40))
+        self.p1=self.formpnl
+        self.p2=self.emppnl
+        backButton.Bind(wx.EVT_BUTTON, self.addTcCancel)
+
+    def addTcSubmit(self,e):
+        if(self.t11.GetValue() and self.t12.GetValue() and self.t13.GetValue() and self.t14.GetValue()):
+            cur = con.cursor(mdb.cursors.DictCursor)
+            cur.execute("select tid from transmissioncompany ")
+            rows=cur.fetchall()
+            self.newid=rows[-1]['tid'] + 1
+            cur = con.cursor()
+            cur.execute("insert into transmissioncompany values (%s,%s,%s,%s,%s,%s,%s)",(self.newid,self.t11.GetValue(),self.t15.GetValue(),self.t14.GetValue(),self.t13.GetValue(),self.t12.GetValue(),self.t16.GetValue()))
+            con.commit()
+
+            self.p1=self.formpnl
+            self.p2=self.emppnl
+            wx.MessageBox(message='Succesfuly Submitted',caption='Info',style=wx.OK | wx.ICON_INFORMATION)
+            self.back(self)
+        else:
+            msg=wx.StaticText(self.formpnl, -1, "Any field can not be empty !!",pos=(w/2,300),size=(300,300))
+            msg.SetForegroundColour((255,0,0))
+
+    def addTcCancel(self,e):
+        dial=wx.MessageBox(message='Do you want to cancel it?',caption='Cancel',style=wx.YES_NO | wx.ICON_INFORMATION)
+        self.p1=self.formpnl
+        self.p2=self.emppnl
+        if (dial==2):
+            self.back(self)
+    def addPc(self,e):
+        self.emppnl.Hide()
+        self.formpnl=NewPanel(self)
+
+        l0 = wx.StaticText(self.formpnl, -1, " Adding New Power Company  ",pos=(450,10),size=(500,500),style=wx.ALIGN_CENTER)
+        l0.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.BOLD))
+
+        l1 = wx.StaticText(self.formpnl, -1, " Name of P.C.             :   ",pos=(100,100))
+        self.t11 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,100),size=(200,30))
+        l2 = wx.StaticText(self.formpnl, -1, " type                     :   ",pos=(100,150))
+        typeList=('Pivate','Government')
+        self.cbState=wx.ComboBox(self.formpnl,pos=(350,150),choices=typeList)
+        self.cbState.Bind(wx.EVT_COMBOBOX, self.gstr)
+
+        #print self.t12
+        l3 = wx.StaticText(self.formpnl, -1, " Total Power Generation   :   ",pos=(100,200))
+        self.t13 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,200),size=(200,30))
+        l4 = wx.StaticText(self.formpnl, -1, " State                    :   ",pos=(100,250))
+        self.t14 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,250),size=(200,30))
+        SubmitButton = wx.Button(self.formpnl, label='Submit', pos=(500, 450),size=(100,40))
+        SubmitButton.Bind(wx.EVT_BUTTON,self.addPcSubmit)
+
+        backButton = wx.Button(self.formpnl, label='Cancel', pos=(630, 450),size = (100,40))
+        self.p1=self.formpnl
+        self.p2=self.emppnl
+        backButton.Bind(wx.EVT_BUTTON, self.addPcCancel)
+    def gstr(self,e):
+        self.t12=e.GetString()
+
+    def addPcSubmit(self,e):
+        if(self.t11.GetValue() and len(self.t12) and self.t13.GetValue() and self.t14.GetValue()):
+            cur = con.cursor(mdb.cursors.DictCursor)
+            cur.execute("select pid from powercompany ")
+            rows=cur.fetchall()
+            self.newid=rows[-1]['pid'] + 1
+            cur = con.cursor()
+            cur.execute("insert into powercompany values (%s,%s,%s,%s,%s)",(self.newid,self.t11.GetValue(),self.t12,self.t13.GetValue(),self.t14.GetValue()))
+            con.commit()
+
+            self.p1=self.formpnl
+            self.p2=self.emppnl
+            wx.MessageBox(message='Succesfuly Submitted',caption='Info',style=wx.OK | wx.ICON_INFORMATION)
+            self.back(self)
+        else:
+            msg=wx.StaticText(self.formpnl, -1, "Any field can not be empty !!",pos=(w/2,300),size=(300,300))
+            msg.SetForegroundColour((255,0,0))
+
+    def addPcCancel(self,e):
+        dial=wx.MessageBox(message='Do you want to cancel it?',caption='Cancel',style=wx.YES_NO | wx.ICON_INFORMATION)
+        self.p1=self.formpnl
+        self.p2=self.emppnl
+        if (dial==2):
+            self.back(self)
 
     def XXEmployee(self,e):
         self.emplpnl.Hide()
