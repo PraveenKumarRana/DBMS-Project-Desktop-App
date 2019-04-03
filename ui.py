@@ -539,11 +539,14 @@ class MainWindow(wx.Frame):
             characters = string.ascii_letters + string.digits
             reference_id="".join(choice(characters) for x in range(randint(8,10)))
             cur.execute("insert into newconnection values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(self.t11.GetValue(),self.t14.GetValue(),rows[0]['boardname'],self.state,self.Subdiv,self.Div,self.t17.GetValue(),self.t15.GetValue(),self.t13.GetValue(),reference_id,))
+            status="pending"
+            cur.execute("insert into ncstatus values (%s,%s)",(reference_id,status,))
             con.commit()
+
             self.p1=self.formpnl
             self.p2=self.homepnl
             wx.MessageBox(message='Succesfuly Submitted',caption='Info',style=wx.OK | wx.ICON_INFORMATION)
-
+            self.back(self)
         else:
             msg=wx.StaticText(self.formpnl, -1, "Any field can not be empty !!",pos=(w/2,300),size=(300,300))
             msg.SetForegroundColour((255,0,0))
@@ -949,14 +952,15 @@ class MainWindow(wx.Frame):
         self.ncrows=cur.fetchall()
         print self.ncrows
         desc = cur.description
-        wx.StaticText(self.emppnl, -1,'Applicant Name',     pos=(10,100),size=(500,500))
-        wx.StaticText(self.emppnl, -1,'Phone no',          pos=(150,100),size=(500,500))
-        wx.StaticText(self.emppnl, -1,'Boardname',         pos=(250,100),size=(500,500))
-        wx.StaticText(self.emppnl, -1,'State',             pos=(600,100),size=(500,500))
-        wx.StaticText(self.emppnl, -1,'Subdivision',       pos=(700,100),size=(500,500))
-        wx.StaticText(self.emppnl, -1,'Division',          pos=(800,100),size=(500,500))
-        wx.StaticText(self.emppnl, -1,'City',              pos=(900,100),size=(500,500))
-        wx.StaticText(self.emppnl, -1,'Email id',          pos=(1000,100),size=(500,500))
+        wx.StaticText(self.emppnl, -1,'Applicant Name',    pos=(5,100),size=(500,500))
+        wx.StaticText(self.emppnl, -1,'Phone no',          pos=(100,100),size=(500,500))
+        wx.StaticText(self.emppnl, -1,'Boardname',         pos=(200,100),size=(500,500))
+        wx.StaticText(self.emppnl, -1,'State',             pos=(450,100),size=(500,500))
+        wx.StaticText(self.emppnl, -1,'Subdivision',       pos=(550,100),size=(500,500))
+        wx.StaticText(self.emppnl, -1,'Division',          pos=(650,100),size=(500,500))
+        wx.StaticText(self.emppnl, -1,'City',              pos=(750,100),size=(500,500))
+        wx.StaticText(self.emppnl, -1,'Email id',          pos=(850,100),size=(500,500))
+        wx.StaticText(self.emppnl, -1,'Insta.. add',       pos=(1000,100),size=(500,500))
         i=160
         j=0
         k=0

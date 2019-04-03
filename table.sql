@@ -23,7 +23,7 @@ create table billinginfo(billid int primary key,cid int,issuedate date,prevreadi
 	drop table newconnection;
 create table newconnection(cname varchar(50),phone int,boardname varchar(50),state varchar(50),subdiv varchar(50),divis varchar(50),city varchar(50),email varchar(50),address varchar(50),refid varchar(50));
 	drop table ncstatus;
-create table ncstatus(ncid varchar(50),refid varchar(50),status varchar(50));
+create table ncstatus(refid varchar(50),status varchar(50));
 
 insert into employee values
 	(7001,	'Amar kumar',		'2012-08-11',	'2000-11-06',	'dept1',	18,	'Andhra pradesh power generation corporation',	'designation1',		844667,	'password'),
