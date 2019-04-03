@@ -14,7 +14,7 @@ class HeadNewPanel(wx.Panel):
     def __init__(self, parent):
         """Constructor"""
         wx.Panel.__init__(self, parent=parent,size=(w,100),pos=(0,0))
-        l1=wx.StaticText(self, -1,"Power Distriution System",pos=(430,30),size=(300,30),style = wx.ALIGN_CENTER)
+        l1=wx.StaticText(self, -1,"Power Distribution System",pos=(430,30),size=(300,30),style = wx.ALIGN_CENTER)
         l1.SetFont(wx.Font(30,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_ITALIC, wx.FONTWEIGHT_BOLD))
 class NewPanel(wx.Panel):
 
@@ -159,9 +159,9 @@ class MainWindow(wx.Frame):
             sdivList.append(row["sdivname"])
         print sdivList
         self.cbDc=wx.ComboBox(self.ncpnl,pos=(w/2,200),choices=sdivList)
-        self.cbDc.Bind(wx.EVT_COMBOBOX, self.nn)
+        self.cbDc.Bind(wx.EVT_COMBOBOX, self.submit_form1)
 
-    def nn(self,e):
+    def submit_form1(self,e):
         self.Subdiv=e.GetString()
         print self.Subdiv
         submitForm=wx.Button(self.ncpnl, label='Submit', pos=(w/2, 300))
@@ -181,12 +181,14 @@ class MainWindow(wx.Frame):
     	ebButton.Bind(wx.EVT_BUTTON, self.back_tc_pc_dc_eb)
         #l1 = wx.StaticText(self.ebpnl, -1,"hello",pos=(10,10))
 
-        #[select all] buttom
-        ebAll = wx.Button(self.upnl, label='Show all', pos=(10, 50))
+        ebNameSearch=wx.SearchCtrl(self.upnl,pos=(120,50),size=(200,40))
+        ebNameSearch.Bind(wx.EVT_TEXT,self.ebNameS)
+
+        ebAll = wx.Button(self.upnl, label='Show all', pos=(10, 50),size=(100,40))
         ebAll.Bind(wx.EVT_BUTTON, self.ebAll)
         wx.StaticText(self.upnl, -1,"State/UT:",pos=(500,60))
         self.t1 = wx.TextCtrl(self.upnl,style= wx.TE_PROCESS_ENTER,pos=(570,50),size=(200,40))
-        self.t1.Bind(wx.EVT_TEXT_ENTER,self.ebStateSearch)
+        self.t1.Bind(wx.EVT_TEXT,self.ebStateSearch)
         if(self.t1.GetValue()==""):
             cur = con.cursor(mdb.cursors.DictCursor)
             cur.execute("SELECT * FROM electricityboard ")
@@ -208,8 +210,27 @@ class MainWindow(wx.Frame):
                 wx.StaticText(self.lpnl, -1,str(row[desc[4][0]]),pos=(600,i))
 
                 i=i+30
-        self.lpnl.Show()
+        #self.lpnl.Show()
 
+
+    def ebNameS(self,e):        #searching by boardname(dynamically)
+        self.lpnl.Hide()
+        name=e.GetString()
+        self.lpnl=lowerNewPanel(self)
+        cur = con.cursor(mdb.cursors.DictCursor)
+        cur.execute("select * FROM electricityboard where boardname like '{}%'".format(name))
+        rows=cur.fetchall()
+        desc = cur.description
+        if(len(rows)==0):
+            msg=wx.StaticText(self.lpnl, -1,"Not available !!",pos=(300,30))
+            msg.SetForegroundColour((255,0,0))
+        i=20
+        for row in rows:
+            wx.StaticText(self.lpnl, -1,row[desc[0][0]],pos=(80,i))
+            wx.StaticText(self.lpnl, -1,str(row[desc[1][0]]),pos=(270,i))
+            wx.StaticText(self.lpnl, -1,row[desc[2][0]],pos=(470,i))
+            wx.StaticText(self.lpnl, -1,str(row[desc[4][0]]),pos=(600,i))
+            i=i+30
 
 
     def ebAll(self,e):
@@ -239,7 +260,7 @@ class MainWindow(wx.Frame):
             self.lpnl.Show()
             print self.t1.GetValue()
             cur = con.cursor(mdb.cursors.DictCursor)
-            cur.execute("SELECT * FROM electricityboard where state=%s",(self.t1.GetValue(),))
+            cur.execute("SELECT * FROM electricityboard where state like '{}%'".format(self.t1.GetValue()))
             rows = cur.fetchall()
             desc = cur.description
             if(len(rows)==0):
