@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import wx
-import random
 import string
+from random import*
 import wx.lib.scrolledpanel as scrolled
 import MySQLdb as mdb
 con = mdb.connect('localhost', 'admin', 'admin', 'eds')
@@ -536,12 +536,14 @@ class MainWindow(wx.Frame):
             cur.execute("select boardname from consumer where state=%s",(self.state,))
             rows=cur.fetchall()
             cur = con.cursor()
-            cur.execute("insert into newconnection values (%s,%s,%s,%s,%s,%s,%s,%s)",(self.t11.GetValue(),self.t14.GetValue(),rows[0]['boardname'],self.state,self.Subdiv,self.Div,self.t17.GetValue(),self.t15.GetValue(),))
+            characters = string.ascii_letters + string.digits
+            reference_id="".join(choice(characters) for x in range(randint(8,10)))
+            cur.execute("insert into newconnection values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(self.t11.GetValue(),self.t14.GetValue(),rows[0]['boardname'],self.state,self.Subdiv,self.Div,self.t17.GetValue(),self.t15.GetValue(),self.t13.GetValue(),reference_id,))
             con.commit()
             self.p1=self.formpnl
             self.p2=self.homepnl
             wx.MessageBox(message='Succesfuly Submitted',caption='Info',style=wx.OK | wx.ICON_INFORMATION)
-            self.back(self)
+
         else:
             msg=wx.StaticText(self.formpnl, -1, "Any field can not be empty !!",pos=(w/2,300),size=(300,300))
             msg.SetForegroundColour((255,0,0))
@@ -959,14 +961,15 @@ class MainWindow(wx.Frame):
         j=0
         k=0
         for r in self.ncrows:
-            wx.StaticText(self.emppnl, -1,r[0],pos=(10,i),size=(500,500))
-            wx.StaticText(self.emppnl, -1,str(r[1]),pos=(150,i),size=(500,500))
-            wx.StaticText(self.emppnl, -1,r[2],pos=(250,i),size=(500,500))
-            wx.StaticText(self.emppnl, -1,r[3],pos=(600,i),size=(500,500))
-            wx.StaticText(self.emppnl, -1,r[4],pos=(700,i),size=(500,500))
-            wx.StaticText(self.emppnl, -1,r[5],pos=(800,i),size=(500,500))
-            wx.StaticText(self.emppnl, -1,r[6],pos=(900,i),size=(500,500))
-            wx.StaticText(self.emppnl, -1,r[7],pos=(1000,i),size=(500,500))
+            wx.StaticText(self.emppnl, -1,r[0],pos=(5,i),size=(500,500))
+            wx.StaticText(self.emppnl, -1,str(r[1]),pos=(100,i),size=(500,500))
+            wx.StaticText(self.emppnl, -1,r[2],pos=(200,i),size=(500,500))
+            wx.StaticText(self.emppnl, -1,r[3],pos=(450,i),size=(500,500))
+            wx.StaticText(self.emppnl, -1,r[4],pos=(550,i),size=(500,500))
+            wx.StaticText(self.emppnl, -1,r[5],pos=(650,i),size=(500,500))
+            wx.StaticText(self.emppnl, -1,r[6],pos=(750,i),size=(500,500))
+            wx.StaticText(self.emppnl, -1,r[7],pos=(850,i),size=(500,500))
+            wx.StaticText(self.emppnl, -1,r[8],pos=(1000,i),size=(500,500))
 
             apButton = wx.Button(self.emppnl, label='Aprove', pos=(1160, i),size=(80,25))
             apButton.id=j
@@ -997,7 +1000,7 @@ class MainWindow(wx.Frame):
                 m=cur.fetchall()
                 meterno=m[0][0]+1
                 cur=con.cursor()
-                cur.execute("insert into consumer values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(cid,self.ncrows[k][0],self.ncrows[k][1],self.ncrows[k][2],self.ncrows[k][3],self.ncrows[k][4],self.ncrows[k][5],self.ncrows[k][6], meterno,'firoz123',self.ncrows[k][7],'address',))
+                cur.execute("insert into consumer values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(cid,self.ncrows[k][0],self.ncrows[k][1],self.ncrows[k][2],self.ncrows[k][3],self.ncrows[k][4],self.ncrows[k][5],self.ncrows[k][6], meterno,'firoz123',self.ncrows[k][7],self.ncrows[k][8],))
                 con.commit()
                 cur=con.cursor()
                 cur.execute("delete from newconnection where cname=%s",(self.ncrows[k][0],))
@@ -1088,7 +1091,7 @@ class MainWindow(wx.Frame):
         self.errormsg.SetLabel(" ")
         #self.panel.Hide()
         self.p1=self.emppnl
-    	self.p2=self.emplpnl
+    	self.p2=self.homepnl
         self.back(self)
 
     def OnClose(self,e):
