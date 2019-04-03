@@ -9,7 +9,7 @@ create table distributioncompany(did int primary key,dname varchar(50),tenure in
 	drop table powercompany;
 create table powercompany(pid int primary key,pname varchar(50),type varchar(50),totalpower int,state varchar(50));
 	drop table transmissioncompany;
-create table transmissioncompany(tid int primary key,tname varchar(50),did int,tcapacity int,state varchar(50),tenure int,pid int);
+create table transmissioncompany(tid int primary key,tname varchar(50),did int,tcapacity int,state varchar(50),tenure int);
 	drop table circles;
 create table circles(cname varchar(50),state varchar(50),managerid int,did int);
 	drop table division;
@@ -21,7 +21,7 @@ create table electricityboard(boardname varchar(50) primary key,noofconsumer int
 	drop table billinginfo;
 create table billinginfo(billid int primary key,cid int,issuedate date,prevreading int,meterno int,curreading int,rate int,type varchar(50),unit int);
 	drop table newconnection;
-create table newconnection(cname varchar(50),phone int,boardname varchar(50),state varchar(50),subdiv varchar(50),divis varchar(50),city varchar(50),email varchar(50));
+create table newconnection(cname varchar(50),phone int,boardname varchar(50),state varchar(50),subdiv varchar(50),divis varchar(50),city varchar(50),email varchar(50),address varchar(50),refid varchar(50));
 
 insert into employee values
 	(7001,	'Amar kumar',		'2012-08-11',	'2000-11-06',	'dept1',	18,	'Andhra pradesh power generation corporation',	'designation1',		844667,	'password'),
@@ -71,16 +71,16 @@ insert into powercompany values
 	(3009,	'SIEKS',	'type9',	24854,	'maharastra'),
 	(3010,	'KHESG',	'type10',	46463,	'jharkhand');
 insert into transmissioncompany values
-	(4001,	'APTransco',	2001,	500,	'Andhra Pradesh',	5,3001),
-	(4002,	'AEGCL SLDC',	2002,	700,	'Assam',			8,3002),
-	(4003,	'SLDC Delhi',	2003,	300,	'Delhi',			3,3003),
-	(4004,	'GETCO',		2004,	800,	'Andhra Pradesh',	6,3001),
-	(4005,	'HVPNL',		2005,	700,	'Gujarat',			9,3004),
-	(4006,	'GUAA',			2006,	200,	'Delhi',		5,3003),
-	(4007,	'DASJH',		2007,	500,	'Haryana',	6,3005),
-	(4008,	'AHAKL',		2008,	300,	'tamil nadu',			9,3006),
-	(4009,	'IUYQW',		2009,	600,	'jharkhand',		7,3010),
-	(4010,	'AKHSDA',		2010,	400,	'jharkhand',		2,3010);
+	(4001,	'APTransco',	2001,	500,	'Andhra Pradesh',	5),
+	(4002,	'AEGCL SLDC',	2002,	700,	'Assam',			8),
+	(4003,	'SLDC Delhi',	2003,	300,	'Delhi',			3),
+	(4004,	'GETCO',		2004,	800,	'Gujarat',			6),
+	(4005,	'HVPNL',		2005,	700,	'Haryana',			9),
+	(4006,	'GUAA',			2006,	200,	'tamil nadu',		5),
+	(4007,	'DASJH',		2007,	500,	'uttar pradesh',	6),
+	(4008,	'AHAKL',		2008,	300,	'Bihar',			9),
+	(4009,	'IUYQW',		2009,	600,	'maharastra',		7),
+	(4010,	'AKHSDA',		2010,	400,	'jharkhand',		2);
 
 insert into circles values
 	('cname1',	'Delhi',			201,	2001),
@@ -109,8 +109,7 @@ insert into subdivision values
 	(6002,	5003,	'Ranjan',	'Delhi',			'sdivname2'),
 	(6003,	5003,	'Manish',	'Delhi',			'sdivname3'),
 	(6004,	5003,	'Prateek',	'Delhi',	'sdivname4'),
-	(6005,	5005,	'Anurag',	'Gujarat',			'sdivname5'),
-	(6007,	5007,	'Manish',	'uttar pradesh',			'sdivname5');
+	(6005,	5005,	'Anurag',	'Gujarat',			'sdivname5');
 insert into electricityboard values
 	('ASEC',	250000,	'Assam',		301,	2500),
 	('DVB',		400000,	'Delhi',		302,	3200),
