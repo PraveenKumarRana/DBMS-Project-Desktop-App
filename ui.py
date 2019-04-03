@@ -1044,7 +1044,7 @@ class MainWindow(wx.Frame):
         self.errormsg.SetLabel(" ")
         #self.panel.Hide()
         self.p1=self.emppnl
-    	self.p2=self.homepnl
+    	self.p2=self.emplpnl
         self.back(self)
 
     def OnClose(self,e):
