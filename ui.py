@@ -71,18 +71,18 @@ class MainWindow(wx.Frame):
         tcButton.Bind(wx.EVT_BUTTON, self.tc)
         ebButton.Bind(wx.EVT_BUTTON, self.eb)
 
-
+        errormsg = wx.StaticText(self.homepnl, -1, " ",pos=(610,340))
         l1 = wx.StaticText(self.homepnl, -1, "Customer ID : ",pos=(510,240))
         t1 = wx.TextCtrl(self.homepnl,style= wx.TE_PROCESS_ENTER,pos=(610,230),size=(200,40))
         l1 = wx.StaticText(self.homepnl, -1, "Password    : ",pos=(510,290))
         t2 = wx.TextCtrl(self.homepnl,style = wx.TE_PASSWORD|wx.TE_PROCESS_ENTER,pos=(610,280),size=(200,40))
-        t1.Bind(wx.EVT_TEXT_ENTER,partial(self.Login,t1=t1,t2=t2))
-        t2.Bind(wx.EVT_TEXT_ENTER,partial(self.Login,t1=t1,t2=t2))
-        self.errormsg = wx.StaticText(self.homepnl, -1, " ",pos=(610,340))
+        t1.Bind(wx.EVT_TEXT_ENTER,partial(self.Login,t1=t1,t2=t2,errormsg=errormsg))
+        t2.Bind(wx.EVT_TEXT_ENTER,partial(self.Login,t1=t1,t2=t2,errormsg=errormsg))
+
         loginButton = wx.Button(self.homepnl, label='Log In', pos=(715, 370))
-        loginButton.Bind(wx.EVT_BUTTON, partial(self.Login,t1=t1,t2=t2))
+        loginButton.Bind(wx.EVT_BUTTON, partial(self.Login,t1=t1,t2=t2,errormsg=errormsg))
         NacButton = wx.Button(self.homepnl, label='Not a Consumer', pos=(515, 370))
-        NacButton.Bind(wx.EVT_BUTTON, self.EmpLoginForm)
+        NacButton.Bind(wx.EVT_BUTTON, partial(self.EmpLoginForm,pt1=t1,pt2=t2,perrormsg=errormsg))
         newConButton = wx.Button(self.homepnl, label='Apply New Connection', pos=(1000,20),size=(200,40))
         newConButton.Bind(wx.EVT_BUTTON,self.newConnection)
         statBtn = wx.Button(self.homepnl, label='Know Your Conn. status', pos=(1000,80),size=(200,40))
@@ -610,25 +610,25 @@ class MainWindow(wx.Frame):
             i=i+30
         self.tcpnl.Show()
 
-    def EmpLoginForm(self,e):
+    def EmpLoginForm(self,e,pt1,pt2,perrormsg):
         self.homepnl.Hide()
 
     	self.SetTitle("Employee Login")
         self.emplpnl=NewPanel(self)
+        errormsg = wx.StaticText(self.emplpnl, -1, " ",pos=(610,140))
         l1 = wx.StaticText(self.emplpnl, -1, "  Employee ID : ",pos=(510,40))
         t1 = wx.TextCtrl(self.emplpnl,style= wx.TE_PROCESS_ENTER,pos=(610,30),size=(200,40))
         l1 = wx.StaticText(self.emplpnl, -1, "Password    : ",pos=(510,90))
         t2 = wx.TextCtrl(self.emplpnl,style = wx.TE_PASSWORD|wx.TE_PROCESS_ENTER,pos=(610,80),size=(200,40))
-        t1.Bind(wx.EVT_TEXT_ENTER,partial(self.EmpLogin,t1=t1,t2=t2))
-        t2.Bind(wx.EVT_TEXT_ENTER,partial(self.EmpLogin,t1=t1,t2=t2))
-        self.errormsg = wx.StaticText(self.emplpnl, -1, " ",pos=(610,140))
+        t1.Bind(wx.EVT_TEXT_ENTER,partial(self.EmpLogin,t1=t1,t2=t2,errormsg=errormsg))
+        t2.Bind(wx.EVT_TEXT_ENTER,partial(self.EmpLogin,t1=t1,t2=t2,errormsg=errormsg))
         loginButton = wx.Button(self.emplpnl, label='Log In', pos=(715, 170))
-        loginButton.Bind(wx.EVT_BUTTON, partial(self.EmpLogin,t1=t1,t2=t2))
+        loginButton.Bind(wx.EVT_BUTTON, partial(self.EmpLogin,t1=t1,t2=t2,errormsg=errormsg))
 
 
         BackButton = wx.Button(self.emplpnl, label='Back', pos=(60, 420),size=(100,40))
 
-    	BackButton.Bind(wx.EVT_BUTTON,partial(self.back,p1=self.emplpnl,p2=self.homepnl,title="Power Distribution System"))
+    	BackButton.Bind(wx.EVT_BUTTON,partial(self.ElfToMainBack,t1=pt1,t2=pt2,errormsg=perrormsg))
     	self.emplpnl.Show()
 
     def NewconForm(self,e):
@@ -766,20 +766,20 @@ class MainWindow(wx.Frame):
     	#self.uppnl.Show()
 
 
-    def Login(self,e,t1,t2):
+    def Login(self,e,t1,t2,errormsg):
         if(t1.GetValue()):
             cur.execute("select password from consumer where cid=%s",(t1.GetValue(),))
             rows = cur.fetchall()
             if(len(rows)!=0 and t2.GetValue()==rows[0][0]):
-                self.Customer(self,t1=t1,t2=t2)
+                self.Customer(self,t1=t1,t2=t2,errormsg=errormsg)
             else:
-                self.errormsg.SetForegroundColour((255,0,0))
-                self.errormsg.SetLabel("Wrong Customer ID or Password!!")
+                errormsg.SetForegroundColour((255,0,0))
+                errormsg.SetLabel("Wrong Customer ID or Password!!")
         else:
-            self.errormsg.SetForegroundColour((255,0,0))
-            self.errormsg.SetLabel("Wrong Customer ID or Password!!")
+            errormsg.SetForegroundColour((255,0,0))
+            errormsg.SetLabel("Wrong Customer ID or Password!!")
 
-    def EmpLogin(self,e,t1,t2):
+    def EmpLogin(self,e,t1,t2,errormsg):
         if(t1.GetValue()):
             cur.execute("select password from employee where eid=%s",(t1.GetValue(),))
             rows = cur.fetchall()
@@ -787,25 +787,25 @@ class MainWindow(wx.Frame):
                 cur.execute("select designation from employee where eid=%s",(t1.GetValue(),))
                 eboard=cur.fetchall()
                 if(eboard[0][0]=='designation6'):
-                    self.XXEmployee(self,t1=t1,t2=t2)
+                    self.XXEmployee(self,t1=t1,t2=t2,errormsg=errormsg)
                 if(eboard[0][0]=='designation3'):
-                    self.designation3(self,t1=t1,t2=t2)
+                    self.designation3(self,t1=t1,t2=t2,errormsg=errormsg)
 
             else:
-                self.errormsg.SetForegroundColour((255,0,0))
-                self.errormsg.SetLabel("Wrong Employee ID or Password!!")
+                errormsg.SetForegroundColour((255,0,0))
+                errormsg.SetLabel("Wrong Employee ID or Password!!")
         else:
-            self.errormsg.SetForegroundColour((255,0,0))
-            self.errormsg.SetLabel("Wrong Employee ID or Password!!")
+            errormsg.SetForegroundColour((255,0,0))
+            errormsg.SetLabel("Wrong Employee ID or Password!!")
 
-    def designation3(self,e,t1,t2):
+    def designation3(self,e,t1,t2,errormsg):
         self.emplpnl.Hide()
         self.emppnl=NewPanel(self)
 
         self.SetTitle("Employee")
 
         LogoutButton = wx.Button(self.emppnl, label='Logout', pos=(1270, 0),size=(80,30))
-        LogoutButton.Bind(wx.EVT_BUTTON,partial(self.EmpLogout,t1=t1,t2=t2))
+        LogoutButton.Bind(wx.EVT_BUTTON,partial(self.EmpLogout,t1=t1,t2=t2,errormsg=errormsg))
         cur.execute("select ename from employee where eid=%s",(t1.GetValue(),))
         rows=cur.fetchall()
         ProfileButton = wx.Button(self.emppnl, label='Hi '+rows[0][0], pos=(1120, 0))
@@ -1037,14 +1037,14 @@ class MainWindow(wx.Frame):
             #self.back(self)
             self.back(self,p1=self.formpnl,p2=self.emppnl,title="Employee")
 
-    def XXEmployee(self,e,t1,t2):
+    def XXEmployee(self,e,t1,t2,errormsg):
         self.emplpnl.Hide()
 
         self.SetTitle("Employee")
         self.emppnl=NewPanel(self)
 
         LogoutButton = wx.Button(self.emppnl, label='Logout', pos=(1270, 0),size=(80,30))
-        LogoutButton.Bind(wx.EVT_BUTTON,partial(self.EmpLogout,t1=t1,t2=t2))
+        LogoutButton.Bind(wx.EVT_BUTTON,partial(self.EmpLogout,t1=t1,t2=t2,errormsg=errormsg))
         cur.execute("select ename from employee where eid=%s",(t1.GetValue(),))
         rows=cur.fetchall()
         ProfileButton = wx.Button(self.emppnl, label='Hi '+rows[0][0], pos=(1120, 0))
@@ -1136,7 +1136,7 @@ class MainWindow(wx.Frame):
     def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
         return ''.join(random.choice(chars) for _ in range(6))
 
-    def Customer(self,e,t1,t2):
+    def Customer(self,e,t1,t2,errormsg):
         self.homepnl.Hide()
 
     	self.SetTitle("User")
@@ -1146,7 +1146,7 @@ class MainWindow(wx.Frame):
         cur.execute("select cname from consumer where cid=%s",(t1.GetValue(),))
         rows=cur.fetchall()
         ProfileButton = wx.Button(self.custpnl, label='Hi '+rows[0][0], pos=(1120, 0))
-    	LogoutButton.Bind(wx.EVT_BUTTON,partial(self.CustLogout,t1=t1,t2=t2))
+    	LogoutButton.Bind(wx.EVT_BUTTON,partial(self.CustLogout,t1=t1,t2=t2,errormsg=errormsg))
         ProfileButton.Bind(wx.EVT_BUTTON,partial(self.UserProfile,t1=t1))
 
         no_of_meter=cur.execute("select * from consumer where cid=%s",(t1.GetValue(),))
@@ -1184,24 +1184,30 @@ class MainWindow(wx.Frame):
 
     	self.custpnl.Show()
 
-    def CustLogout(self,e,t1,t2):
+    def CustLogout(self,e,t1,t2,errormsg):
         t1.Clear()
         t2.Clear()
-        self.errormsg.SetLabel(" ")
+        errormsg.SetLabel(" ")
         #self.p1=self.custpnl
     	#self.p2=self.homepnl
         #self.back(self)
         self.back(self,p1=self.custpnl,p2=self.homepnl,title="Power Distribution System")
 
-    def EmpLogout(self,e,t1,t2):
+    def EmpLogout(self,e,t1,t2,errormsg):
         t1.Clear()
         t2.Clear()
-        self.errormsg.SetLabel(" ")
+        errormsg.SetLabel(" ")
         #self.panel.Hide()
         #self.p1=self.emppnl
     	#self.p2=self.homepnl
         #self.back(self)
         self.back(self,p1=self.emppnl,p2=self.emplpnl,title="Employee Login")
+
+    def ElfToMainBack(self,e,t1,t2,errormsg):
+        t1.Clear()
+        t2.Clear()
+        errormsg.SetLabel(" ")
+        self.back(self,p1=self.emplpnl,p2=self.homepnl,title="Power Distribution System")
 
     def OnClose(self,e):
         self.Close(True)
