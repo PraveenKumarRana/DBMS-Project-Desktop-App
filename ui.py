@@ -646,6 +646,8 @@ class MainWindow(wx.Frame):
         t13 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,200),size=(200,30))
         l5 = wx.StaticText(self.formpnl, -1, " Mobile No.           :   ",pos=(100,250))
         t14 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,250),size=(200,30))
+
+
         l6 = wx.StaticText(self.formpnl, -1, " Email                :   ",pos=(100,300))
         t15 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,300),size=(200,30))
         l7 = wx.StaticText(self.formpnl, -1, " Purpose of Supply    :   ",pos=(100,350))
@@ -659,9 +661,9 @@ class MainWindow(wx.Frame):
         self.ps.Bind(wx.EVT_COMBOBOX, self.posu)
         l8 = wx.StaticText(self.formpnl, -1, " City    :   ",              pos=(100,400))
         t17 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,400),size=(200,30))
-
+        msg=wx.StaticText(self.formpnl, -1, "",pos=(620,300),size=(300,300))
         SubmitButton = wx.Button(self.formpnl, label='Submit', pos=(500, 450),size=(100,40))
-        SubmitButton.Bind(wx.EVT_BUTTON,partial(self.Submit,t11=t11,t12=t12,t13=t13,t14=t14,t15=t15,t17=t17))
+        SubmitButton.Bind(wx.EVT_BUTTON,partial(self.Submit,t11=t11,t12=t12,t13=t13,t14=t14,t15=t15,t17=t17,msg=msg))
 
         backButton = wx.Button(self.formpnl, label='Cancel', pos=(1000, 10))
         self.p1=self.formpnl
@@ -671,8 +673,8 @@ class MainWindow(wx.Frame):
     def posu(self,e):
         self.t16=e.GetString()
 
-    def Submit(self,e,t11,t12,t13,t14,t15,t17):
-        if(t11.GetValue() and t12.GetValue() and t13.GetValue() and t14.GetValue() and t15.GetValue() and self.t16 ):
+    def Submit(self,e,t11,t12,t13,t14,t15,t17,msg):
+        if(t11.GetValue() and t12.GetValue() and t13.GetValue() and len(t14.GetValue())==10 and t15.GetValue() and self.t16 ):
             cur = con.cursor(mdb.cursors.DictCursor)
             cur.execute("select boardname from consumer where state=%s",(self.state,))
             rows=cur.fetchall()
@@ -693,8 +695,24 @@ class MainWindow(wx.Frame):
             else:
             	ciid=cidd+1
 
-            cur.execute("insert into newconnection values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(t11.GetValue(),t14.GetValue(),rows[0]['boardname'],self.state,self.Subdiv,self.Div,t17.GetValue(),t15.GetValue(),t13.GetValue(),self.reference_id,ciid,))
+            try:
+                cur.execute("insert into newconnection values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(t11.GetValue(),t14.GetValue(),rows[0]['boardname'],self.state,self.Subdiv,self.Div,t17.GetValue(),t15.GetValue(),t13.GetValue(),self.reference_id,ciid,))
+            except mdb.Error,e:
+                print(e)
+                """if 'errorpnl' in locals():
+                    errorpnl.Hide()
+                errorpnl=wx.Panel(self,pos=(w/2,300),size=(300,20))
+                errorpnl.SetBackgroundColour("white")
+                """
+                msg.Hide()
+                msg.Show()
+                msg.SetLabel("Invalid Mobile No. !!")
+                msg.SetForegroundColour((255,0,0))
 
+
+
+
+                return
 
             status="pending"
             cur.execute("insert into ncstatus values (%s,%s,%s)",(ciid,self.reference_id,status,))
@@ -707,8 +725,16 @@ class MainWindow(wx.Frame):
             self.back(self,p1=self.formpnl,p2=self.homepnl,title="Power Distribution System")
 
         else:
-            msg=wx.StaticText(self.formpnl, -1, "Any field can not be empty !!",pos=(w/2,300),size=(300,300))
-            msg.SetForegroundColour((255,0,0))
+            if(len(t14.GetValue())!=10):
+                msg.Hide()
+                msg.Show()
+                msg.SetLabel("Invalid Mobile No. !!")
+                msg.SetForegroundColour((255,0,0))
+            else:
+                msg.Hide()
+                msg.Show()
+                msg.SetLabel("Any field can not be empty !!")
+                msg.SetForegroundColour((255,0,0))
 
     def Cancel(self,e):
         dial=wx.MessageBox(message='Do you want to cancel it?',caption='Cancel',style=wx.YES_NO | wx.ICON_INFORMATION)
@@ -716,7 +742,8 @@ class MainWindow(wx.Frame):
         #self.p2=self.homepnl
         if (dial==2):
             #self.back(self)
-            self.back_tc_pc_dc_eb(self,p1=self.formpnl,p2=self.homepnl,title="Power Distribution System")
+
+            self.back(self,p1=self.formpnl,p2=self.homepnl,title="Power Distribution System")
     def UserProfile(self,e,t1):
     	self.custpnl.Hide()
 
@@ -1233,7 +1260,7 @@ class MainWindow(wx.Frame):
         SubmitButton.Bind(wx.EVT_BUTTON,partial(self.addTcSubmit,t11=t11,t12=t12,t13=t13,t14=t14,t15=t15,t16=t16))
 
         backButton = wx.Button(self.formpnl, label='Cancel', pos=(630, 450),size = (100,40))
-        self.p1=self.formpnl
+        self.p1=self.formpnlt11t11t11t11
         self.p2=self.emppnl
         backButton.Bind(wx.EVT_BUTTON, self.addTcCancel)
 
