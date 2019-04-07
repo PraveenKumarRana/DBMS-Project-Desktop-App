@@ -839,6 +839,7 @@ class MainWindow(wx.Frame):
         l2Update=wx.Button(self.emppnl, label='UPDATE', pos=(200,200),size=(100,40))
         l2Update.Bind(wx.EVT_BUTTON,self.updateTc)
         l2Delete=wx.Button(self.emppnl, label='DELETE', pos=(330,200),size=(100,40))
+        l2Delete.Bind(wx.EVT_BUTTON,self.DelTc)
 
         l3=wx.StaticText(self.emppnl, -1,"Power Company",pos=(80,270),size=(300,30))
         l3.SetFont(wx.Font(12,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
@@ -848,6 +849,7 @@ class MainWindow(wx.Frame):
         l3Update=wx.Button(self.emppnl, label='UPDATE', pos=(200,320),size=(100,40))
         l3Update.Bind(wx.EVT_BUTTON,self.updatePc)
         l3Delete=wx.Button(self.emppnl, label='DELETE', pos=(330,320),size=(100,40))
+        l3Delete.Bind(wx.EVT_BUTTON,self.DelPc)
 
     def updateDc(self,e):
         self.emppnl.Hide()
@@ -1054,7 +1056,7 @@ class MainWindow(wx.Frame):
             wx.StaticText(self.delpnl, -1,row['state'],pos=(660,i))
             wx.StaticText(self.delpnl, -1,str(row['tid']),pos=(830,i))
             delButton = wx.Button(self.delpnl, label='DELETE', pos=(880, i),size=(100,20))
-            delButton.Bind(wx.EVT_BUTTON,self.delBut,delButton)
+            delButton.Bind(wx.EVT_BUTTON,self.delButDc,delButton)
             delButton.id=j
             j=j+1
             i=i+30
@@ -1062,7 +1064,74 @@ class MainWindow(wx.Frame):
 
         backButton.Bind(wx.EVT_BUTTON, partial(self.back,p1=self.delpnl,p2=self.emppnl,title="Emplooyee"))
 
-    def delBut(self,e):
+    def DelTc(self,e):
+        self.emppnl.Hide()
+        self.delpnl=NewPanel(self)
+        l0 = wx.StaticText(self.delpnl, -1, " Deleting Transmission Company  ",pos=(450,10),size=(500,500),style=wx.ALIGN_CENTER)
+        l0.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.BOLD))
+
+        cur=con.cursor(mdb.cursors.DictCursor)
+        cur.execute("select * from transmissioncompany")
+        self.rows=cur.fetchall()
+        wx.StaticText(self.delpnl, -1, "Tid",pos=(150,50))
+        wx.StaticText(self.delpnl, -1, "Name",pos=(200,50))
+        wx.StaticText(self.delpnl, -1, "Did",pos=(400,50))
+        wx.StaticText(self.delpnl, -1, "Tcapacity",pos=(500,50))
+        wx.StaticText(self.delpnl, -1, "State",pos=(600,50))
+        wx.StaticText(self.delpnl, -1, "Tenure(in years)",pos=(800,50))
+
+        i=80
+        j=0
+        for row in self.rows:
+            wx.StaticText(self.delpnl, -1,str(row['tid']),pos=(150,i))
+            wx.StaticText(self.delpnl, -1,row['tname'],pos=(200,i))
+            wx.StaticText(self.delpnl, -1,str(row['did']),pos=(400,i))
+            wx.StaticText(self.delpnl, -1,str(row['tcapacity']),pos=(500,i))
+            wx.StaticText(self.delpnl, -1,row['state'],pos=(600,i))
+            wx.StaticText(self.delpnl, -1,str(row['tenure']),pos=(800,i))
+            delButton = wx.Button(self.delpnl, label='DELETE', pos=(900, i),size=(100,20))
+            delButton.Bind(wx.EVT_BUTTON,self.delButTc,delButton)
+            delButton.id=j
+            j=j+1
+            i=i+30
+        backButton = wx.Button(self.delpnl, label='Back', pos=(1000, 10),size = (100,40))
+
+        backButton.Bind(wx.EVT_BUTTON, partial(self.back,p1=self.delpnl,p2=self.emppnl,title="Employee"))
+
+    def DelPc(self,e):
+        self.emppnl.Hide()
+        self.delpnl=NewPanel(self)
+        l0 = wx.StaticText(self.delpnl, -1, " Deleting Power Company  ",pos=(450,10),size=(500,500),style=wx.ALIGN_CENTER)
+        l0.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.BOLD))
+
+        cur=con.cursor(mdb.cursors.DictCursor)
+        cur.execute("select * from powercompany")
+        self.rows=cur.fetchall()
+        wx.StaticText(self.delpnl, -1, "Pid",pos=(150,50))
+        wx.StaticText(self.delpnl, -1, "Name",pos=(200,50))
+        wx.StaticText(self.delpnl, -1, "State",pos=(320,50))
+        wx.StaticText(self.delpnl, -1, "Type",pos=(500,50))
+        wx.StaticText(self.delpnl, -1, "Total Power",pos=(600,50))
+
+
+        i=80
+        j=0
+        for row in self.rows:
+            wx.StaticText(self.delpnl, -1,str(row['pid']),pos=(150,i))
+            wx.StaticText(self.delpnl, -1,row['pname'],pos=(200,i))
+            wx.StaticText(self.delpnl, -1,row['state'],pos=(320,i))
+            wx.StaticText(self.delpnl, -1,row['type'],pos=(500,i))
+            wx.StaticText(self.delpnl, -1,str(row['totalpower']),pos=(600,i))
+            delButton = wx.Button(self.delpnl, label='DELETE', pos=(750, i),size=(100,20))
+            delButton.Bind(wx.EVT_BUTTON,self.delButPc,delButton)
+            delButton.id=j
+            j=j+1
+            i=i+30
+        backButton = wx.Button(self.delpnl, label='Back', pos=(1000, 10),size = (100,40))
+
+        backButton.Bind(wx.EVT_BUTTON, partial(self.back,p1=self.delpnl,p2=self.emppnl,title="Employee"))
+
+    def delButDc(self,e):
         id=e.GetEventObject().id
         deldid=self.rows[id]['did']
         cur = con.cursor(mdb.cursors.DictCursor)
@@ -1070,6 +1139,24 @@ class MainWindow(wx.Frame):
         con.commit()
         self.delpnl.Hide()
         self.DelDc(self)
+
+    def delButTc(self,e):
+        id=e.GetEventObject().id
+        deltid=self.rows[id]['tid']
+        cur = con.cursor(mdb.cursors.DictCursor)
+        cur.execute("delete from transmissioncompany where tid =%s",(deltid,))
+        con.commit()
+        self.delpnl.Hide()
+        self.DelTc(self)
+
+    def delButPc(self,e):
+        id=e.GetEventObject().id
+        delpid=self.rows[id]['pid']
+        cur = con.cursor(mdb.cursors.DictCursor)
+        cur.execute("delete from powercompany where pid =%s",(delpid,))
+        con.commit()
+        self.delpnl.Hide()
+        self.DelPc(self)
 
     def addDc(self,e):
         self.emppnl.Hide()
