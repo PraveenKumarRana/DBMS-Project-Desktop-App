@@ -817,6 +817,7 @@ class MainWindow(wx.Frame):
         l1Add=wx.Button(self.emppnl, label='ADD', pos=(70,80),size=(100,40))
         l1Add.Bind(wx.EVT_BUTTON,self.addDc)
         l1Update=wx.Button(self.emppnl, label='UPDATE', pos=(200,80),size=(100,40))
+        l1Update.Bind(wx.EVT_BUTTON,self.updateDc)
         l1Delete=wx.Button(self.emppnl, label='DELETE', pos=(330,80),size=(100,40))
         l1Delete.Bind(wx.EVT_BUTTON,self.DelDc)
 
@@ -826,6 +827,7 @@ class MainWindow(wx.Frame):
         l2Add=wx.Button(self.emppnl, label='ADD', pos=(70,200),size=(100,40))
         l2Add.Bind(wx.EVT_BUTTON,self.addTc)
         l2Update=wx.Button(self.emppnl, label='UPDATE', pos=(200,200),size=(100,40))
+        l2Update.Bind(wx.EVT_BUTTON,self.updateTc)
         l2Delete=wx.Button(self.emppnl, label='DELETE', pos=(330,200),size=(100,40))
 
         l3=wx.StaticText(self.emppnl, -1,"Power Company",pos=(80,270),size=(300,30))
@@ -834,7 +836,189 @@ class MainWindow(wx.Frame):
         l3Add=wx.Button(self.emppnl, label='ADD', pos=(70,320),size=(100,40))
         l3Add.Bind(wx.EVT_BUTTON,self.addPc)
         l3Update=wx.Button(self.emppnl, label='UPDATE', pos=(200,320),size=(100,40))
+        l3Update.Bind(wx.EVT_BUTTON,self.updatePc)
         l3Delete=wx.Button(self.emppnl, label='DELETE', pos=(330,320),size=(100,40))
+
+    def updateDc(self,e):
+        self.emppnl.Hide()
+        self.updatepnl=NewPanel(self)
+        updateDcBackButton=wx.Button(self.updatepnl, label='Back' , pos=(1000,10),size=(100,40))
+        updateDcBackButton.Bind(wx.EVT_BUTTON,partial(self.back,p1=self.updatepnl,p2=self.emppnl,title='Employee'))
+        wx.StaticText(self.updatepnl,-1,"Did",pos=(80,100))
+        wx.StaticText(self.updatepnl, -1,"Name",pos=(150,100))
+        wx.StaticText(self.updatepnl, -1,"State",pos=(450,100))
+        wx.StaticText(self.updatepnl, -1,"Tenure(in years)",pos=(580,100))
+        wx.StaticText(self.updatepnl, -1,"Tid",pos=(750,100))
+        cur=con.cursor(mdb.cursors.DictCursor)
+        cur.execute("select * from distributioncompany")
+        self.rows=cur.fetchall()
+        i=120
+        j=0
+        for row in self.rows:
+            wx.StaticText(self.updatepnl, -1,str(row['did']),pos=(80,i))
+            wx.StaticText(self.updatepnl, -1,row['dname'],pos=(150,i))
+            wx.StaticText(self.updatepnl, -1,row['state'],pos=(450,i))
+            wx.StaticText(self.updatepnl, -1,str(row['tenure']),pos=(650,i))
+            wx.StaticText(self.updatepnl, -1,str(row['tid']),pos=(750,i))
+            editButton = wx.Button(self.updatepnl, label='Edit', pos=(850, i),size=(100,20))
+            editButton.Bind(wx.EVT_BUTTON,self.editDcButton,editButton)
+            editButton.id=j
+            j=j+1
+            i=i+30
+
+    def updateTc(self,e):
+        self.emppnl.Hide()
+        self.updatepnl=NewPanel(self)
+        updateTcBackButton=wx.Button(self.updatepnl, label='Back' , pos=(1000,10),size=(100,40))
+        updateTcBackButton.Bind(wx.EVT_BUTTON,partial(self.back,p1=self.updatepnl,p2=self.emppnl,title='Employee'))
+        wx.StaticText(self.updatepnl,-1,"Tid",pos=(80,100))
+        wx.StaticText(self.updatepnl, -1,"Name",pos=(150,100))
+        wx.StaticText(self.updatepnl, -1,"State",pos=(300,100))
+        wx.StaticText(self.updatepnl, -1,"Did",pos=(500,100))
+        wx.StaticText(self.updatepnl, -1,"Tcapacity",pos=(600,100))
+        wx.StaticText(self.updatepnl, -1,"Tenure(in years)",pos=(700,100))
+        cur=con.cursor(mdb.cursors.DictCursor)
+        cur.execute("select * from transmissioncompany")
+        self.rows=cur.fetchall()
+        i=120
+        j=0
+        for row in self.rows:
+            wx.StaticText(self.updatepnl, -1,str(row['tid']),pos=(80,i))
+            wx.StaticText(self.updatepnl, -1,row['tname'],pos=(150,i))
+            wx.StaticText(self.updatepnl, -1,row['state'],pos=(300,i))
+            wx.StaticText(self.updatepnl, -1,str(row['did']),pos=(500,i))
+            wx.StaticText(self.updatepnl, -1,str(row['tcapacity']),pos=(600,i))
+            wx.StaticText(self.updatepnl, -1,str(row['tenure']),pos=(750,i))
+            editButton = wx.Button(self.updatepnl, label='Edit', pos=(850, i),size=(100,20))
+            editButton.Bind(wx.EVT_BUTTON,self.editTcButton,editButton)
+            editButton.id=j
+            j=j+1
+            i=i+30
+
+    def updatePc(self,e):
+        self.emppnl.Hide()
+        self.updatepnl=NewPanel(self)
+        updateTcBackButton=wx.Button(self.updatepnl, label='Back' , pos=(1000,10),size=(100,40))
+        updateTcBackButton.Bind(wx.EVT_BUTTON,partial(self.back,p1=self.updatepnl,p2=self.emppnl,title='Employee'))
+        wx.StaticText(self.updatepnl,-1,"pid",pos=(80,100))
+        wx.StaticText(self.updatepnl, -1,"Name",pos=(150,100))
+        wx.StaticText(self.updatepnl, -1,"State",pos=(300,100))
+        wx.StaticText(self.updatepnl, -1,"Type",pos=(500,100))
+        wx.StaticText(self.updatepnl, -1,"Total Power",pos=(600,100))
+        cur=con.cursor(mdb.cursors.DictCursor)
+        cur.execute("select * from powercompany")
+        self.rows=cur.fetchall()
+        i=120
+        j=0
+        for row in self.rows:
+            wx.StaticText(self.updatepnl, -1,str(row['pid']),pos=(80,i))
+            wx.StaticText(self.updatepnl, -1,row['pname'],pos=(150,i))
+            wx.StaticText(self.updatepnl, -1,row['state'],pos=(300,i))
+            wx.StaticText(self.updatepnl, -1,row['type'],pos=(500,i))
+            wx.StaticText(self.updatepnl, -1,str(row['totalpower']),pos=(600,i))
+            editButton = wx.Button(self.updatepnl, label='Edit', pos=(750, i),size=(100,20))
+            editButton.Bind(wx.EVT_BUTTON,self.editPcButton,editButton)
+            editButton.id=j
+            j=j+1
+            i=i+30
+
+
+    def editDcButton(self,e,):
+        self.updatepnl.Hide()
+        self.editDcpnl=NewPanel(self)
+        self.idDc=e.GetEventObject().id
+        cur=con.cursor(mdb.cursors.DictCursor)
+        cur.execute("select * from distributioncompany")
+        rows=cur.fetchall()
+        editDcBackButton=wx.Button(self.editDcpnl, label='Back' , pos=(1000,10),size=(100,40))
+        editDcBackButton.Bind(wx.EVT_BUTTON,partial(self.back,p1=self.editDcpnl,p2=self.updatepnl,title='Employee'))
+        l1=wx.StaticText(self.editDcpnl, -1,"Did :",pos=(120,120),size=(300,30))
+        l2 = wx.StaticText(self.editDcpnl,-1, str(rows[self.idDc]['did']) ,  pos=(320,115),size=(200,30))
+        l3=wx.StaticText(self.editDcpnl, -1,"Dname :",pos=(120,170),size=(300,30))
+        self.tDcDname = wx.TextCtrl(self.editDcpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,165),size=(200,30))
+        l4=wx.StaticText(self.editDcpnl, -1,"State :",pos=(120,220),size=(300,30))
+        self.tDcState = wx.TextCtrl(self.editDcpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,215),size=(200,30))
+        l5=wx.StaticText(self.editDcpnl, -1,"Tenure(in years) :",pos=(120,270),size=(300,30))
+        self.tDcTenure = wx.TextCtrl(self.editDcpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,265),size=(200,30))
+        l6=wx.StaticText(self.editDcpnl, -1,"Tid :",pos=(120,320),size=(300,30))
+        self.tDcTid = wx.TextCtrl(self.editDcpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,315),size=(200,30))
+        updateButton=wx.Button(self.editDcpnl, label='Update',pos=(500, 450),size=(100,40))
+        updateButton.Bind(wx.EVT_BUTTON,self.updateDcSubmit)
+
+    def editTcButton(self,e):
+        self.updatepnl.Hide()
+        self.editTcpnl=NewPanel(self)
+        self.idTc=e.GetEventObject().id
+        cur=con.cursor(mdb.cursors.DictCursor)
+        cur.execute("select * from transmissioncompany")
+        rows=cur.fetchall()
+        editTcBackButton=wx.Button(self.editTcpnl, label='Back' , pos=(1000,10),size=(100,40))
+        editTcBackButton.Bind(wx.EVT_BUTTON,partial(self.back,p1=self.editTcpnl,p2=self.updatepnl,title='Employee'))
+        l1=wx.StaticText(self.editTcpnl, -1,"Tid :",pos=(120,120),size=(300,30))
+        l2 = wx.StaticText(self.editTcpnl,-1, str(rows[self.idTc]['tid']) ,  pos=(320,115),size=(200,30))
+        l3=wx.StaticText(self.editTcpnl, -1,"Tname :",pos=(120,170),size=(300,30))
+        self.tTcTname = wx.TextCtrl(self.editTcpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,165),size=(200,30))
+        l4=wx.StaticText(self.editTcpnl, -1,"State :",pos=(120,220),size=(300,30))
+        self.tTcState = wx.TextCtrl(self.editTcpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,215),size=(200,30))
+        l5=wx.StaticText(self.editTcpnl, -1,"Did :",pos=(120,270),size=(300,30))
+        self.tTcDid = wx.TextCtrl(self.editTcpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,265),size=(200,30))
+        l6=wx.StaticText(self.editTcpnl, -1,"Tcapacity :",pos=(120,320),size=(300,30))
+        self.tTcTcapacity = wx.TextCtrl(self.editTcpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,315),size=(200,30))
+        l6=wx.StaticText(self.editTcpnl, -1,"Tenure(in years) :",pos=(120,370),size=(300,30))
+        self.tTcTenure = wx.TextCtrl(self.editTcpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,365),size=(200,30))
+        updateButton=wx.Button(self.editTcpnl, label='Update',pos=(500, 450),size=(100,40))
+        updateButton.Bind(wx.EVT_BUTTON,self.updateTcSubmit)
+
+    def editPcButton(self,e):
+        self.updatepnl.Hide()
+        self.editPcpnl=NewPanel(self)
+        self.idPc=e.GetEventObject().id
+        cur=con.cursor(mdb.cursors.DictCursor)
+        cur.execute("select * from powercompany")
+        rows=cur.fetchall()
+        editPcBackButton=wx.Button(self.editPcpnl, label='Back' , pos=(1000,10),size=(100,40))
+        editPcBackButton.Bind(wx.EVT_BUTTON,partial(self.back,p1=self.editPcpnl,p2=self.updatepnl,title='Employee'))
+        l1=wx.StaticText(self.editPcpnl, -1,"Pid :",pos=(120,120),size=(300,30))
+        l2 = wx.StaticText(self.editPcpnl,-1, str(rows[self.idPc]['pid']) ,  pos=(320,115),size=(200,30))
+        l3=wx.StaticText(self.editPcpnl, -1,"Pname :",pos=(120,170),size=(300,30))
+        self.tPcPname = wx.TextCtrl(self.editPcpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,165),size=(200,30))
+        l4=wx.StaticText(self.editPcpnl, -1,"State :",pos=(120,220),size=(300,30))
+        self.tPcState = wx.TextCtrl(self.editPcpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,215),size=(200,30))
+        l5=wx.StaticText(self.editPcpnl, -1,"Type :",pos=(120,270),size=(300,30))
+        self.tPcType = wx.TextCtrl(self.editPcpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,265),size=(200,30))
+        l6=wx.StaticText(self.editPcpnl, -1,"Total Power :",pos=(120,320),size=(300,30))
+        self.tPcTotalpower = wx.TextCtrl(self.editPcpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,315),size=(200,30))
+        updateButton=wx.Button(self.editPcpnl, label='Update',pos=(500, 450),size=(100,40))
+        updateButton.Bind(wx.EVT_BUTTON,self.updatePcSubmit)
+
+    def updateDcSubmit(self,e):
+        cur = con.cursor(mdb.cursors.DictCursor)
+        cur.execute("select * from distributioncompany")
+        rows=cur.fetchall()
+        cur.execute("update distributioncompany set dname=%s,state=%s,tenure=%s,tid=%s  where did =%s",(self.tDcDname.GetValue(),self.tDcState.GetValue(),str(self.tDcTenure.GetValue()),str(self.tDcTid.GetValue()),rows[self.idDc]['did']))
+        con.commit()
+        self.editDcpnl.Hide()
+        self.updateDc(self)
+
+    def updateTcSubmit(self,e):
+        cur = con.cursor(mdb.cursors.DictCursor)
+        cur.execute("select * from transmissioncompany")
+        rows=cur.fetchall()
+        cur.execute("update transmissioncompany set tname=%s,state=%s,did=%s,tcapacity=%s,tenure=%s  where tid =%s",(self.tTcTname.GetValue(),self.tTcState.GetValue(),str(self.tTcDid.GetValue()),str(self.tTcTcapacity.GetValue()),str(self.tTcTenure.GetValue()),rows[self.idTc]['tid']))
+        con.commit()
+        self.editTcpnl.Hide()
+        self.updateTc(self)
+
+    def updatePcSubmit(self,e):
+        cur = con.cursor(mdb.cursors.DictCursor)
+        cur.execute("select * from powercompany")
+        rows=cur.fetchall()
+        cur.execute("update powercompany set pname=%s,state=%s,type=%s,totalpower=%s  where pid =%s",(self.tPcPname.GetValue(),self.tPcState.GetValue(),self.tPcType.GetValue(),str(self.tPcTotalpower.GetValue()),rows[self.idPc]['pid']))
+        con.commit()
+        self.editPcpnl.Hide()
+        self.updatePc(self)
+
+
     def DelDc(self,e):
         self.emppnl.Hide()
         self.delpnl=NewPanel(self)
