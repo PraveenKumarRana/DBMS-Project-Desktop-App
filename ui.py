@@ -812,14 +812,14 @@ class MainWindow(wx.Frame):
         l4 = wx.StaticText(self.formpnl, -1, " T.C. Id      :   ",pos=(100,250))
         t14 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,250),size=(200,30))
         SubmitButton = wx.Button(self.formpnl, label='Submit', pos=(500, 450),size=(100,40))
-        SubmitButton.Bind(wx.EVT_BUTTON,self.addDcSubmit)
+        SubmitButton.Bind(wx.EVT_BUTTON,partial(self.addDcSubmit,t11=t11,t12=t12,t13=t13,t14=t14))
 
         backButton = wx.Button(self.formpnl, label='Cancel', pos=(630, 450),size = (100,40))
         self.p1=self.formpnl
         self.p2=self.emppnl
         backButton.Bind(wx.EVT_BUTTON, self.addDcCancel)
 
-    def addDcSubmit(self,e):
+    def addDcSubmit(self,e,t11,t12,t13,t14):
         if(t11.GetValue() and t12.GetValue() and t13.GetValue() and t14.GetValue()):
             cur = con.cursor(mdb.cursors.DictCursor)
             cur.execute("select did from distributioncompany ")
@@ -868,14 +868,14 @@ class MainWindow(wx.Frame):
         t16 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,350),size=(200,30))
 
         SubmitButton = wx.Button(self.formpnl, label='Submit', pos=(500, 450),size=(100,40))
-        SubmitButton.Bind(wx.EVT_BUTTON,self.addTcSubmit)
+        SubmitButton.Bind(wx.EVT_BUTTON,partial(self.addTcSubmit,t11=t11,t12=t12,t13=t13,t14=t14,t15=t15,t16=t16))
 
         backButton = wx.Button(self.formpnl, label='Cancel', pos=(630, 450),size = (100,40))
         self.p1=self.formpnl
         self.p2=self.emppnl
         backButton.Bind(wx.EVT_BUTTON, self.addTcCancel)
 
-    def addTcSubmit(self,e):
+    def addTcSubmit(self,e,t11,t12,t13,t14,t15,t16):
         if(t11.GetValue() and t12.GetValue() and t13.GetValue() and t14.GetValue()):
             cur = con.cursor(mdb.cursors.DictCursor)
             cur.execute("select tid from transmissioncompany ")
@@ -890,7 +890,7 @@ class MainWindow(wx.Frame):
             #self.back(self)
             self.back(self,p1=self.formpnl,p2=self.emppnl,title="Employee")
         else:
-            msg=wx.StaticText(self.formpnl, -1, "Any field can not be empty !!",pos=(w/2,300),size=(300,300))
+            msg=wx.StaticText(self.formpnl, -1, "No field can be empty !!",pos=(w/2,300),size=(300,300))
             msg.SetForegroundColour((255,0,0))
 
     def addTcCancel(self,e):
@@ -910,26 +910,31 @@ class MainWindow(wx.Frame):
         l1 = wx.StaticText(self.formpnl, -1, " Name of P.C.             :   ",pos=(100,100))
         t11 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,100),size=(200,30))
         l2 = wx.StaticText(self.formpnl, -1, " type                     :   ",pos=(100,150))
-        typeList=('Pivate','Government')
+        typeList=('Private','Government')
         self.cbState=wx.ComboBox(self.formpnl,pos=(350,150),choices=typeList)
+        self.t20="NULL"
         self.cbState.Bind(wx.EVT_COMBOBOX, self.gstr)
-
+        #print self.t20
         #print t12
         l3 = wx.StaticText(self.formpnl, -1, " Total Power Generation   :   ",pos=(100,200))
         t13 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,200),size=(200,30))
         l4 = wx.StaticText(self.formpnl, -1, " State                    :   ",pos=(100,250))
         t14 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,250),size=(200,30))
         SubmitButton = wx.Button(self.formpnl, label='Submit', pos=(500, 450),size=(100,40))
-        SubmitButton.Bind(wx.EVT_BUTTON,self.addPcSubmit)
+        SubmitButton.Bind(wx.EVT_BUTTON,partial(self.addPcSubmit,t11=t11,t12=self.t20,t13=t13,t14=t14))
 
         backButton = wx.Button(self.formpnl, label='Cancel', pos=(630, 450),size = (100,40))
         self.p1=self.formpnl
         self.p2=self.emppnl
         backButton.Bind(wx.EVT_BUTTON, self.addPcCancel)
-    def gstr(self,e):
-        t12=e.GetString()
 
-    def addPcSubmit(self,e):
+    def gstr(self,e):
+        print e.GetString()
+        self.t20=e.GetString()
+
+    def addPcSubmit(self,e,t11,t12,t13,t14):
+        #print t12
+        #print t12.GetValue()
         if(t11.GetValue() and len(t12) and t13.GetValue() and t14.GetValue()):
             cur = con.cursor(mdb.cursors.DictCursor)
             cur.execute("select pid from powercompany ")
