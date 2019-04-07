@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from functools import partial
 import wx
 import string
@@ -97,25 +100,102 @@ class MainWindow(wx.Frame):
         self.SetTitle("Application Status form New Connection")
         self.ncstatpnl=NewPanel(self)
         l1=wx.StaticText(self.ncstatpnl, -1, "Provide your ref_id :",pos=(400,300),size=(500,500))
-        self.t22 = wx.TextCtrl(self.ncstatpnl,style= wx.TE_PROCESS_ENTER,pos=(600,300),size=(200,40))
+        self.t222 = wx.TextCtrl(self.ncstatpnl,style= wx.TE_PROCESS_ENTER,pos=(600,300),size=(200,40))
         knowstatButton = wx.Button(self.ncstatpnl, label='submit', pos=(650, 370))
         knowstatButton.Bind(wx.EVT_BUTTON, self.ncstatsubmit)
+        backButton = wx.Button(self.ncstatpnl, label='Back', pos=(1000, 10))
+        backButton.Bind(wx.EVT_BUTTON, partial(self.back,p1=self.ncstatpnl,p2=self.homepnl,title="Power Distribution System"))
 
     def ncstatsubmit(self,e):
-        if(self.t22.GetValue()):
-            self.ncstatpnl.Hide()
-            self.previousTitle=self.GetTitle()
-            self.SetTitle("Status for New Connection")
-            self.statpnl=NewPanel(self)
-            cur.execute("select status from ncstatus where refid=%s",(self.t22.GetValue(),))
+        if(self.t222.GetValue()):
+            cur.execute("select status from ncstatus where refid=%s",(self.t222.GetValue(),))
             rows=cur.fetchall()
+            print len(rows)
             if(len(rows)!=0):
-                wx.StaticText(self.statpnl, -1,rows[0][0],pos=(500,300))
+                self.ncstatpnl.Hide()
+                self.previousTitle=self.GetTitle()
+                self.SetTitle("Status for New Connection")
+                self.statpnl=NewPanel(self)
+                backButton = wx.Button(self.statpnl, label='Back', pos=(1000, 10))
+                backButton.Bind(wx.EVT_BUTTON, partial(self.back,p1=self.statpnl,p2=self.ncstatpnl,title="Application Status form New Connection"))
+                l1=wx.StaticText(self.statpnl, -1,'Status  : ',              pos=(980,350),size=(500,500))
+                l1.SetFont(wx.Font(15,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+                l2=wx.StaticText(self.statpnl, -1, rows[0][0] ,  pos=(1100,350),size=(500,500))
+                l2.SetFont(wx.Font(15,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+
+                l3=wx.StaticText(self.statpnl, -1,'Reference no. : ',              pos=(900,150),size=(500,500))
+                l3.SetFont(wx.Font(15,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+                l4=wx.StaticText(self.statpnl, -1, self.t222.GetValue() ,  pos=(1100,150),size=(500,500))
+                l4.SetFont(wx.Font(15,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+                if rows[0][0]=='Aproved' :
+                    msg='Hi Your Application has been succesfuly Aproved !!'
+                    wx.MessageBox(message=msg,caption='Info',style=wx.OK | wx.ICON_INFORMATION)
+
+                    wx.StaticText(self.statpnl, -1,'Applicant Name :',          pos=(100,100),size=(500,500))
+                    wx.StaticText(self.statpnl, -1,'Consumer id    :',          pos=(100,130),size=(500,500))
+                    wx.StaticText(self.statpnl, -1,'Phone no       :',          pos=(100,160),size=(500,500))
+                    wx.StaticText(self.statpnl, -1,'Boardname      :',          pos=(100,190),size=(500,500))
+                    wx.StaticText(self.statpnl, -1,'State          :',          pos=(100,220),size=(500,500))
+                    wx.StaticText(self.statpnl, -1,'Subdivision    :',          pos=(100,250),size=(500,500))
+                    wx.StaticText(self.statpnl, -1,'Division       :',          pos=(100,280),size=(500,500))
+                    wx.StaticText(self.statpnl, -1,'City           :',          pos=(100,310),size=(500,500))
+                    wx.StaticText(self.statpnl, -1,'Meter no.      :',          pos=(100,340),size=(500,500))
+                    wx.StaticText(self.statpnl, -1,'Email id       :',          pos=(100,370),size=(500,500))
+                    wx.StaticText(self.statpnl, -1,'Insta.. add    :',          pos=(100,400),size=(500,500))
+
+                    cur.execute("select * from consumer c,ncstatus n where c.cid=n.cid and refid=%s",(self.t222.GetValue(),))
+                    d=cur.fetchall()
+                    self.t222.Clear()
+                    wx.StaticText(self.statpnl, -1, d[0][1]  ,  pos=(260,100),size=(500,500))
+                    wx.StaticText(self.statpnl, -1, str(d[0][0]) ,  pos=(260,130),size=(500,500))
+                    wx.StaticText(self.statpnl, -1, str(d[0][2])  ,  pos=(260,160),size=(500,500))
+                    wx.StaticText(self.statpnl, -1, d[0][3] ,  pos=(260,190),size=(500,500))
+                    wx.StaticText(self.statpnl, -1, d[0][4] ,  pos=(260,220),size=(500,500))
+                    wx.StaticText(self.statpnl, -1, d[0][5] ,  pos=(260,250),size=(500,500))
+                    wx.StaticText(self.statpnl, -1, d[0][6]  ,  pos=(260,280),size=(500,500))
+                    wx.StaticText(self.statpnl, -1, d[0][7] ,  pos=(260,310),size=(500,500))
+                    wx.StaticText(self.statpnl, -1, str(d[0][8]) ,  pos=(260,340),size=(500,500))
+                    wx.StaticText(self.statpnl, -1, d[0][10] ,  pos=(260,370),size=(500,500))
+                    wx.StaticText(self.statpnl, -1, d[0][11] ,  pos=(260,400),size=(500,500))
+
+                    l2.SetForegroundColour((0,255,0))
+                else:
+                    if rows[0][0]=='pending' :
+                        wx.StaticText(self.statpnl, -1,'Applicant Name :',          pos=(100,100),size=(500,500))
+                        wx.StaticText(self.statpnl, -1,'Phone no       :',          pos=(100,130),size=(500,500))
+                        wx.StaticText(self.statpnl, -1,'Boardname      :',          pos=(100,160),size=(500,500))
+                        wx.StaticText(self.statpnl, -1,'State          :',          pos=(100,190),size=(500,500))
+                        wx.StaticText(self.statpnl, -1,'Subdivision    :',          pos=(100,220),size=(500,500))
+                        wx.StaticText(self.statpnl, -1,'Division       :',          pos=(100,250),size=(500,500))
+                        wx.StaticText(self.statpnl, -1,'City           :',          pos=(100,280),size=(500,500))
+                        wx.StaticText(self.statpnl, -1,'Email id       :',          pos=(100,310),size=(500,500))
+                        wx.StaticText(self.statpnl, -1,'Insta.. add    :',          pos=(100,340),size=(500,500))
+                        cur.execute("select * from newconnection where refid=%s",(self.t222.GetValue(),))
+                        dt=cur.fetchall()
+                        print dt
+                        wx.StaticText(self.statpnl, -1, dt[0][0]  ,      pos=(260,100),size=(500,500))
+                        wx.StaticText(self.statpnl, -1, str(dt[0][1]) ,  pos=(260,130),size=(500,500))
+                        wx.StaticText(self.statpnl, -1, dt[0][2]  ,      pos=(260,160),size=(500,500))
+                        wx.StaticText(self.statpnl, -1, dt[0][3] ,       pos=(260,190),size=(500,500))
+                        wx.StaticText(self.statpnl, -1, dt[0][4] ,       pos=(260,220),size=(500,500))
+                        wx.StaticText(self.statpnl, -1, dt[0][5] ,       pos=(260,250),size=(500,500))
+                        wx.StaticText(self.statpnl, -1, dt[0][6]  ,      pos=(260,280),size=(500,500))
+                        wx.StaticText(self.statpnl, -1, dt[0][7] ,       pos=(260,310),size=(500,500))
+                        wx.StaticText(self.statpnl, -1, dt[0][8] ,       pos=(260,340),size=(500,500))
+                        msg='Hi Your Application is Pending \n \n and is under verification process'
+                        l2.SetForegroundColour((0,0,255))
+                    else:
+                        msg='Hi Your Application has been rejected'
+                        l2.SetForegroundColour((255,0,0))
+                    wx.MessageBox(message=msg,caption='Info',style=wx.OK | wx.ICON_INFORMATION)
+
+                    self.t222.Clear()
             else:
-                msg=wx.StaticText(self.statpnl, -1, "Invalid reference id !!",pos=(w/2,300),size=(300,300))
+                msg=wx.StaticText(self.ncstatpnl, -1, "Invalid reference id !!",pos=(600,250),size=(300,300))
                 msg.SetForegroundColour((255,0,0))
+
         else:
-            msg=wx.StaticText(self.statpnl, -1, "Invalid reference id !!",pos=(w/2,300),size=(300,300))
+            msg=wx.StaticText(self.ncstatpnl, -1, "Enter your reference id!!",pos=(600,250),size=(300,300))
             msg.SetForegroundColour((255,0,0))
 
     def newConnection(self,e):
@@ -588,7 +668,7 @@ class MainWindow(wx.Frame):
             rows=cur.fetchall()
             cur = con.cursor()
             characters = string.ascii_letters + string.digits
-            reference_id="".join(choice(characters) for x in range(randint(8,10)))
+            self.reference_id="".join(choice(characters) for x in range(randint(8,10)))
 
             cur.execute("select max(cid) from consumer")
             c=cur.fetchall()
@@ -603,22 +683,23 @@ class MainWindow(wx.Frame):
             else:
             	ciid=cidd+1
 
-            cur.execute("insert into newconnection values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(t11.GetValue(),t14.GetValue(),rows[0]['boardname'],self.state,self.Subdiv,self.Div,t17.GetValue(),t15.GetValue(),t13.GetValue(),reference_id,ciid,))
+            cur.execute("insert into newconnection values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(t11.GetValue(),t14.GetValue(),rows[0]['boardname'],self.state,self.Subdiv,self.Div,t17.GetValue(),t15.GetValue(),t13.GetValue(),self.reference_id,ciid,))
 
 
             status="pending"
-            cur.execute("insert into ncstatus values (%s,%s,%s)",(ciid,reference_id,status,))
+            cur.execute("insert into ncstatus values (%s,%s,%s)",(ciid,self.reference_id,status,))
             con.commit()
 
             #self.p1=self.formpnl
             #self.p2=self.homepnl
-            msg='Succesfuly Submitted !! Your reference no. is ' + reference_id
+            msg='\n Succesfuly Submitted !! Your reference no. is ' + self.reference_id
             wx.MessageBox(message=msg,caption='Info',style=wx.OK | wx.ICON_INFORMATION)
             self.back(self,p1=self.formpnl,p2=self.homepnl,title="Power Distribution System")
 
         else:
             msg=wx.StaticText(self.formpnl, -1, "Any field can not be empty !!",pos=(w/2,300),size=(300,300))
             msg.SetForegroundColour((255,0,0))
+
     def Cancel(self,e):
         dial=wx.MessageBox(message='Do you want to cancel it?',caption='Cancel',style=wx.YES_NO | wx.ICON_INFORMATION)
         #self.p1=self.formpnl
