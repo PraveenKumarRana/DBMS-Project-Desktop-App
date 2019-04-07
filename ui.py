@@ -82,14 +82,41 @@ class MainWindow(wx.Frame):
         NacButton.Bind(wx.EVT_BUTTON, partial(self.EmpLoginForm,pt1=t1,pt2=t2,perrormsg=errormsg))
         newConButton = wx.Button(self.homepnl, label='Apply New Connection', pos=(1000,20),size=(200,40))
         newConButton.Bind(wx.EVT_BUTTON,self.newConnection)
-        statusButton = wx.Button(self.homepnl, label='Know Your Conn. status', pos=(1000,80),size=(200,40))
-        #statusButton.Bind(wx.EVT_BUTTON,self.conStatus)
+        statBtn = wx.Button(self.homepnl, label='Know Your Conn. status', pos=(1000,80),size=(200,40))
+        statBtn.Bind(wx.EVT_BUTTON,self.ncStat)
         #w,h=wx.GetDisplaySize()
         self.SetSize((w,h))
         self.SetMaxSize((w,h))
         self.SetMinSize((w,h))
         self.SetTitle('Power Distribution System')
         self.Centre()
+
+    def ncStat(self,e):
+        self.homepnl.Hide()
+        self.previousTitle=self.GetTitle()
+        self.SetTitle("Application Status form New Connection")
+        self.ncstatpnl=NewPanel(self)
+        l1=wx.StaticText(self.ncstatpnl, -1, "Provide your ref_id :",pos=(400,300),size=(500,500))
+        self.t22 = wx.TextCtrl(self.ncstatpnl,style= wx.TE_PROCESS_ENTER,pos=(600,300),size=(200,40))
+        knowstatButton = wx.Button(self.ncstatpnl, label='submit', pos=(650, 370))
+        knowstatButton.Bind(wx.EVT_BUTTON, self.ncstatsubmit)
+
+    def ncstatsubmit(self,e):
+        if(self.t22.GetValue()):
+            self.ncstatpnl.Hide()
+            self.previousTitle=self.GetTitle()
+            self.SetTitle("Status for New Connection")
+            self.statpnl=NewPanel(self)
+            cur.execute("select status from ncstatus where refid=%s",(self.t22.GetValue(),))
+            rows=cur.fetchall()
+            if(len(rows)!=0):
+                wx.StaticText(self.statpnl, -1,rows[0][0],pos=(500,300))
+            else:
+                msg=wx.StaticText(self.statpnl, -1, "Invalid reference id !!",pos=(w/2,300),size=(300,300))
+                msg.SetForegroundColour((255,0,0))
+        else:
+            msg=wx.StaticText(self.statpnl, -1, "Invalid reference id !!",pos=(w/2,300),size=(300,300))
+            msg.SetForegroundColour((255,0,0))
 
     def newConnection(self,e):
         self.homepnl.Hide()
@@ -547,14 +574,14 @@ class MainWindow(wx.Frame):
         t17 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,400),size=(200,30))
 
         SubmitButton = wx.Button(self.formpnl, label='Submit', pos=(500, 450),size=(100,40))
-        SubmitButton.Bind(wx.EVT_BUTTON,self.Submit)
+        SubmitButton.Bind(wx.EVT_BUTTON,partial(self.Submit,t11=t11,t12=t12,t13=t13,t14=t14,t15=t15,t16=t16,t17=t17))
 
         backButton = wx.Button(self.formpnl, label='Cancel', pos=(1000, 10))
         self.p1=self.formpnl
         self.p2=self.homepnl
         backButton.Bind(wx.EVT_BUTTON, self.Cancel)
 
-    def Submit(self,e):
+    def Submit(self,e,t11,t12,t13,t14,t15,t16,t17):
         if(t11.GetValue() and t12.GetValue() and t13.GetValue() and t14.GetValue() and t15.GetValue() and t16.GetValue() ):
             cur = con.cursor(mdb.cursors.DictCursor)
             cur.execute("select boardname from consumer where state=%s",(self.state,))
@@ -562,16 +589,33 @@ class MainWindow(wx.Frame):
             cur = con.cursor()
             characters = string.ascii_letters + string.digits
             reference_id="".join(choice(characters) for x in range(randint(8,10)))
-            cur.execute("insert into newconnection values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(t11.GetValue(),t14.GetValue(),rows[0]['boardname'],self.state,self.Subdiv,self.Div,t17.GetValue(),t15.GetValue(),t13.GetValue(),reference_id,))
+
+            cur.execute("select max(cid) from consumer")
+            c=cur.fetchall()
+            cid=c[0][0]
+
+            cur.execute("select max(cid) from newconnection")
+            cc=cur.fetchall()
+            cidd=cc[0][0]
+
+            if cid>=cidd:
+            	ciid=cid+1
+            else:
+            	ciid=cidd+1
+
+            cur.execute("insert into newconnection values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(t11.GetValue(),t14.GetValue(),rows[0]['boardname'],self.state,self.Subdiv,self.Div,t17.GetValue(),t15.GetValue(),t13.GetValue(),reference_id,ciid,))
+
+
             status="pending"
-            cur.execute("insert into ncstatus values (%s,%s)",(reference_id,status,))
+            cur.execute("insert into ncstatus values (%s,%s,%s)",(ciid,reference_id,status,))
             con.commit()
 
             #self.p1=self.formpnl
             #self.p2=self.homepnl
-            wx.MessageBox(message='Succesfuly Submitted',caption='Info',style=wx.OK | wx.ICON_INFORMATION)
-            #self.back(self)
-            self.back_tc_pc_dc_eb(self,p1=self.formpnl,p2=self.homepnl,title="Power Distribution System")
+            msg='Succesfuly Submitted !! Your reference no. is ' + reference_id
+            wx.MessageBox(message=msg,caption='Info',style=wx.OK | wx.ICON_INFORMATION)
+            self.back(self,p1=self.formpnl,p2=self.homepnl,title="Power Distribution System")
+
         else:
             msg=wx.StaticText(self.formpnl, -1, "Any field can not be empty !!",pos=(w/2,300),size=(300,300))
             msg.SetForegroundColour((255,0,0))
@@ -916,61 +960,6 @@ class MainWindow(wx.Frame):
         self.emplpnl.Hide()
 
         self.SetTitle("Employee")
-
-
-
-
-
-        """self.panel =NewPanel(self)
-        hbox = wx.BoxSizer(wx.HORIZONTAL)
-
-        self.listbox = wx.ListBox(self.panel)
-        hbox.Add(self.listbox, wx.ID_ANY, wx.EXPAND | wx.ALL, 80)
-
-        self.btnPanel = wx.Panel(self.panel)
-        vbox = wx.BoxSizer(wx.VERTICAL)
-
-        LogoutButton = wx.Button(self.btnPanel, wx.ID_ANY, 'Logout', size=(90, 40))
-        LogoutButton.Bind(wx.EVT_BUTTON,self.EmpLogout)
-        cur.execute("select ename from employee where eid=%s",(t1.GetValue(),))
-        rows=cur.fetchall()
-        ProfileButton = wx.Button(self.btnPanel, label='Hi '+rows[0][0])
-        ProfileButton.Bind(wx.EVT_BUTTON,self.EmpProfile)
-
-
-        delBtn = wx.Button(self.btnPanel, wx.ID_ANY, 'Delete', size=(90, 40))
-        clrBtn = wx.Button(self.btnPanel, wx.ID_ANY, 'Clear', size=(90, 40))
-
-        #self.Bind(wx.EVT_BUTTON, self.NewItem, id=newBtn.GetId())
-
-        #self.Bind(wx.EVT_BUTTON, self.NewItem, id=newBtn.GetId())
-        #self.Bind(wx.EVT_BUTTON, self.OnRename, id=renBtn.GetId())
-        #self.Bind(wx.EVT_BUTTON, self.OnDelete, id=delBtn.GetId())
-        #self.Bind(wx.EVT_BUTTON, self.OnClear, id=clrBtn.GetId())
-        #self.Bind(wx.EVT_LISTBOX_DCLICK, self.OnRename)
-
-        #vbox.Add((-1, 20))
-        vbox.Add(LogoutButton)
-        vbox.Add(ProfileButton, 0, wx.TOP, 5)
-        vbox.Add(delBtn, 0, wx.TOP, 5)
-        vbox.Add(clrBtn, 0, wx.TOP, 5)
-
-        self.btnPanel.SetSizer(vbox)
-        hbox.Add(self.btnPanel, 0.4, wx.EXPAND | wx.RIGHT, 20)
-        self.panel.SetSizer(hbox)
-
-        #self.SetTitle('wx.ListBox')
-        #self.Centre()
-
-    def NewItem(self, event):
-
-        text = wx.GetTextFromUser('Enter a new item', 'Insert dialog')
-        if text != '':
-            self.listbox.Append(text)"""
-
-
-
-
         self.emppnl=NewPanel(self)
 
         LogoutButton = wx.Button(self.emppnl, label='Logout', pos=(1270, 0),size=(80,30))
@@ -1010,54 +999,55 @@ class MainWindow(wx.Frame):
             apButton = wx.Button(self.emppnl, label='Aprove', pos=(1160, i),size=(80,25))
             apButton.id=j
             apButton.SetBackgroundColour(wx.Colour(115,230,0))
-            apButton.Bind(wx.EVT_BUTTON,self.ncAprove,apButton)
+            apButton.Bind(wx.EVT_BUTTON,partial(self.ncAprove,t1=t1,t2=t2),apButton)
             j=j+1
             rejButton = wx.Button(self.emppnl, label='Reject', pos=(1270, i),size=(80,25))
             rejButton.id=j
             rejButton.SetBackgroundColour(wx.Colour(255, 71, 26))
-            rejButton.Bind(wx.EVT_BUTTON,self.ncReject,rejButton)
+            rejButton.Bind(wx.EVT_BUTTON,partial(self.ncReject,t1=t1,t2=t2),rejButton)
             i=i+40
             j=j+1
             k=k+1
 
 
-    def ncAprove(self,e):
+    def ncAprove(self,e,t1,t2):
         print e.GetEventObject().id
         j=0
         k=0
         for i in range(0,len(self.ncrows)):
             if e.GetEventObject().id==2*j :
                 cur=con.cursor()
-                cur.execute("select max(cid) from consumer")
-                c=cur.fetchall()
-                cid=c[0][0]+1
-                cur=con.cursor()
                 cur.execute("select max(meterno) from consumer")
                 m=cur.fetchall()
                 meterno=m[0][0]+1
                 cur=con.cursor()
-                cur.execute("insert into consumer values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(cid,self.ncrows[k][0],self.ncrows[k][1],self.ncrows[k][2],self.ncrows[k][3],self.ncrows[k][4],self.ncrows[k][5],self.ncrows[k][6], meterno,'firoz123',self.ncrows[k][7],self.ncrows[k][8],))
+                cur.execute("insert into consumer values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(self.ncrows[k][10],self.ncrows[k][0],self.ncrows[k][1],self.ncrows[k][2],self.ncrows[k][3],self.ncrows[k][4],self.ncrows[k][5],self.ncrows[k][6], meterno,'firoz123',self.ncrows[k][7],self.ncrows[k][8],))
+                status="Aproved"
+                cur.execute("update ncstatus set status=%s where cid=%s",(status,self.ncrows[k][10]))
+
                 con.commit()
                 cur=con.cursor()
                 cur.execute("delete from newconnection where cname=%s",(self.ncrows[k][0],))
                 con.commit()
                 self.emppnl.Hide()
-                self.XXEmployee(self)
+                self.XXEmployee(self,t1=t1,t2=t2)
                 break
             j=j+1
             k=k+1
 
-    def ncReject(self,e):
+    def ncReject(self,e,t1,t2):
         print e.GetEventObject().id
         j=0
         k=0
         for i in range(0,len(self.ncrows)):
             if e.GetEventObject().id== (2*j+1) :
                 cur=con.cursor()
+                status="Rejected"
+                cur.execute("update ncstatus set status=%s where cid=%s",(status,self.ncrows[k][10]))
                 cur.execute("delete from newconnection where cname=%s",(self.ncrows[k][0],))
                 con.commit()
                 self.emppnl.Hide()
-                self.XXEmployee(self)
+                self.XXEmployee(self,t1=t1,t2=t2)
                 break
             j=j+1
             k=k+1
