@@ -649,20 +649,30 @@ class MainWindow(wx.Frame):
         l6 = wx.StaticText(self.formpnl, -1, " Email                :   ",pos=(100,300))
         t15 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,300),size=(200,30))
         l7 = wx.StaticText(self.formpnl, -1, " Purpose of Supply    :   ",pos=(100,350))
-        t16 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,350),size=(200,30))
+        #t16 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,350),size=(200,30))
+        divList=list()
+        divList.append("Domestic")
+        divList.append("Commercial")
+        divList.append("Industrial")
+
+        self.ps=wx.ComboBox(self.formpnl,pos=(350,350),choices=divList)
+        self.ps.Bind(wx.EVT_COMBOBOX, self.posu)
         l8 = wx.StaticText(self.formpnl, -1, " City    :   ",              pos=(100,400))
         t17 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,400),size=(200,30))
 
         SubmitButton = wx.Button(self.formpnl, label='Submit', pos=(500, 450),size=(100,40))
-        SubmitButton.Bind(wx.EVT_BUTTON,partial(self.Submit,t11=t11,t12=t12,t13=t13,t14=t14,t15=t15,t16=t16,t17=t17))
+        SubmitButton.Bind(wx.EVT_BUTTON,partial(self.Submit,t11=t11,t12=t12,t13=t13,t14=t14,t15=t15,t17=t17))
 
         backButton = wx.Button(self.formpnl, label='Cancel', pos=(1000, 10))
         self.p1=self.formpnl
         self.p2=self.homepnl
         backButton.Bind(wx.EVT_BUTTON, self.Cancel)
 
-    def Submit(self,e,t11,t12,t13,t14,t15,t16,t17):
-        if(t11.GetValue() and t12.GetValue() and t13.GetValue() and t14.GetValue() and t15.GetValue() and t16.GetValue() ):
+    def posu(self,e):
+        self.t16=e.GetString()
+
+    def Submit(self,e,t11,t12,t13,t14,t15,t17):
+        if(t11.GetValue() and t12.GetValue() and t13.GetValue() and t14.GetValue() and t15.GetValue() and self.t16 ):
             cur = con.cursor(mdb.cursors.DictCursor)
             cur.execute("select boardname from consumer where state=%s",(self.state,))
             rows=cur.fetchall()
@@ -1080,18 +1090,18 @@ class MainWindow(wx.Frame):
             apButton = wx.Button(self.emppnl, label='Aprove', pos=(1160, i),size=(80,25))
             apButton.id=j
             apButton.SetBackgroundColour(wx.Colour(115,230,0))
-            apButton.Bind(wx.EVT_BUTTON,partial(self.ncAprove,t1=t1,t2=t2),apButton)
+            apButton.Bind(wx.EVT_BUTTON,partial(self.ncAprove,t1=t1,t2=t2,errormsg=errormsg),apButton)
             j=j+1
             rejButton = wx.Button(self.emppnl, label='Reject', pos=(1270, i),size=(80,25))
             rejButton.id=j
             rejButton.SetBackgroundColour(wx.Colour(255, 71, 26))
-            rejButton.Bind(wx.EVT_BUTTON,partial(self.ncReject,t1=t1,t2=t2),rejButton)
+            rejButton.Bind(wx.EVT_BUTTON,partial(self.ncReject,t1=t1,t2=t2,errormsg=errormsg),rejButton)
             i=i+40
             j=j+1
             k=k+1
 
 
-    def ncAprove(self,e,t1,t2):
+    def ncAprove(self,e,t1,t2,errormsg):
         print e.GetEventObject().id
         j=0
         k=0
@@ -1111,12 +1121,12 @@ class MainWindow(wx.Frame):
                 cur.execute("delete from newconnection where cname=%s",(self.ncrows[k][0],))
                 con.commit()
                 self.emppnl.Hide()
-                self.XXEmployee(self,t1=t1,t2=t2)
+                self.XXEmployee(self,t1=t1,t2=t2,errormsg=errormsg)
                 break
             j=j+1
             k=k+1
 
-    def ncReject(self,e,t1,t2):
+    def ncReject(self,e,t1,t2,errormsg):
         print e.GetEventObject().id
         j=0
         k=0
@@ -1128,7 +1138,7 @@ class MainWindow(wx.Frame):
                 cur.execute("delete from newconnection where cname=%s",(self.ncrows[k][0],))
                 con.commit()
                 self.emppnl.Hide()
-                self.XXEmployee(self,t1=t1,t2=t2)
+                self.XXEmployee(self,t1=t1,t2=t2,errormsg=errormsg)
                 break
             j=j+1
             k=k+1
