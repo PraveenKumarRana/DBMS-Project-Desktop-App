@@ -1,9 +1,9 @@
 use eds;
 
 drop table employee;
-create table employee(eid int primary key,ename varchar(50),doj date,dob date,dept varchar(50),age int,boardname varchar(50),designation varchar(50),phone int,password varchar(50));
+create table employee(eid int primary key,ename varchar(50),doj date,dob date,dept varchar(50),age int,boardname varchar(50),designation varchar(50),phone bigint,password varchar(50));
 drop table consumer;
-create table consumer(cid int,cname varchar(50),phone int,boardname varchar(50),state varchar(50),subdiv varchar(50),divis varchar(50),city varchar(50),meterno int primary key,password varchar(50),email varchar(50),address varchar(50));
+create table consumer(cid int,cname varchar(50),phone bigint,boardname varchar(50),state varchar(50),subdiv varchar(50),divis varchar(50),city varchar(50),meterno int primary key,password varchar(50),email varchar(50),address varchar(50));
 drop table distributioncompany;
 create table distributioncompany(did int primary key,dname varchar(50),tenure int,state varchar(50),tid int);
 	drop table powercompany;
@@ -21,7 +21,7 @@ create table electricityboard(boardname varchar(50) primary key,noofconsumer int
 	drop table billinginfo;
 create table billinginfo(billid int primary key,cid int,issuedate date,prevreading int,meterno int,curreading int,rate int,type varchar(50),unit int);
 	drop table newconnection;
-create table newconnection(cname varchar(50),phone int,boardname varchar(50),state varchar(50),subdiv varchar(50),divis varchar(50),city varchar(50),email varchar(50),address varchar(50),refid varchar(50), cid int);
+create table newconnection(cname varchar(50),phone bigint,boardname varchar(50),state varchar(50),subdiv varchar(50),divis varchar(50),city varchar(50),email varchar(50),address varchar(50),refid varchar(50), cid int);
 	drop table ncstatus;
 create table ncstatus(cid int,refid varchar(50),status varchar(50));
 
