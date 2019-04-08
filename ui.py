@@ -119,14 +119,15 @@ class MainWindow(wx.Frame):
         self.previousTitle=self.GetTitle()
         self.SetTitle("Application Status form New Connection")
         self.ncstatpnl=NewPanel(self)
+        msg=wx.StaticText(self.ncstatpnl, -1, "",pos=(600,250),size=(300,300))
         l1=wx.StaticText(self.ncstatpnl, -1, "Provide your ref_id :",pos=(400,300),size=(500,500))
         self.t222 = wx.TextCtrl(self.ncstatpnl,style= wx.TE_PROCESS_ENTER,pos=(600,300),size=(200,40))
         knowstatButton = wx.Button(self.ncstatpnl, label='submit', pos=(650, 370))
-        knowstatButton.Bind(wx.EVT_BUTTON, self.ncstatsubmit)
+        knowstatButton.Bind(wx.EVT_BUTTON, partial(self.ncstatsubmit,msg=msg))
         backButton = wx.Button(self.ncstatpnl, label='Back', pos=(1000, 10))
         backButton.Bind(wx.EVT_BUTTON, partial(self.back,p1=self.ncstatpnl,p2=self.homepnl,title="Power Distribution System"))
 
-    def ncstatsubmit(self,e):
+    def ncstatsubmit(self,e,msg):
         if(self.t222.GetValue()):
             cur.execute("select status from ncstatus where refid=%s",(self.t222.GetValue(),))
             rows=cur.fetchall()
@@ -211,11 +212,14 @@ class MainWindow(wx.Frame):
 
                     self.t222.Clear()
             else:
-                msg=wx.StaticText(self.ncstatpnl, -1, "Invalid reference id !!",pos=(600,250),size=(300,300))
+                msg.Hide()
+                msg.Show()
+                msg.SetLabel("Invalid reference id")
                 msg.SetForegroundColour((255,0,0))
-
         else:
-            msg=wx.StaticText(self.ncstatpnl, -1, "Enter your reference id!!",pos=(600,250),size=(300,300))
+            msg.Hide()
+            msg.Show()
+            msg.SetLabel("Enter reference id pleas!!!!")
             msg.SetForegroundColour((255,0,0))
 
     def newConnection(self,e):
