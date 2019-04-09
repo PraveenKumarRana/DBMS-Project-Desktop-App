@@ -393,10 +393,14 @@ class MainWindow(wx.Frame):
             rows = cur.fetchall()
             desc = cur.description
 
-            wx.StaticText(self.upnl, -1,"Board Name",pos=(70,100))
-            wx.StaticText(self.upnl, -1,"No. of Consumer",pos=(270,100))
-            wx.StaticText(self.upnl, -1,"State/UT",pos=(470,100))
-            wx.StaticText(self.upnl, -1,"Power Consumed",pos=(600,100))
+            l0=wx.StaticText(self.upnl, -1,"Board Name",pos=(70,100),size=(500,500))
+            l0.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+            l1=wx.StaticText(self.upnl, -1,"No. of Consumer",pos=(270,100),size=(500,500))
+            l1.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+            l2=wx.StaticText(self.upnl, -1,"State/UT",pos=(470,100),size=(500,500))
+            l2.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+            l3=wx.StaticText(self.upnl, -1,"Power Consumed",pos=(600,100),size=(500,500))
+            l3.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
 
             #print "%s %s %s %s %s" % (desc[0][0], desc[1][0],desc[2][0],desc[3][0],desc[4][0])
             i=20
@@ -697,10 +701,14 @@ class MainWindow(wx.Frame):
         t1 = wx.SearchCtrl(self.upnl,style= wx.TE_PROCESS_ENTER,pos=(570,50),size=(200,40))
         t1.SetDescriptiveText("Search by State/UT")
         t1.Bind(wx.EVT_TEXT,partial(self.pcStateSearch,t1=t1))
-        wx.StaticText(self.upnl, -1,"Name",pos=(100,100))
-        wx.StaticText(self.upnl, -1,"State",pos=(300,100))
-        wx.StaticText(self.upnl, -1,"Type",pos=(500,100))
-        wx.StaticText(self.upnl, -1,"Total power",pos=(700,100))
+        l0=wx.StaticText(self.upnl, -1,"Name",pos=(100,100),size=(500,500))
+        l0.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+        l1=wx.StaticText(self.upnl, -1,"State",pos=(300,100),size=(500,500))
+        l1.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+        l2=wx.StaticText(self.upnl, -1,"Type",pos=(500,100),size=(500,500))
+        l2.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+        l3=wx.StaticText(self.upnl, -1,"Total power",pos=(700,100),size=(500,500))
+        l3.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
         cur = con.cursor(mdb.cursors.DictCursor)
         cur.execute("SELECT * FROM powercompany ")
         rows = cur.fetchall()
@@ -735,9 +743,12 @@ class MainWindow(wx.Frame):
         t1 = wx.SearchCtrl(self.upnl,style= wx.TE_PROCESS_ENTER,pos=(570,50),size=(200,40))
         t1.SetDescriptiveText("Search by State/UT")
         t1.Bind(wx.EVT_TEXT,partial(self.dcStateSearch,t1=t1))
-        wx.StaticText(self.upnl, -1,"Name",pos=(100,100))
-        wx.StaticText(self.upnl, -1,"State",pos=(500,100))
-        wx.StaticText(self.upnl, -1,"Tenure(in years)",pos=(700,100))
+        l0=wx.StaticText(self.upnl, -1,"Name",pos=(100,100),size=(500,500))
+        l0.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+        l1=wx.StaticText(self.upnl, -1,"State",pos=(500,100),size=(500,500))
+        l1.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+        l2=wx.StaticText(self.upnl, -1,"Tenure(in years)",pos=(700,100),size=(500,500))
+        l2.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
         cur = con.cursor(mdb.cursors.DictCursor)
         cur.execute("SELECT * FROM distributioncompany ")
         rows = cur.fetchall()
@@ -770,10 +781,14 @@ class MainWindow(wx.Frame):
         t1 = wx.SearchCtrl(self.upnl,style= wx.TE_PROCESS_ENTER,pos=(570,50),size=(200,40))
         t1.SetDescriptiveText("Search by State/UT")
         t1.Bind(wx.EVT_TEXT,partial(self.tcStateSearch,t1=t1))
-        wx.StaticText(self.upnl, -1,"Name",pos=(100,100))
-        wx.StaticText(self.upnl, -1,"State",pos=(300,100))
-        wx.StaticText(self.upnl, -1,"Capacity",pos=(500,100))
-        wx.StaticText(self.upnl, -1,"Tenure(in years)",pos=(700,100))
+        l0=wx.StaticText(self.upnl, -1,"Name",pos=(100,100),size=(500,500))
+        l0.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+        l1=wx.StaticText(self.upnl, -1,"State",pos=(300,100),size=(500,500))
+        l1.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+        l2=wx.StaticText(self.upnl, -1,"Capacity",pos=(500,100),size=(500,500))
+        l2.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+        l3=wx.StaticText(self.upnl, -1,"Tenure(in years)",pos=(700,100),size=(500,500))
+        l3.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
         cur = con.cursor(mdb.cursors.DictCursor)
         cur.execute("SELECT * FROM transmissioncompany ")
         rows = cur.fetchall()
@@ -1102,11 +1117,11 @@ class MainWindow(wx.Frame):
 
         self.SetTitle("Employee")
 
-        LogoutButton = wx.Button(self.emppnl, label='Logout', pos=(1270, 0),size=(80,30))
+        LogoutButton = wx.Button(self.emppnl, label='Logout', pos=(1270, 20),size=(80,35))
         LogoutButton.Bind(wx.EVT_BUTTON,partial(self.EmpLogout,t1=t1,t2=t2,errormsg=errormsg))
         cur.execute("select ename from employee where eid=%s",(t1.GetValue(),))
         rows=cur.fetchall()
-        ProfileButton = wx.Button(self.emppnl, label='Hi '+rows[0][0], pos=(1120, 0))
+        ProfileButton = wx.Button(self.emppnl, label='Hi '+rows[0][0], pos=(1100, 20),size=(150,35))
         ProfileButton.Bind(wx.EVT_BUTTON,partial(self.EmpProfile,t1=t1,t2=t2))
 
         l1=wx.StaticText(self.emppnl, -1,"Distribution Company",pos=(80,30),size=(300,30))
@@ -1602,7 +1617,7 @@ class MainWindow(wx.Frame):
         SubmitButton.Bind(wx.EVT_BUTTON,partial(self.addTcSubmit,t11=t11,t12=t12,t13=t13,t14=t14,t15=t15,t16=t16))
 
         backButton = wx.Button(self.formpnl, label='Cancel', pos=(630, 450),size = (100,40))
-        self.p1=self.formpnlt11t11t11t11
+        self.p1=self.formpnl
         self.p2=self.emppnl
         backButton.Bind(wx.EVT_BUTTON, self.addTcCancel)
 
@@ -1698,11 +1713,11 @@ class MainWindow(wx.Frame):
         self.SetTitle("Employee")
         self.emppnl=NewPanel(self)
 
-        LogoutButton = wx.Button(self.emppnl, label='Logout', pos=(1270, 20),size=(80,30))
+        LogoutButton = wx.Button(self.emppnl, label='Logout', pos=(1270, 20),size=(80,35))
         LogoutButton.Bind(wx.EVT_BUTTON,partial(self.EmpLogout,t1=t1,t2=t2,errormsg=errormsg))
         cur.execute("select ename from employee where eid=%s",(t1.GetValue(),))
         rows=cur.fetchall()
-        ProfileButton = wx.Button(self.emppnl, label='Hi '+rows[0][0], pos=(1120, 20))
+        ProfileButton = wx.Button(self.emppnl, label='Hi '+rows[0][0], pos=(1100, 20),size=(150,35))
         ProfileButton.Bind(wx.EVT_BUTTON,partial(self.EmpProfile,t1=t1,t2=t2))
 
         cur.execute("select * from newconnection where boardname in ( select boardname from employee where eid=%s )",(t1.GetValue(),))
@@ -1806,10 +1821,10 @@ class MainWindow(wx.Frame):
     	self.SetTitle("User")
         self.custpnl=NewPanel(self)
 
-        LogoutButton = wx.Button(self.custpnl, label='Logout', pos=(1270, 20),size=(80,30))
+        LogoutButton = wx.Button(self.custpnl, label='Logout', pos=(1270, 20),size=(80,35))
         cur.execute("select cname from consumer where cid=%s",(t1.GetValue(),))
         rows=cur.fetchall()
-        ProfileButton = wx.Button(self.custpnl, label='Hi '+rows[0][0], pos=(1120, 20))
+        ProfileButton = wx.Button(self.custpnl, label='Hi '+rows[0][0], pos=(1100, 20),size=(150,35))
     	LogoutButton.Bind(wx.EVT_BUTTON,partial(self.CustLogout,t1=t1,t2=t2,errormsg=errormsg))
         ProfileButton.Bind(wx.EVT_BUTTON,partial(self.UserProfile,t1=t1))
 
