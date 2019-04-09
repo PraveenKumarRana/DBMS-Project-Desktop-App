@@ -983,6 +983,7 @@ class MainWindow(wx.Frame):
         self.tDcTid = wx.TextCtrl(self.editDcpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,315),size=(200,30))
         updateButton=wx.Button(self.editDcpnl, label='Update',pos=(500, 450),size=(100,40))
         updateButton.Bind(wx.EVT_BUTTON,self.updateDcSubmit)
+        self.errorDcUpdate=wx.StaticText(self.editDcpnl,-1,"" ,pos=(700,200),size=(400,50))
 
     def editTcButton(self,e):
         self.updatepnl.Hide()
@@ -1007,6 +1008,7 @@ class MainWindow(wx.Frame):
         self.tTcTenure = wx.TextCtrl(self.editTcpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,365),size=(200,30))
         updateButton=wx.Button(self.editTcpnl, label='Update',pos=(500, 450),size=(100,40))
         updateButton.Bind(wx.EVT_BUTTON,self.updateTcSubmit)
+        self.errorTcUpdate=wx.StaticText(self.editTcpnl,-1,"" ,pos=(700,200),size=(400,50))
 
     def editPcButton(self,e):
         self.updatepnl.Hide()
@@ -1029,33 +1031,49 @@ class MainWindow(wx.Frame):
         self.tPcTotalpower = wx.TextCtrl(self.editPcpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,315),size=(200,30))
         updateButton=wx.Button(self.editPcpnl, label='Update',pos=(500, 450),size=(100,40))
         updateButton.Bind(wx.EVT_BUTTON,self.updatePcSubmit)
+        self.errorPcUpdate=wx.StaticText(self.editPcpnl,-1,"" ,pos=(700,200),size=(400,50))
 
     def updateDcSubmit(self,e):
-        cur = con.cursor(mdb.cursors.DictCursor)
-        cur.execute("select * from distributioncompany")
-        rows=cur.fetchall()
-        cur.execute("update distributioncompany set dname=%s,state=%s,tenure=%s,tid=%s  where did =%s",(self.tDcDname.GetValue(),self.tDcState.GetValue(),str(self.tDcTenure.GetValue()),str(self.tDcTid.GetValue()),rows[self.idDc]['did']))
-        con.commit()
-        self.editDcpnl.Hide()
-        self.updateDc(self)
+        if(self.tDcDname.GetValue() and self.tDcState.GetValue() and self.tDcTenure.GetValue() and self.tDcTid.GetValue()):
+            cur = con.cursor(mdb.cursors.DictCursor)
+            cur.execute("select * from distributioncompany")
+            rows=cur.fetchall()
+            cur.execute("update distributioncompany set dname=%s,state=%s,tenure=%s,tid=%s  where did =%s",(self.tDcDname.GetValue(),self.tDcState.GetValue(),str(self.tDcTenure.GetValue()),str(self.tDcTid.GetValue()),rows[self.idDc]['did']))
+            con.commit()
+            self.editDcpnl.Hide()
+            self.updateDc(self)
+        else:
+            self.errorDcUpdate.SetLabel("Please, Fill all the data")
+            self.errorDcUpdate.SetForegroundColour((255,0,0))
+
 
     def updateTcSubmit(self,e):
-        cur = con.cursor(mdb.cursors.DictCursor)
-        cur.execute("select * from transmissioncompany")
-        rows=cur.fetchall()
-        cur.execute("update transmissioncompany set tname=%s,state=%s,did=%s,tcapacity=%s,tenure=%s  where tid =%s",(self.tTcTname.GetValue(),self.tTcState.GetValue(),str(self.tTcDid.GetValue()),str(self.tTcTcapacity.GetValue()),str(self.tTcTenure.GetValue()),rows[self.idTc]['tid']))
-        con.commit()
-        self.editTcpnl.Hide()
-        self.updateTc(self)
+        if(self.tTcTname.GetValue() and self.tTcState.GetValue() and self.tTcDid.GetValue() and self.tTcTcapacity.GetValue() and self.tTcTenure.GetValue()):
+            cur = con.cursor(mdb.cursors.DictCursor)
+            cur.execute("select * from transmissioncompany")
+            rows=cur.fetchall()
+            cur.execute("update transmissioncompany set tname=%s,state=%s,did=%s,tcapacity=%s,tenure=%s  where tid =%s",(self.tTcTname.GetValue(),self.tTcState.GetValue(),str(self.tTcDid.GetValue()),str(self.tTcTcapacity.GetValue()),str(self.tTcTenure.GetValue()),rows[self.idTc]['tid']))
+            con.commit()
+            self.editTcpnl.Hide()
+            self.updateTc(self)
+        else:
+            self.errorTcUpdate.SetLabel("Please, Fill all the data")
+            self.errorTcUpdate.SetForegroundColour((0,255,0))
 
     def updatePcSubmit(self,e):
-        cur = con.cursor(mdb.cursors.DictCursor)
-        cur.execute("select * from powercompany")
-        rows=cur.fetchall()
-        cur.execute("update powercompany set pname=%s,state=%s,type=%s,totalpower=%s  where pid =%s",(self.tPcPname.GetValue(),self.tPcState.GetValue(),self.tPcType.GetValue(),str(self.tPcTotalpower.GetValue()),rows[self.idPc]['pid']))
-        con.commit()
-        self.editPcpnl.Hide()
-        self.updatePc(self)
+        if(self.tPcPname.GetValue() and self.tPcState.GetValue() and self.tPcType.GetValue() and self.tPcTotalpower.GetValue()):
+            cur = con.cursor(mdb.cursors.DictCursor)
+            cur.execute("select * from powercompany")
+            rows=cur.fetchall()
+            cur.execute("update powercompany set pname=%s,state=%s,type=%s,totalpower=%s  where pid =%s",(self.tPcPname.GetValue(),self.tPcState.GetValue(),self.tPcType.GetValue(),str(self.tPcTotalpower.GetValue()),rows[self.idPc]['pid']))
+            con.commit()
+            self.editPcpnl.Hide()
+            self.updatePc(self)
+        else:
+            self.errorPcUpdate.SetLabel("Please, Fill all the data")
+            self.errorPcUpdate.SetForegroundColour((0,0,255))
+
+
 
 
     def DelDc(self,e):
