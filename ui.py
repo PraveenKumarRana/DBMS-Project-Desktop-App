@@ -10,6 +10,7 @@ import string
 from random import*
 import wx.lib.scrolledpanel as scrolled
 import MySQLdb as mdb
+
 con = mdb.connect('localhost', 'admin', 'admin', 'eds')
 
 with con:
@@ -19,8 +20,9 @@ class HeadNewPanel(wx.Panel):
     def __init__(self, parent):
         """Constructor"""
         wx.Panel.__init__(self, parent=parent,size=(w,100),pos=(0,0))
-        l1=wx.StaticText(self, -1,"Power Distribution System",pos=(430,30),size=(300,30),style = wx.ALIGN_CENTER)
+        l1=wx.StaticText(self, -1,"Electricity Distribution System",pos=(350,30),size=(300,30),style = wx.ALIGN_CENTER)
         l1.SetFont(wx.Font(30,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_ITALIC, wx.FONTWEIGHT_BOLD))
+        l1.SetForegroundColour("white")
 class NewPanel(wx.Panel):
 
     def __init__(self, parent):
@@ -64,9 +66,18 @@ class MainWindow(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnClose, fileItem)
 
         self.headpnl=HeadNewPanel(self)
-        self.headpnl.SetBackgroundColour("blue")
+        imr = 'logor1.png'
+        bmp1 = wx.Image(imr, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+        self.bitmap1 = wx.StaticBitmap(self.headpnl, -1, bmp1, (20,10))
+        self.headpnl.SetBackgroundColour("grey16")
 
         self.homepnl = NewPanel(self)
+        print w,h
+        imr = '4r.jpg'
+
+        bmp1 = wx.Image(imr, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+        self.bitmap1 = wx.StaticBitmap(self.homepnl, -1, bmp1, (0,0))
+
         pcButton = wx.Button(self.homepnl, label='Power Company', pos=(40, 150),size=(200,40))
         dcButton = wx.Button(self.homepnl, label='Distribution Company', pos=(40, 200),size=(200,40))
         tcButton = wx.Button(self.homepnl, label='Transmission Company', pos=(40, 250),size=(200,40))
