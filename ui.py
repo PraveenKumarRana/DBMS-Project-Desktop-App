@@ -131,11 +131,11 @@ class MainWindow(wx.Frame):
         self.SetTitle("Application Status form New Connection")
         self.ncstatpnl=NewPanel(self)
         msg=wx.StaticText(self.ncstatpnl, -1, "",pos=(600,250),size=(300,300))
-        l1=wx.StaticText(self.ncstatpnl, -1, "Provide your ref_id :",pos=(400,300),size=(500,500))
-        self.t222 = wx.TextCtrl(self.ncstatpnl,style= wx.TE_PROCESS_ENTER,pos=(600,300),size=(200,40))
-        knowstatButton = wx.Button(self.ncstatpnl, label='submit', pos=(650, 370))
+        l1=wx.StaticText(self.ncstatpnl, -1, "Provide your ref_id :",pos=(400,110),size=(500,500))
+        self.t222 = wx.TextCtrl(self.ncstatpnl,style= wx.TE_PROCESS_ENTER,pos=(600,100),size=(200,40))
+        knowstatButton = wx.Button(self.ncstatpnl, label='submit', pos=(650, 170))
         knowstatButton.Bind(wx.EVT_BUTTON, partial(self.ncstatsubmit,msg=msg))
-        backButton = wx.Button(self.ncstatpnl, label='Back', pos=(1000, 10))
+        backButton = wx.Button(self.ncstatpnl, label='Back', pos=(1000, 15))
         backButton.Bind(wx.EVT_BUTTON, partial(self.back,p1=self.ncstatpnl,p2=self.homepnl,title="Power Distribution System"))
 
     def ncstatsubmit(self,e,msg):
@@ -148,7 +148,7 @@ class MainWindow(wx.Frame):
                 self.previousTitle=self.GetTitle()
                 self.SetTitle("Status for New Connection")
                 self.statpnl=NewPanel(self)
-                backButton = wx.Button(self.statpnl, label='Back', pos=(1000, 10))
+                backButton = wx.Button(self.statpnl, label='Back', pos=(1000, 15))
                 backButton.Bind(wx.EVT_BUTTON, partial(self.back,p1=self.statpnl,p2=self.ncstatpnl,title="Application Status form New Connection"))
                 l1=wx.StaticText(self.statpnl, -1,'Status  : ',              pos=(980,350),size=(500,500))
                 l1.SetFont(wx.Font(15,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
@@ -630,7 +630,7 @@ class MainWindow(wx.Frame):
     	self.SetTitle("Power Company")
         self.upnl=upperNewPanel(self)
         self.lpnl=lowerNewPanel(self)
-        BackButton = wx.Button(self.upnl, label='Back', pos=(1000, 10),size=(100,40))
+        BackButton = wx.Button(self.upnl, label='Back', pos=(1000, 15),size=(100,40))
         ShowAllButton = wx.Button(self.upnl, label='Show All', pos=(10, 50),size=(100,40))
 
     	BackButton.Bind(wx.EVT_BUTTON,partial(self.back_tc_pc_dc_eb,p1=self.upnl,p2=self.homepnl,title="Power Distribution System"))
@@ -668,7 +668,7 @@ class MainWindow(wx.Frame):
     	self.SetTitle("Distribution Company")
         self.upnl=upperNewPanel(self)
         self.lpnl=lowerNewPanel(self)
-        BackButton = wx.Button(self.upnl, label='Back', pos=(1000, 10),size=(100,40))
+        BackButton = wx.Button(self.upnl, label='Back', pos=(1000, 15),size=(100,40))
         ShowAllButton = wx.Button(self.upnl, label='Show All', pos=(10, 50),size=(100,40))
 
     	BackButton.Bind(wx.EVT_BUTTON,partial(self.back_tc_pc_dc_eb,p1=self.upnl,p2=self.homepnl,title="Power Distribution System"))
@@ -703,7 +703,7 @@ class MainWindow(wx.Frame):
     	self.SetTitle("Transmission Company")
         self.upnl=upperNewPanel(self)
         self.lpnl=lowerNewPanel(self)
-        BackButton = wx.Button(self.upnl, label='Back', pos=(1000, 10),size=(100,40))
+        BackButton = wx.Button(self.upnl, label='Back', pos=(1000, 15),size=(100,40))
         ShowAllButton = wx.Button(self.upnl, label='Show All', pos=(10, 50),size=(100,40))
 
     	BackButton.Bind(wx.EVT_BUTTON,partial(self.back_tc_pc_dc_eb,p1=self.upnl,p2=self.homepnl,title="Power Distribution System"))
@@ -753,7 +753,7 @@ class MainWindow(wx.Frame):
         loginButton.Bind(wx.EVT_BUTTON, partial(self.EmpLogin,t1=t1,t2=t2,errormsg=errormsg))
 
 
-        BackButton = wx.Button(self.emplpnl, label='Back', pos=(60, 420),size=(100,40))
+        BackButton = wx.Button(self.emplpnl, label='Back', pos=(1000, 15),size=(100,40))
 
     	BackButton.Bind(wx.EVT_BUTTON,partial(self.ElfToMainBack,t1=pt1,t2=pt2,errormsg=perrormsg))
     	self.emplpnl.Show()
@@ -903,7 +903,7 @@ class MainWindow(wx.Frame):
         l4.SetFont(wx.Font(13, wx.MODERN, wx.NORMAL, wx.NORMAL))
         l5.SetFont(wx.Font(13, wx.MODERN, wx.NORMAL, wx.NORMAL))
         l6.SetFont(wx.Font(13, wx.MODERN, wx.NORMAL, wx.NORMAL))
-        BackButton = wx.Button(self.uppnl, label='Back', pos=(60, 420),size=(100,40))
+        BackButton = wx.Button(self.uppnl, label='Back', pos=(1000, 15),size=(100,40))
     	#self.p1=self.uppnl
     	#self.p2=self.custpnl
     	BackButton.Bind(wx.EVT_BUTTON,partial(self.back,p1=self.uppnl,p2=self.custpnl,title="User"))
@@ -936,7 +936,7 @@ class MainWindow(wx.Frame):
         l8.SetFont(wx.Font(12, wx.MODERN, wx.NORMAL, wx.NORMAL))
         l9.SetFont(wx.Font(12, wx.MODERN, wx.NORMAL, wx.NORMAL))
 
-        BackButton = wx.Button(self.epnl, label='Back', pos=(1200, 420),size=(100,40))
+        BackButton = wx.Button(self.epnl, label='Back', pos=(1000, 15),size=(100,40))
 
     	BackButton.Bind(wx.EVT_BUTTON,partial(self.back,p1=self.epnl,p2=self.emppnl,title="Employee"))
     	#self.uppnl.SetBackgroundColour("blue")
@@ -1026,7 +1026,7 @@ class MainWindow(wx.Frame):
     def updateDc(self,e):
         self.emppnl.Hide()
         self.updatepnl=NewPanel(self)
-        updateDcBackButton=wx.Button(self.updatepnl, label='Back' , pos=(1000,10),size=(100,40))
+        updateDcBackButton=wx.Button(self.updatepnl, label='Back' , pos=(1000,15),size=(100,40))
         updateDcBackButton.Bind(wx.EVT_BUTTON,partial(self.back,p1=self.updatepnl,p2=self.emppnl,title='Employee'))
         l0=wx.StaticText(self.updatepnl,-1,"Did",pos=(80,80),size=(500,500))
         l0.SetFont(wx.Font(10, wx.MODERN, wx.NORMAL, wx.BOLD))
@@ -1058,7 +1058,7 @@ class MainWindow(wx.Frame):
     def updateTc(self,e):
         self.emppnl.Hide()
         self.updatepnl=NewPanel(self)
-        updateTcBackButton=wx.Button(self.updatepnl, label='Back' , pos=(1000,10),size=(100,40))
+        updateTcBackButton=wx.Button(self.updatepnl, label='Back' , pos=(1000,15),size=(100,40))
         updateTcBackButton.Bind(wx.EVT_BUTTON,partial(self.back,p1=self.updatepnl,p2=self.emppnl,title='Employee'))
         l0=wx.StaticText(self.updatepnl,-1,"Tid",pos=(80,80),size=(500,500))
         l0.SetFont(wx.Font(10, wx.MODERN, wx.NORMAL, wx.BOLD))
@@ -1093,7 +1093,7 @@ class MainWindow(wx.Frame):
     def updatePc(self,e):
         self.emppnl.Hide()
         self.updatepnl=NewPanel(self)
-        updateTcBackButton=wx.Button(self.updatepnl, label='Back' , pos=(1000,10),size=(100,40))
+        updateTcBackButton=wx.Button(self.updatepnl, label='Back' , pos=(1000,15),size=(100,40))
         updateTcBackButton.Bind(wx.EVT_BUTTON,partial(self.back,p1=self.updatepnl,p2=self.emppnl,title='Employee'))
         l0=wx.StaticText(self.updatepnl,-1,"Pid",pos=(80,80),size=(500,500))
         l0.SetFont(wx.Font(10, wx.MODERN, wx.NORMAL, wx.BOLD))
@@ -1130,7 +1130,7 @@ class MainWindow(wx.Frame):
         cur=con.cursor(mdb.cursors.DictCursor)
         cur.execute("select * from distributioncompany")
         rows=cur.fetchall()
-        editDcBackButton=wx.Button(self.editDcpnl, label='Back' , pos=(1000,10),size=(100,40))
+        editDcBackButton=wx.Button(self.editDcpnl, label='Back' , pos=(1000,15),size=(100,40))
         editDcBackButton.Bind(wx.EVT_BUTTON,partial(self.back,p1=self.editDcpnl,p2=self.updatepnl,title='Employee'))
         l1=wx.StaticText(self.editDcpnl, -1,"Did :",pos=(120,120),size=(300,30))
         l2 = wx.StaticText(self.editDcpnl,-1, str(rows[self.idDc]['did']) ,  pos=(320,115),size=(200,30))
@@ -1153,7 +1153,7 @@ class MainWindow(wx.Frame):
         cur=con.cursor(mdb.cursors.DictCursor)
         cur.execute("select * from transmissioncompany")
         rows=cur.fetchall()
-        editTcBackButton=wx.Button(self.editTcpnl, label='Back' , pos=(1000,10),size=(100,40))
+        editTcBackButton=wx.Button(self.editTcpnl, label='Back' , pos=(1000,15),size=(100,40))
         editTcBackButton.Bind(wx.EVT_BUTTON,partial(self.back,p1=self.editTcpnl,p2=self.updatepnl,title='Employee'))
         l1=wx.StaticText(self.editTcpnl, -1,"Tid :",pos=(120,120),size=(300,30))
         l2 = wx.StaticText(self.editTcpnl,-1, str(rows[self.idTc]['tid']) ,  pos=(320,115),size=(200,30))
@@ -1178,7 +1178,7 @@ class MainWindow(wx.Frame):
         cur=con.cursor(mdb.cursors.DictCursor)
         cur.execute("select * from powercompany")
         rows=cur.fetchall()
-        editPcBackButton=wx.Button(self.editPcpnl, label='Back' , pos=(1000,10),size=(100,40))
+        editPcBackButton=wx.Button(self.editPcpnl, label='Back' , pos=(1000,15),size=(100,40))
         editPcBackButton.Bind(wx.EVT_BUTTON,partial(self.back,p1=self.editPcpnl,p2=self.updatepnl,title='Employee'))
         l1=wx.StaticText(self.editPcpnl, -1,"Pid :",pos=(120,120),size=(300,30))
         l2 = wx.StaticText(self.editPcpnl,-1, str(rows[self.idPc]['pid']) ,  pos=(320,115),size=(200,30))
@@ -1271,7 +1271,7 @@ class MainWindow(wx.Frame):
             delButton.id=j
             j=j+1
             i=i+30
-        backButton = wx.Button(self.delpnl, label='Back', pos=(1000, 10),size = (100,40))
+        backButton = wx.Button(self.delpnl, label='Back', pos=(1000, 15),size = (100,40))
 
         backButton.Bind(wx.EVT_BUTTON, partial(self.back,p1=self.delpnl,p2=self.emppnl,title="Emplooyee"))
 
@@ -1311,7 +1311,7 @@ class MainWindow(wx.Frame):
             delButton.id=j
             j=j+1
             i=i+30
-        backButton = wx.Button(self.delpnl, label='Back', pos=(1000, 10),size = (100,40))
+        backButton = wx.Button(self.delpnl, label='Back', pos=(1000, 15),size = (100,40))
 
         backButton.Bind(wx.EVT_BUTTON, partial(self.back,p1=self.delpnl,p2=self.emppnl,title="Employee"))
 
@@ -1349,7 +1349,7 @@ class MainWindow(wx.Frame):
             delButton.id=j
             j=j+1
             i=i+30
-        backButton = wx.Button(self.delpnl, label='Back', pos=(1000, 10),size = (100,40))
+        backButton = wx.Button(self.delpnl, label='Back', pos=(1000, 15),size = (100,40))
 
         backButton.Bind(wx.EVT_BUTTON, partial(self.back,p1=self.delpnl,p2=self.emppnl,title="Employee"))
 
