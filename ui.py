@@ -449,9 +449,35 @@ class MainWindow(wx.Frame):
 
             #self.currentpnl.SetBackgroundColour("pink")
             cur = con.cursor(mdb.cursors.DictCursor)
-            cur.execute("SELECT * FROM transmissioncompany where state=%s",(t1.GetValue(),))
+            cur.execute("SELECT * FROM transmissioncompany where state like '{}%'".format(t1.GetValue()))
             rows = cur.fetchall()
             desc = cur.description
+            if(len(rows)==0):
+                msg=wx.StaticText(self.lpnl, -1,"Not available !!",pos=(300,30))
+                msg.SetForegroundColour((255,0,0))
+            i=20
+            for row in rows:
+                #txt = row[desc[0][0]], row[desc[1][0]], row[desc[2][0]],row[desc[3][0]],row[desc[4][0]]
+                wx.StaticText(self.lpnl, -1,row[desc[1][0]],pos=(100,i))
+                wx.StaticText(self.lpnl, -1,row[desc[4][0]],pos=(300,i))
+                wx.StaticText(self.lpnl, -1,str(row[desc[3][0]]),pos=(500,i))
+                wx.StaticText(self.lpnl, -1,str(row[desc[5][0]]),pos=(700,i))
+                i=i+30
+
+    def tcNameS(self,e):
+        if(self.tcNameSearch.GetValue()):
+            self.lpnl.Hide()
+            self.lpnl=lowerNewPanel(self)
+            self.lpnl.Show()
+
+            #self.currentpnl.SetBackgroundColour("pink")
+            cur = con.cursor(mdb.cursors.DictCursor)
+            cur.execute("SELECT * FROM transmissioncompany where tname like '{}%'".format(self.tcNameSearch.GetValue()))
+            rows = cur.fetchall()
+            desc = cur.description
+            if(len(rows)==0):
+                msg=wx.StaticText(self.lpnl, -1,"Not available !!",pos=(300,30))
+                msg.SetForegroundColour((255,0,0))
             i=20
             for row in rows:
                 #txt = row[desc[0][0]], row[desc[1][0]], row[desc[2][0]],row[desc[3][0]],row[desc[4][0]]
@@ -469,9 +495,35 @@ class MainWindow(wx.Frame):
 
             #self.currentpnl.SetBackgroundColour("pink")
             cur = con.cursor(mdb.cursors.DictCursor)
-            cur.execute("SELECT * FROM powercompany where state=%s",(t1.GetValue(),))
+            cur.execute("SELECT * FROM powercompany where state like '{}%'".format(t1.GetValue()))
             rows = cur.fetchall()
             desc = cur.description
+            if(len(rows)==0):
+                msg=wx.StaticText(self.lpnl, -1,"Not available !!",pos=(300,30))
+                msg.SetForegroundColour((255,0,0))
+            i=20
+            for row in rows:
+                #txt = row[desc[0][0]], row[desc[1][0]], row[desc[2][0]],row[desc[3][0]],row[desc[4][0]]
+                wx.StaticText(self.lpnl, -1,row[desc[1][0]],pos=(100,i))
+                wx.StaticText(self.lpnl, -1,row[desc[4][0]],pos=(300,i))
+                wx.StaticText(self.lpnl, -1,row[desc[2][0]],pos=(500,i))
+                wx.StaticText(self.lpnl, -1,str(row[desc[3][0]]),pos=(700,i))
+                i=i+30
+
+    def pcNameS(self,e):
+        if(self.pcNameSearch.GetValue()):
+            self.lpnl.Hide()
+            self.lpnl=lowerNewPanel(self)
+            self.lpnl.Show()
+
+            #self.currentpnl.SetBackgroundColour("pink")
+            cur = con.cursor(mdb.cursors.DictCursor)
+            cur.execute("SELECT * FROM powercompany where pname like '{}%'".format(self.pcNameSearch.GetValue()))
+            rows = cur.fetchall()
+            desc = cur.description
+            if(len(rows)==0):
+                msg=wx.StaticText(self.lpnl, -1,"Not available !!",pos=(300,30))
+                msg.SetForegroundColour((255,0,0))
             i=20
             for row in rows:
                 #txt = row[desc[0][0]], row[desc[1][0]], row[desc[2][0]],row[desc[3][0]],row[desc[4][0]]
@@ -489,20 +541,45 @@ class MainWindow(wx.Frame):
 
             #self.currentpnl.SetBackgroundColour("pink")
             cur = con.cursor(mdb.cursors.DictCursor)
-            cur.execute("SELECT * FROM distributioncompany where state=%s",(t1.GetValue(),))
+            cur.execute("SELECT * FROM distributioncompany where state like '{}%'".format(t1.GetValue()))
             rows = cur.fetchall()
             desc = cur.description
+            if(len(rows)==0):
+                msg=wx.StaticText(self.lpnl, -1,"Not available !!",pos=(300,30))
+                msg.SetForegroundColour((255,0,0))
             i=20
             for row in rows:
                 #txt = row[desc[0][0]], row[desc[1][0]], row[desc[2][0]],row[desc[3][0]],row[desc[4][0]]
                 wx.StaticText(self.lpnl, -1,row[desc[1][0]],pos=(100,i))
-                wx.StaticText(self.lpnl, -1,row[desc[3][0]],pos=(300,i))
-                wx.StaticText(self.lpnl, -1,str(row[desc[2][0]]),pos=(500,i))
+                wx.StaticText(self.lpnl, -1,row[desc[3][0]],pos=(500,i))
+                wx.StaticText(self.lpnl, -1,str(row[desc[2][0]]),pos=(700,i))
+                i=i+30
+
+    def dcNameS(self,e):
+        if(self.dcNameSearch.GetValue()):
+            self.lpnl.Hide()
+            self.lpnl=lowerNewPanel(self)
+            self.lpnl.Show()
+
+            #self.currentpnl.SetBackgroundColour("pink")
+            cur = con.cursor(mdb.cursors.DictCursor)
+            cur.execute("SELECT * FROM distributioncompany where dname like '{}%'".format(self.dcNameSearch.GetValue()))
+            rows = cur.fetchall()
+            desc = cur.description
+            if(len(rows)==0):
+                msg=wx.StaticText(self.lpnl, -1,"Not available !!",pos=(300,30))
+                msg.SetForegroundColour((255,0,0))
+            i=20
+            for row in rows:
+                #txt = row[desc[0][0]], row[desc[1][0]], row[desc[2][0]],row[desc[3][0]],row[desc[4][0]]
+                wx.StaticText(self.lpnl, -1,row[desc[1][0]],pos=(100,i))
+                wx.StaticText(self.lpnl, -1,row[desc[3][0]],pos=(500,i))
+                wx.StaticText(self.lpnl, -1,str(row[desc[2][0]]),pos=(700,i))
                 i=i+30
 
     def tcAll(self,e):
         self.lpnl.Hide()
-        self.tcpnl.Hide()
+        self.upnl.Hide()
         self.tc(self)
 
 
@@ -513,7 +590,7 @@ class MainWindow(wx.Frame):
 
     def dcAll(self,e):
         self.lpnl.Hide()
-        self.dcpnl.Hide()
+        self.upnl.Hide()
         self.dc(self)
 
 
@@ -547,8 +624,13 @@ class MainWindow(wx.Frame):
 
     	BackButton.Bind(wx.EVT_BUTTON,partial(self.back_tc_pc_dc_eb,p1=self.upnl,p2=self.homepnl,title="Power Distribution System"))
         ShowAllButton.Bind(wx.EVT_BUTTON,self.pcAll)
-        t1 = wx.TextCtrl(self.upnl,style= wx.TE_PROCESS_ENTER,pos=(500,20),size=(200,40))
-        t1.Bind(wx.EVT_TEXT_ENTER,partial(self.pcStateSearch,t1=t1))
+        self.pcNameSearch=wx.SearchCtrl(self.upnl,pos=(120,50),size=(200,40))
+        self.pcNameSearch.SetDescriptiveText("Search by P.Name")
+        self.pcNameSearch.Bind(wx.EVT_TEXT,self.pcNameS)
+        wx.StaticText(self.upnl, -1,"State/UT:",pos=(500,60))
+        t1 = wx.SearchCtrl(self.upnl,style= wx.TE_PROCESS_ENTER,pos=(570,50),size=(200,40))
+        t1.SetDescriptiveText("Search by State/UT")
+        t1.Bind(wx.EVT_TEXT,partial(self.pcStateSearch,t1=t1))
         wx.StaticText(self.upnl, -1,"Name",pos=(100,100))
         wx.StaticText(self.upnl, -1,"State",pos=(300,100))
         wx.StaticText(self.upnl, -1,"Type",pos=(500,100))
@@ -567,25 +649,29 @@ class MainWindow(wx.Frame):
             wx.StaticText(self.lpnl, -1,str(row[desc[3][0]]),pos=(700,i))
             i=i+30
 
-    	self.upnl.Show()
 
 
     def dc(self,e):
         self.homepnl.Hide()
 
     	self.SetTitle("Distribution Company")
-        self.dcpnl=NewPanel(self)
+        self.upnl=NewPanel(self)
         self.lpnl=lowerNewPanel(self)
-        BackButton = wx.Button(self.dcpnl, label='Back', pos=(1000, 10),size=(100,40))
-        ShowAllButton = wx.Button(self.dcpnl, label='Show All', pos=(10, 50),size=(100,40))
+        BackButton = wx.Button(self.upnl, label='Back', pos=(1000, 10),size=(100,40))
+        ShowAllButton = wx.Button(self.upnl, label='Show All', pos=(10, 50),size=(100,40))
 
-    	BackButton.Bind(wx.EVT_BUTTON,partial(self.back_tc_pc_dc_eb,p1=self.dcpnl,p2=self.homepnl,title="Power Distribution System"))
+    	BackButton.Bind(wx.EVT_BUTTON,partial(self.back_tc_pc_dc_eb,p1=self.upnl,p2=self.homepnl,title="Power Distribution System"))
         ShowAllButton.Bind(wx.EVT_BUTTON,self.dcAll)
-        t1 = wx.TextCtrl(self.dcpnl,style= wx.TE_PROCESS_ENTER,pos=(500,20),size=(200,40))
-        t1.Bind(wx.EVT_TEXT_ENTER,partial(self.dcStateSearch,t1=t1))
-        wx.StaticText(self.dcpnl, -1,"Name",pos=(100,100))
-        wx.StaticText(self.dcpnl, -1,"State",pos=(300,100))
-        wx.StaticText(self.dcpnl, -1,"Tenure(in years)",pos=(500,100))
+        self.dcNameSearch=wx.SearchCtrl(self.upnl,pos=(120,50),size=(200,40))
+        self.dcNameSearch.SetDescriptiveText("Search by D.Name")
+        self.dcNameSearch.Bind(wx.EVT_TEXT,self.dcNameS)
+        wx.StaticText(self.upnl, -1,"State/UT:",pos=(500,60))
+        t1 = wx.SearchCtrl(self.upnl,style= wx.TE_PROCESS_ENTER,pos=(570,50),size=(200,40))
+        t1.SetDescriptiveText("Search by State/UT")
+        t1.Bind(wx.EVT_TEXT,partial(self.dcStateSearch,t1=t1))
+        wx.StaticText(self.upnl, -1,"Name",pos=(100,100))
+        wx.StaticText(self.upnl, -1,"State",pos=(500,100))
+        wx.StaticText(self.upnl, -1,"Tenure(in years)",pos=(700,100))
         cur = con.cursor(mdb.cursors.DictCursor)
         cur.execute("SELECT * FROM distributioncompany ")
         rows = cur.fetchall()
@@ -595,29 +681,33 @@ class MainWindow(wx.Frame):
         for row in rows:
             #txt = row[desc[0][0]], row[desc[1][0]], row[desc[2][0]],row[desc[3][0]],row[desc[4][0]]
             wx.StaticText(self.lpnl, -1,row[desc[1][0]],pos=(100,i))
-            wx.StaticText(self.lpnl, -1,row[desc[3][0]],pos=(300,i))
-            wx.StaticText(self.lpnl, -1,str(row[desc[2][0]]),pos=(500,i))
+            wx.StaticText(self.lpnl, -1,row[desc[3][0]],pos=(500,i))
+            wx.StaticText(self.lpnl, -1,str(row[desc[2][0]]),pos=(700,i))
             i=i+30
-    	self.dcpnl.Show()
 
 
     def tc(self,e):
         self.homepnl.Hide()
 
     	self.SetTitle("Transmission Company")
-        self.tcpnl=NewPanel(self)
+        self.upnl=NewPanel(self)
         self.lpnl=lowerNewPanel(self)
-        BackButton = wx.Button(self.tcpnl, label='Back', pos=(1000, 10),size=(100,40))
-        ShowAllButton = wx.Button(self.tcpnl, label='Show All', pos=(10, 50),size=(100,40))
+        BackButton = wx.Button(self.upnl, label='Back', pos=(1000, 10),size=(100,40))
+        ShowAllButton = wx.Button(self.upnl, label='Show All', pos=(10, 50),size=(100,40))
 
-    	BackButton.Bind(wx.EVT_BUTTON,partial(self.back_tc_pc_dc_eb,p1=self.tcpnl,p2=self.homepnl,title="Power Distribution System"))
+    	BackButton.Bind(wx.EVT_BUTTON,partial(self.back_tc_pc_dc_eb,p1=self.upnl,p2=self.homepnl,title="Power Distribution System"))
         ShowAllButton.Bind(wx.EVT_BUTTON,self.tcAll)
-        t1 = wx.TextCtrl(self.tcpnl,style= wx.TE_PROCESS_ENTER,pos=(500,20),size=(200,40))
-        t1.Bind(wx.EVT_TEXT_ENTER,partial(self.tcStateSearch,t1=t1))
-        wx.StaticText(self.tcpnl, -1,"Name",pos=(100,100))
-        wx.StaticText(self.tcpnl, -1,"State",pos=(300,100))
-        wx.StaticText(self.tcpnl, -1,"Capacity",pos=(500,100))
-        wx.StaticText(self.tcpnl, -1,"Tenure(in years)",pos=(700,100))
+        self.tcNameSearch=wx.SearchCtrl(self.upnl,pos=(120,50),size=(200,40))
+        self.tcNameSearch.SetDescriptiveText("Search by T.name")
+        self.tcNameSearch.Bind(wx.EVT_TEXT,self.tcNameS)
+        wx.StaticText(self.upnl, -1,"State/UT:",pos=(500,60))
+        t1 = wx.SearchCtrl(self.upnl,style= wx.TE_PROCESS_ENTER,pos=(570,50),size=(200,40))
+        t1.SetDescriptiveText("Search by State/UT")
+        t1.Bind(wx.EVT_TEXT,partial(self.tcStateSearch,t1=t1))
+        wx.StaticText(self.upnl, -1,"Name",pos=(100,100))
+        wx.StaticText(self.upnl, -1,"State",pos=(300,100))
+        wx.StaticText(self.upnl, -1,"Capacity",pos=(500,100))
+        wx.StaticText(self.upnl, -1,"Tenure(in years)",pos=(700,100))
         cur = con.cursor(mdb.cursors.DictCursor)
         cur.execute("SELECT * FROM transmissioncompany ")
         rows = cur.fetchall()
@@ -633,7 +723,6 @@ class MainWindow(wx.Frame):
             wx.StaticText(self.lpnl, -1,str(row[desc[3][0]]),pos=(500,i))
             wx.StaticText(self.lpnl, -1,str(row[desc[5][0]]),pos=(700,i))
             i=i+30
-        self.tcpnl.Show()
 
     def EmpLoginForm(self,e,pt1,pt2,perrormsg):
         self.homepnl.Hide()
@@ -1028,6 +1117,7 @@ class MainWindow(wx.Frame):
         self.tDcTid = wx.TextCtrl(self.editDcpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,315),size=(200,30))
         updateButton=wx.Button(self.editDcpnl, label='Update',pos=(500, 450),size=(100,40))
         updateButton.Bind(wx.EVT_BUTTON,self.updateDcSubmit)
+        self.errorDcUpdate=wx.StaticText(self.editDcpnl,-1,"" ,pos=(700,200),size=(400,50))
 
     def editTcButton(self,e):
         self.updatepnl.Hide()
@@ -1052,6 +1142,7 @@ class MainWindow(wx.Frame):
         self.tTcTenure = wx.TextCtrl(self.editTcpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,365),size=(200,30))
         updateButton=wx.Button(self.editTcpnl, label='Update',pos=(500, 450),size=(100,40))
         updateButton.Bind(wx.EVT_BUTTON,self.updateTcSubmit)
+        self.errorTcUpdate=wx.StaticText(self.editTcpnl,-1,"" ,pos=(700,200),size=(400,50))
 
     def editPcButton(self,e):
         self.updatepnl.Hide()
@@ -1074,33 +1165,49 @@ class MainWindow(wx.Frame):
         self.tPcTotalpower = wx.TextCtrl(self.editPcpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,315),size=(200,30))
         updateButton=wx.Button(self.editPcpnl, label='Update',pos=(500, 450),size=(100,40))
         updateButton.Bind(wx.EVT_BUTTON,self.updatePcSubmit)
+        self.errorPcUpdate=wx.StaticText(self.editPcpnl,-1,"" ,pos=(700,200),size=(400,50))
 
     def updateDcSubmit(self,e):
-        cur = con.cursor(mdb.cursors.DictCursor)
-        cur.execute("select * from distributioncompany")
-        rows=cur.fetchall()
-        cur.execute("update distributioncompany set dname=%s,state=%s,tenure=%s,tid=%s  where did =%s",(self.tDcDname.GetValue(),self.tDcState.GetValue(),str(self.tDcTenure.GetValue()),str(self.tDcTid.GetValue()),rows[self.idDc]['did']))
-        con.commit()
-        self.editDcpnl.Hide()
-        self.updateDc(self)
+        if(self.tDcDname.GetValue() and self.tDcState.GetValue() and self.tDcTenure.GetValue() and self.tDcTid.GetValue()):
+            cur = con.cursor(mdb.cursors.DictCursor)
+            cur.execute("select * from distributioncompany")
+            rows=cur.fetchall()
+            cur.execute("update distributioncompany set dname=%s,state=%s,tenure=%s,tid=%s  where did =%s",(self.tDcDname.GetValue(),self.tDcState.GetValue(),str(self.tDcTenure.GetValue()),str(self.tDcTid.GetValue()),rows[self.idDc]['did']))
+            con.commit()
+            self.editDcpnl.Hide()
+            self.updateDc(self)
+        else:
+            self.errorDcUpdate.SetLabel("Please, Fill all the data")
+            self.errorDcUpdate.SetForegroundColour((255,0,0))
+
 
     def updateTcSubmit(self,e):
-        cur = con.cursor(mdb.cursors.DictCursor)
-        cur.execute("select * from transmissioncompany")
-        rows=cur.fetchall()
-        cur.execute("update transmissioncompany set tname=%s,state=%s,did=%s,tcapacity=%s,tenure=%s  where tid =%s",(self.tTcTname.GetValue(),self.tTcState.GetValue(),str(self.tTcDid.GetValue()),str(self.tTcTcapacity.GetValue()),str(self.tTcTenure.GetValue()),rows[self.idTc]['tid']))
-        con.commit()
-        self.editTcpnl.Hide()
-        self.updateTc(self)
+        if(self.tTcTname.GetValue() and self.tTcState.GetValue() and self.tTcDid.GetValue() and self.tTcTcapacity.GetValue() and self.tTcTenure.GetValue()):
+            cur = con.cursor(mdb.cursors.DictCursor)
+            cur.execute("select * from transmissioncompany")
+            rows=cur.fetchall()
+            cur.execute("update transmissioncompany set tname=%s,state=%s,did=%s,tcapacity=%s,tenure=%s  where tid =%s",(self.tTcTname.GetValue(),self.tTcState.GetValue(),str(self.tTcDid.GetValue()),str(self.tTcTcapacity.GetValue()),str(self.tTcTenure.GetValue()),rows[self.idTc]['tid']))
+            con.commit()
+            self.editTcpnl.Hide()
+            self.updateTc(self)
+        else:
+            self.errorTcUpdate.SetLabel("Please, Fill all the data")
+            self.errorTcUpdate.SetForegroundColour((0,255,0))
 
     def updatePcSubmit(self,e):
-        cur = con.cursor(mdb.cursors.DictCursor)
-        cur.execute("select * from powercompany")
-        rows=cur.fetchall()
-        cur.execute("update powercompany set pname=%s,state=%s,type=%s,totalpower=%s  where pid =%s",(self.tPcPname.GetValue(),self.tPcState.GetValue(),self.tPcType.GetValue(),str(self.tPcTotalpower.GetValue()),rows[self.idPc]['pid']))
-        con.commit()
-        self.editPcpnl.Hide()
-        self.updatePc(self)
+        if(self.tPcPname.GetValue() and self.tPcState.GetValue() and self.tPcType.GetValue() and self.tPcTotalpower.GetValue()):
+            cur = con.cursor(mdb.cursors.DictCursor)
+            cur.execute("select * from powercompany")
+            rows=cur.fetchall()
+            cur.execute("update powercompany set pname=%s,state=%s,type=%s,totalpower=%s  where pid =%s",(self.tPcPname.GetValue(),self.tPcState.GetValue(),self.tPcType.GetValue(),str(self.tPcTotalpower.GetValue()),rows[self.idPc]['pid']))
+            con.commit()
+            self.editPcpnl.Hide()
+            self.updatePc(self)
+        else:
+            self.errorPcUpdate.SetLabel("Please, Fill all the data")
+            self.errorPcUpdate.SetForegroundColour((0,0,255))
+
+
 
 
     def DelDc(self,e):
