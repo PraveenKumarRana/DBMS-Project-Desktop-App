@@ -1028,11 +1028,11 @@ class MainWindow(wx.Frame):
 
         self.SetTitle("Employee")
 
-        LogoutButton = wx.Button(self.emppnl, label='Logout', pos=(1270, 0),size=(80,30))
+        LogoutButton = wx.Button(self.emppnl, label='Logout', pos=(1270, 20),size=(80,35))
         LogoutButton.Bind(wx.EVT_BUTTON,partial(self.EmpLogout,t1=t1,t2=t2,errormsg=errormsg))
         cur.execute("select ename from employee where eid=%s",(t1.GetValue(),))
         rows=cur.fetchall()
-        ProfileButton = wx.Button(self.emppnl, label='Hi '+rows[0][0], pos=(1120, 0))
+        ProfileButton = wx.Button(self.emppnl, label='Hi '+rows[0][0], pos=(1100, 20))
         ProfileButton.Bind(wx.EVT_BUTTON,partial(self.EmpProfile,t1=t1,t2=t2))
 
         l1=wx.StaticText(self.emppnl, -1,"Distribution Company",pos=(80,30),size=(300,30))
@@ -1606,11 +1606,11 @@ class MainWindow(wx.Frame):
         self.SetTitle("Employee")
         self.emppnl=NewPanel(self)
 
-        LogoutButton = wx.Button(self.emppnl, label='Logout', pos=(1270, 20),size=(80,30))
+        LogoutButton = wx.Button(self.emppnl, label='Logout', pos=(1270, 20),size=(80,35))
         LogoutButton.Bind(wx.EVT_BUTTON,partial(self.EmpLogout,t1=t1,t2=t2,errormsg=errormsg))
         cur.execute("select ename from employee where eid=%s",(t1.GetValue(),))
         rows=cur.fetchall()
-        ProfileButton = wx.Button(self.emppnl, label='Hi '+rows[0][0], pos=(1120, 20))
+        ProfileButton = wx.Button(self.emppnl, label='Hi '+rows[0][0], pos=(1100, 20))
         ProfileButton.Bind(wx.EVT_BUTTON,partial(self.EmpProfile,t1=t1,t2=t2))
 
         cur.execute("select * from newconnection where boardname in ( select boardname from employee where eid=%s )",(t1.GetValue(),))
@@ -1714,10 +1714,10 @@ class MainWindow(wx.Frame):
     	self.SetTitle("User")
         self.custpnl=NewPanel(self)
 
-        LogoutButton = wx.Button(self.custpnl, label='Logout', pos=(1270, 20),size=(80,30))
+        LogoutButton = wx.Button(self.custpnl, label='Logout', pos=(1270, 20),size=(80,35))
         cur.execute("select cname from consumer where cid=%s",(t1.GetValue(),))
         rows=cur.fetchall()
-        ProfileButton = wx.Button(self.custpnl, label='Hi '+rows[0][0], pos=(1120, 20))
+        ProfileButton = wx.Button(self.custpnl, label='Hi '+rows[0][0], pos=(1100, 20))
     	LogoutButton.Bind(wx.EVT_BUTTON,partial(self.CustLogout,t1=t1,t2=t2,errormsg=errormsg))
         ProfileButton.Bind(wx.EVT_BUTTON,partial(self.UserProfile,t1=t1))
 
