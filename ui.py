@@ -1561,7 +1561,7 @@ class MainWindow(wx.Frame):
         SubmitButton.Bind(wx.EVT_BUTTON,partial(self.addTcSubmit,t11=t11,t12=t12,t13=t13,t14=t14,t15=t15,t16=t16))
 
         backButton = wx.Button(self.formpnl, label='Cancel', pos=(630, 450),size = (100,40))
-        self.p1=self.formpnlt11t11t11t11
+        self.p1=self.formpnl
         self.p2=self.emppnl
         backButton.Bind(wx.EVT_BUTTON, self.addTcCancel)
 
