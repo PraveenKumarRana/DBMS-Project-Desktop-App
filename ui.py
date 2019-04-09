@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import os
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -25,6 +26,12 @@ class NewPanel(wx.Panel):
     def __init__(self, parent):
         """Constructor"""
         wx.Panel.__init__(self, parent=parent,size=(w,h-100),pos=(0,100))
+        self.Bind(wx.EVT_PAINT, self.OnPaintN)
+    def OnPaintN(self,e) :
+        dc = wx.PaintDC(self)
+        dc.SetBrush(wx.Brush(wx.Colour(255,255,255)))
+        dc.DrawRectangle(10, 10, 1346, 500)
+
 class upperNewPanel(wx.Panel):
 
     def __init__(self, parent):
@@ -71,6 +78,8 @@ class MainWindow(wx.Frame):
         tcButton.Bind(wx.EVT_BUTTON, self.tc)
         ebButton.Bind(wx.EVT_BUTTON, self.eb)
 
+        l0 = wx.StaticText(self.homepnl, -1, "Customer Login ",pos=(600,170),size=(500,500))
+        l0.SetFont(wx.Font(16,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
         errormsg = wx.StaticText(self.homepnl, -1, " ",pos=(610,340))
         l1 = wx.StaticText(self.homepnl, -1, "Customer ID : ",pos=(510,240))
         t1 = wx.TextCtrl(self.homepnl,style= wx.TE_PROCESS_ENTER,pos=(610,230),size=(200,40))
@@ -93,20 +102,32 @@ class MainWindow(wx.Frame):
         self.SetMinSize((w,h))
         self.SetTitle('Power Distribution System')
         self.Centre()
+        self.homepnl.Bind(wx.EVT_PAINT, partial(self.OnPaint,op=self.homepnl))
+        #self.Centre()
+        #self.Show(True)
+
+
+    def OnPaint(self,e,op):
+        dc = wx.PaintDC(op)
+        dc.SetBrush(wx.Brush(wx.Colour(255,255,255)))
+        dc.DrawRectangle(10, 10, 1346, 500)
+        dc.SetBrush(wx.Brush(wx.Colour(220,217,217)))
+        dc.DrawRectangle(450, 160, 480, 290)
 
     def ncStat(self,e):
         self.homepnl.Hide()
         self.previousTitle=self.GetTitle()
         self.SetTitle("Application Status form New Connection")
         self.ncstatpnl=NewPanel(self)
+        msg=wx.StaticText(self.ncstatpnl, -1, "",pos=(600,250),size=(300,300))
         l1=wx.StaticText(self.ncstatpnl, -1, "Provide your ref_id :",pos=(400,300),size=(500,500))
         self.t222 = wx.TextCtrl(self.ncstatpnl,style= wx.TE_PROCESS_ENTER,pos=(600,300),size=(200,40))
         knowstatButton = wx.Button(self.ncstatpnl, label='submit', pos=(650, 370))
-        knowstatButton.Bind(wx.EVT_BUTTON, self.ncstatsubmit)
+        knowstatButton.Bind(wx.EVT_BUTTON, partial(self.ncstatsubmit,msg=msg))
         backButton = wx.Button(self.ncstatpnl, label='Back', pos=(1000, 10))
         backButton.Bind(wx.EVT_BUTTON, partial(self.back,p1=self.ncstatpnl,p2=self.homepnl,title="Power Distribution System"))
 
-    def ncstatsubmit(self,e):
+    def ncstatsubmit(self,e,msg):
         if(self.t222.GetValue()):
             cur.execute("select status from ncstatus where refid=%s",(self.t222.GetValue(),))
             rows=cur.fetchall()
@@ -191,11 +212,14 @@ class MainWindow(wx.Frame):
 
                     self.t222.Clear()
             else:
-                msg=wx.StaticText(self.ncstatpnl, -1, "Invalid reference id !!",pos=(600,250),size=(300,300))
+                msg.Hide()
+                msg.Show()
+                msg.SetLabel("Invalid reference id")
                 msg.SetForegroundColour((255,0,0))
-
         else:
-            msg=wx.StaticText(self.ncstatpnl, -1, "Enter your reference id!!",pos=(600,250),size=(300,300))
+            msg.Hide()
+            msg.Show()
+            msg.SetLabel("Enter reference id pleas!!!!")
             msg.SetForegroundColour((255,0,0))
 
     def newConnection(self,e):
@@ -207,10 +231,10 @@ class MainWindow(wx.Frame):
         ebButton = wx.Button(self.ncpnl, label='Back', pos=(1000, 10))
         ebButton.Bind(wx.EVT_BUTTON, partial(self.back,p1=self.ncpnl,p2=self.homepnl,title="Power Distribution System"))
 
-        l1=wx.StaticText(self.ncpnl, -1, "State/UT :",pos=(w/2-200,50),size=(500,500))
-        l2=wx.StaticText(self.ncpnl, -1, "Distribution Company :",pos=(w/2-200,100),size=(500,500))
-        l3=wx.StaticText(self.ncpnl, -1, "Division :",pos=(w/2-200,150),size=(500,500))
-        l4=wx.StaticText(self.ncpnl, -1, "Sub Division :",pos=(w/2-200,200),size=(500,500))
+        l1=wx.StaticText(self.ncpnl, -1, "State/UT :",pos=(w/2-200,180),size=(500,500))
+        l2=wx.StaticText(self.ncpnl, -1, "Distribution Company :",pos=(w/2-200,230),size=(500,500))
+        l3=wx.StaticText(self.ncpnl, -1, "Division :",pos=(w/2-200,280),size=(500,500))
+        l4=wx.StaticText(self.ncpnl, -1, "Sub Division :",pos=(w/2-200,330),size=(500,500))
         l1.SetFont(wx.Font(12,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
         l2.SetFont(wx.Font(12,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
         l3.SetFont(wx.Font(12,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
@@ -224,8 +248,9 @@ class MainWindow(wx.Frame):
         for row in rows:
             stateList.append(row["state"])
         print stateList
-        self.cbState=wx.ComboBox(self.ncpnl,pos=(w/2,50),choices=stateList)
+        self.cbState=wx.ComboBox(self.ncpnl,pos=(w/2,180),choices=stateList)
         self.cbState.Bind(wx.EVT_COMBOBOX, self.ncDcSelect)
+        #self.ncpnl.Bind(wx.EVT_PAINT, partial(self.OnPaint,op=self.ncpnl))
 
 
 
@@ -239,7 +264,7 @@ class MainWindow(wx.Frame):
         for row in rows:
             dcList.append(row["dname"])
         print dcList
-        self.cbDc=wx.ComboBox(self.ncpnl,pos=(w/2,100),choices=dcList)
+        self.cbDc=wx.ComboBox(self.ncpnl,pos=(w/2,230),choices=dcList)
         self.cbDc.Bind(wx.EVT_COMBOBOX, self.ncDivSelect)
 
     def ncDivSelect(self,e):
@@ -252,7 +277,7 @@ class MainWindow(wx.Frame):
         for row in rows:
             divList.append(row["divname"])
         print divList
-        self.cbDc=wx.ComboBox(self.ncpnl,pos=(w/2,150),choices=divList)
+        self.cbDc=wx.ComboBox(self.ncpnl,pos=(w/2,280),choices=divList)
         self.cbDc.Bind(wx.EVT_COMBOBOX, self.ncSubdivSelect)
     def ncSubdivSelect(self,e):
         self.Div=e.GetString()
@@ -264,13 +289,13 @@ class MainWindow(wx.Frame):
         for row in rows:
             sdivList.append(row["sdivname"])
         print sdivList
-        self.cbDc=wx.ComboBox(self.ncpnl,pos=(w/2,200),choices=sdivList)
+        self.cbDc=wx.ComboBox(self.ncpnl,pos=(w/2,330),choices=sdivList)
         self.cbDc.Bind(wx.EVT_COMBOBOX, self.submit_form1)
 
     def submit_form1(self,e):
         self.Subdiv=e.GetString()
         print self.Subdiv
-        submitForm=wx.Button(self.ncpnl, label='Submit', pos=(w/2, 300))
+        submitForm=wx.Button(self.ncpnl, label='Submit', pos=(w/2-100, 380))
         submitForm.Bind(wx.EVT_BUTTON,self.NewconForm)
 
     def eb(self,e):
@@ -616,13 +641,15 @@ class MainWindow(wx.Frame):
     	self.SetTitle("Employee Login")
         self.emplpnl=NewPanel(self)
         errormsg = wx.StaticText(self.emplpnl, -1, " ",pos=(610,140))
-        l1 = wx.StaticText(self.emplpnl, -1, "  Employee ID : ",pos=(510,40))
-        t1 = wx.TextCtrl(self.emplpnl,style= wx.TE_PROCESS_ENTER,pos=(610,30),size=(200,40))
-        l1 = wx.StaticText(self.emplpnl, -1, "Password    : ",pos=(510,90))
-        t2 = wx.TextCtrl(self.emplpnl,style = wx.TE_PASSWORD|wx.TE_PROCESS_ENTER,pos=(610,80),size=(200,40))
+        l0 = wx.StaticText(self.emplpnl, -1, "Employee Login ",pos=(600,170),size=(500,500))
+        l0.SetFont(wx.Font(16,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+        l1 = wx.StaticText(self.emplpnl, -1, "Employee ID : ",pos=(510,240))
+        t1 = wx.TextCtrl(self.emplpnl,style= wx.TE_PROCESS_ENTER,pos=(610,230),size=(200,40))
+        l1 = wx.StaticText(self.emplpnl, -1, "Password    : ",pos=(510,290))
+        t2 = wx.TextCtrl(self.emplpnl,style = wx.TE_PASSWORD|wx.TE_PROCESS_ENTER,pos=(610,280),size=(200,40))
         t1.Bind(wx.EVT_TEXT_ENTER,partial(self.EmpLogin,t1=t1,t2=t2,errormsg=errormsg))
         t2.Bind(wx.EVT_TEXT_ENTER,partial(self.EmpLogin,t1=t1,t2=t2,errormsg=errormsg))
-        loginButton = wx.Button(self.emplpnl, label='Log In', pos=(715, 170))
+        loginButton = wx.Button(self.emplpnl, label='Log In', pos=(715, 370))
         loginButton.Bind(wx.EVT_BUTTON, partial(self.EmpLogin,t1=t1,t2=t2,errormsg=errormsg))
 
 
@@ -630,6 +657,8 @@ class MainWindow(wx.Frame):
 
     	BackButton.Bind(wx.EVT_BUTTON,partial(self.ElfToMainBack,t1=pt1,t2=pt2,errormsg=perrormsg))
     	self.emplpnl.Show()
+        self.emplpnl.Bind(wx.EVT_PAINT, partial(self.OnPaint,op=self.emplpnl))
+
 
     def NewconForm(self,e):
         self.ncpnl.Hide()
@@ -664,11 +693,20 @@ class MainWindow(wx.Frame):
         msg=wx.StaticText(self.formpnl, -1, "",pos=(620,300),size=(300,300))
         SubmitButton = wx.Button(self.formpnl, label='Submit', pos=(500, 450),size=(100,40))
         SubmitButton.Bind(wx.EVT_BUTTON,partial(self.Submit,t11=t11,t12=t12,t13=t13,t14=t14,t15=t15,t17=t17,msg=msg))
-
+        idButton = wx.Button(self.formpnl, label='chose file', pos=(700, 450),size=(100,40))
+        idButton.Bind(wx.EVT_BUTTON,self.upload)
         backButton = wx.Button(self.formpnl, label='Cancel', pos=(1000, 10))
         self.p1=self.formpnl
         self.p2=self.homepnl
         backButton.Bind(wx.EVT_BUTTON, self.Cancel)
+
+    def upload(self,e):
+        frame = wx.Frame(None, -1, 'win.py')
+        frame.SetDimensions(0,0,200,50)
+        dialog=wx.FileDialog(frame, "Open", "", "", "Python files (*.py)|*.py",  wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
+        if dialog.ShowModal() == wx.ID_OK:
+            print dialog.GetPath()
+
 
     def posu(self,e):
         self.t16=e.GetString()
@@ -725,16 +763,18 @@ class MainWindow(wx.Frame):
             self.back(self,p1=self.formpnl,p2=self.homepnl,title="Power Distribution System")
 
         else:
-            if(len(t14.GetValue())!=10):
+            if(t11.GetValue() and t12.GetValue() and t13.GetValue() and len(t14.GetValue())!=10 and t15.GetValue() and self.t16 ):
                 msg.Hide()
                 msg.Show()
-                msg.SetLabel("Invalid Mobile No. !!")
+                msg.SetLabel("Invalid Mobile no. !!")
                 msg.SetForegroundColour((255,0,0))
             else:
                 msg.Hide()
                 msg.Show()
                 msg.SetLabel("Any field can not be empty !!")
                 msg.SetForegroundColour((255,0,0))
+
+
 
     def Cancel(self,e):
         dial=wx.MessageBox(message='Do you want to cancel it?',caption='Cancel',style=wx.YES_NO | wx.ICON_INFORMATION)
@@ -810,11 +850,16 @@ class MainWindow(wx.Frame):
             if(len(rows)!=0 and t2.GetValue()==rows[0][0]):
                 self.Customer(self,t1=t1,t2=t2,errormsg=errormsg)
             else:
+                errormsg.Hide()
+                errormsg.Show()
                 errormsg.SetForegroundColour((255,0,0))
                 errormsg.SetLabel("Wrong Customer ID or Password!!")
         else:
+            errormsg.Hide()
+            errormsg.Show()
             errormsg.SetForegroundColour((255,0,0))
             errormsg.SetLabel("Wrong Customer ID or Password!!")
+
 
     def EmpLogin(self,e,t1,t2,errormsg):
         if(t1.GetValue()):
@@ -1374,50 +1419,59 @@ class MainWindow(wx.Frame):
         self.SetTitle("Employee")
         self.emppnl=NewPanel(self)
 
-        LogoutButton = wx.Button(self.emppnl, label='Logout', pos=(1270, 0),size=(80,30))
+        LogoutButton = wx.Button(self.emppnl, label='Logout', pos=(1270, 20),size=(80,30))
         LogoutButton.Bind(wx.EVT_BUTTON,partial(self.EmpLogout,t1=t1,t2=t2,errormsg=errormsg))
         cur.execute("select ename from employee where eid=%s",(t1.GetValue(),))
         rows=cur.fetchall()
-        ProfileButton = wx.Button(self.emppnl, label='Hi '+rows[0][0], pos=(1120, 0))
+        ProfileButton = wx.Button(self.emppnl, label='Hi '+rows[0][0], pos=(1120, 20))
         ProfileButton.Bind(wx.EVT_BUTTON,partial(self.EmpProfile,t1=t1,t2=t2))
 
         cur.execute("select * from newconnection where boardname in ( select boardname from employee where eid=%s )",(t1.GetValue(),))
         self.ncrows=cur.fetchall()
         print self.ncrows
         desc = cur.description
-        wx.StaticText(self.emppnl, -1,'Applicant Name',    pos=(5,100),size=(500,500))
-        wx.StaticText(self.emppnl, -1,'Phone no',          pos=(100,100),size=(500,500))
-        wx.StaticText(self.emppnl, -1,'Boardname',         pos=(200,100),size=(500,500))
-        wx.StaticText(self.emppnl, -1,'State',             pos=(450,100),size=(500,500))
-        wx.StaticText(self.emppnl, -1,'Subdivision',       pos=(550,100),size=(500,500))
-        wx.StaticText(self.emppnl, -1,'Division',          pos=(650,100),size=(500,500))
-        wx.StaticText(self.emppnl, -1,'City',              pos=(750,100),size=(500,500))
-        wx.StaticText(self.emppnl, -1,'Email id',          pos=(850,100),size=(500,500))
-        wx.StaticText(self.emppnl, -1,'Insta.. add',       pos=(1000,100),size=(500,500))
+        h1=wx.StaticText(self.emppnl, -1,'Applicant Name',    pos=(15,100),size=(130,20))
+        h2=wx.StaticText(self.emppnl, -1,'Phone no',          pos=(150,100),size=(95,20))
+        h3=wx.StaticText(self.emppnl, -1,'Boardname',         pos=(250,100),size=(345,20))
+        h4=wx.StaticText(self.emppnl, -1,'State',             pos=(600,100),size=(125,20))
+        h5=wx.StaticText(self.emppnl, -1,'Subdivision',       pos=(730,100),size=(115,20))
+        h6=wx.StaticText(self.emppnl, -1,'Division',          pos=(850,100),size=(95,20))
+        h7=wx.StaticText(self.emppnl, -1,'City',              pos=(950,100),size=(85,20))
+        h8=wx.StaticText(self.emppnl, -1,'Email id',          pos=(1040,100),size=(145,20))
+        h9=wx.StaticText(self.emppnl, -1,'Insta.. add',       pos=(1190,100),size=(165,20))
+        h1.SetBackgroundColour('dark gray')
+        h2.SetBackgroundColour('dark gray')
+        h3.SetBackgroundColour('dark gray')
+        h4.SetBackgroundColour('dark gray')
+        h5.SetBackgroundColour('dark gray')
+        h6.SetBackgroundColour('dark gray')
+        h7.SetBackgroundColour('dark gray')
+        h8.SetBackgroundColour('dark gray')
+        h9.SetBackgroundColour('dark gray')
         i=160
         j=0
         k=0
         for r in self.ncrows:
-            wx.StaticText(self.emppnl, -1,r[0],pos=(5,i),size=(500,500))
-            wx.StaticText(self.emppnl, -1,str(r[1]),pos=(100,i),size=(500,500))
-            wx.StaticText(self.emppnl, -1,r[2],pos=(200,i),size=(500,500))
-            wx.StaticText(self.emppnl, -1,r[3],pos=(450,i),size=(500,500))
-            wx.StaticText(self.emppnl, -1,r[4],pos=(550,i),size=(500,500))
-            wx.StaticText(self.emppnl, -1,r[5],pos=(650,i),size=(500,500))
-            wx.StaticText(self.emppnl, -1,r[6],pos=(750,i),size=(500,500))
-            wx.StaticText(self.emppnl, -1,r[7],pos=(850,i),size=(500,500))
-            wx.StaticText(self.emppnl, -1,r[8],pos=(1000,i),size=(500,500))
+            wx.StaticText(self.emppnl, -1,r[0],pos=(15,i),size=(500,500))
+            wx.StaticText(self.emppnl, -1,str(r[1]),pos=(150,i),size=(500,500))
+            wx.StaticText(self.emppnl, -1,r[2],pos=(250,i),size=(500,500))
+            wx.StaticText(self.emppnl, -1,r[3],pos=(600,i),size=(500,500))
+            wx.StaticText(self.emppnl, -1,r[4],pos=(730,i),size=(500,500))
+            wx.StaticText(self.emppnl, -1,r[5],pos=(850,i),size=(500,500))
+            wx.StaticText(self.emppnl, -1,r[6],pos=(950,i),size=(500,500))
+            wx.StaticText(self.emppnl, -1,r[7],pos=(1040,i),size=(500,500))
+            wx.StaticText(self.emppnl, -1,r[8],pos=(1190,i),size=(500,500))
 
-            apButton = wx.Button(self.emppnl, label='Aprove', pos=(1160, i),size=(80,25))
+            apButton = wx.Button(self.emppnl, label='Aprove', pos=(1090, i+40),size=(80,25))
             apButton.id=j
             apButton.SetBackgroundColour(wx.Colour(115,230,0))
             apButton.Bind(wx.EVT_BUTTON,partial(self.ncAprove,t1=t1,t2=t2,errormsg=errormsg),apButton)
             j=j+1
-            rejButton = wx.Button(self.emppnl, label='Reject', pos=(1270, i),size=(80,25))
+            rejButton = wx.Button(self.emppnl, label='Reject', pos=(1220, i+40),size=(80,25))
             rejButton.id=j
             rejButton.SetBackgroundColour(wx.Colour(255, 71, 26))
             rejButton.Bind(wx.EVT_BUTTON,partial(self.ncReject,t1=t1,t2=t2,errormsg=errormsg),rejButton)
-            i=i+40
+            i=i+80
             j=j+1
             k=k+1
 
@@ -1473,10 +1527,10 @@ class MainWindow(wx.Frame):
     	self.SetTitle("User")
         self.custpnl=NewPanel(self)
 
-        LogoutButton = wx.Button(self.custpnl, label='Logout', pos=(1270, 0),size=(80,30))
+        LogoutButton = wx.Button(self.custpnl, label='Logout', pos=(1270, 20),size=(80,30))
         cur.execute("select cname from consumer where cid=%s",(t1.GetValue(),))
         rows=cur.fetchall()
-        ProfileButton = wx.Button(self.custpnl, label='Hi '+rows[0][0], pos=(1120, 0))
+        ProfileButton = wx.Button(self.custpnl, label='Hi '+rows[0][0], pos=(1120, 20))
     	LogoutButton.Bind(wx.EVT_BUTTON,partial(self.CustLogout,t1=t1,t2=t2,errormsg=errormsg))
         ProfileButton.Bind(wx.EVT_BUTTON,partial(self.UserProfile,t1=t1))
 
@@ -1485,8 +1539,8 @@ class MainWindow(wx.Frame):
         for i in range(0,no_of_meter):
             cur.execute("select * from billinginfo where meterno=%s",(rows_cust[i][8],))
             rows_cust_bill=cur.fetchall()
-            l0 = wx.StaticText(self.custpnl, -1, str(rows_cust[i][3]),pos=(200,0+i*400),size=(1000,1000),style=wx.ALIGN_CENTER)
-            l0.SetFont(wx.Font(23, wx.MODERN, wx.NORMAL, wx.BOLD))
+            l0 = wx.StaticText(self.custpnl, -1, str(rows_cust[i][3]),pos=(200,20+i*400),size=(1000,1000),style=wx.ALIGN_CENTER)
+            l0.SetFont(wx.Font(20, wx.MODERN, wx.NORMAL, wx.BOLD))
             l1 = wx.StaticText(self.custpnl, -1, "Customer Id :     "+str(rows_cust[i][0]),pos=(100,100+i*400),size=(1000,1000))
             l2 = wx.StaticText(self.custpnl, -1, "Name        :     "+rows_cust[i][1],pos=(100,160+i*400),size=(1000,1000))
             l3 = wx.StaticText(self.custpnl, -1, "Address     :     "+rows_cust[i][11],pos=(100,220+i*400),size=(1000,1000))
