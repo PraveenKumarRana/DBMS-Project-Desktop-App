@@ -770,7 +770,7 @@ class MainWindow(wx.Frame):
                 msg.SetForegroundColour((255,0,0))
             else:
                 msg.Hide()
-                msg.Show()
+                msg.Show()  
                 msg.SetLabel("Any field can not be empty !!")
                 msg.SetForegroundColour((255,0,0))
 
