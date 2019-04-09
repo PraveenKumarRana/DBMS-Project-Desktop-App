@@ -1032,6 +1032,8 @@ class MainWindow(wx.Frame):
                     self.XXEmployee(self,t1=t1,t2=t2,errormsg=errormsg)
                 if(eboard[0][0]=='designation3'):
                     self.designation3(self,t1=t1,t2=t2,errormsg=errormsg)
+                if(eboard[0][0]=='designation1'):
+                    self.designation1(self,t1=t1,t2=t2,errormsg=errormsg)
 
             else:
                 errormsg.SetForegroundColour((255,0,0))
@@ -1039,6 +1041,60 @@ class MainWindow(wx.Frame):
         else:
             errormsg.SetForegroundColour((255,0,0))
             errormsg.SetLabel("Wrong Employee ID or Password!!")
+
+    def designation1(self,e,t1,t2,errormsg):    #updating user data
+        self.emplpnl.Hide()
+        self.emppnl=NewPanel(self)
+
+        self.SetTitle("Employee")
+        LogoutButton = wx.Button(self.emppnl, label='Logout', pos=(1270, 20),size=(80,30))
+        LogoutButton.Bind(wx.EVT_BUTTON,partial(self.EmpLogout,t1=t1,t2=t2,errormsg=errormsg))
+        cur.execute("select ename from employee where eid=%s",(t1.GetValue(),))
+        rows=cur.fetchall()
+        ProfileButton = wx.Button(self.emppnl, label='Hi '+rows[0][0], pos=(1120, 20))
+        ProfileButton.Bind(wx.EVT_BUTTON,partial(self.EmpProfile,t1=t1,t2=t2))
+
+        l1=wx.StaticText(self.emppnl, -1,"Consumer No.  :",pos=(w/2-160,115),size=(300,30))
+        l1.SetFont(wx.Font(12,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+
+        consNo = wx.TextCtrl(self.emppnl,style= wx.TE_PROCESS_ENTER,    pos=(w/2,110),size=(200,30))
+        SubmitButton = wx.Button(self.emppnl, label='Submit', pos=(w/2, 180),size=(100,35))
+        SubmitButton.Bind(wx.EVT_BUTTON,partial(self.updateConsumer,consNo=consNo))
+
+    def updateConsumer(self,e,consNo):
+
+            self.emppnl.Hide()
+            self.editConpnl=NewPanel(self)
+            cur=con.cursor(mdb.cursors.DictCursor)
+            cur.execute("select * from consumer where cid = {}".format(consNo.GetValue()))
+            rows=cur.fetchall()
+            print rows
+
+            BackButton=wx.Button(self.editConpnl, label='Back' , pos=(1000,15),size=(100,40))
+            BackButton.Bind(wx.EVT_BUTTON,partial(self.back,p1=self.editConpnl,p2=self.emppnl,title='Employee'))
+            l1=wx.StaticText(self.editConpnl, -1,"Consumer No:",pos=(120,120),size=(300,30))
+            l2 = wx.StaticText(self.editConpnl,-1,rows[0]['cid'] ,  pos=(320,115),size=(200,30))
+
+            l3=wx.StaticText(self.editConpnl, -1,"Name :",pos=(120,170),size=(300,30))
+            self.conName = wx.TextCtrl(self.editConpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,165),size=(300,30))
+            self.conName.AppendText(str(rows[0]['cname']))
+
+            l3=wx.StaticText(self.editConpnl, -1,"Mobile No. :",pos=(120,220),size=(300,30))
+            self.conPhone = wx.TextCtrl(self.editConpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,165),size=(300,30))
+            self.conPhone.AppendText(str(rows[0]['phone']))
+            l4=wx.StaticText(self.editConpnl, -1,"Email      :",pos=(120,270),size=(300,30))
+            self.conEmail = wx.TextCtrl(self.editConpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,215),size=(300,30))
+            self.conEmail.AppendText(rows[0]['email'])
+            l5=wx.StaticText(self.editConpnl, -1,"Address    :",pos=(120,320),size=(300,30))
+            self.conAddr = wx.TextCtrl(self.editConpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,265),size=(300,30))
+            self.conAddr.AppendText(rows[0]['address'])
+            l6=wx.StaticText(self.editConpnl, -1,"password   :",pos=(120,370),size=(300,30))
+            self.conPass = wx.TextCtrl(self.editConpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,315),size=(300,30))
+            self.conPass.AppendText(rows[0]['password'])
+            updateButton=wx.Button(self.editConpnl, label='Update',pos=(500, 450),size=(100,40))
+            #updateButton.Bind(wx.EVT_BUTTON,self.updateConSubmit)
+            #self.errorPcUpdate=wx.StaticText(self.editConpnl,-1,"" ,pos=(700,200),size=(400,50))
+
 
     def designation3(self,e,t1,t2,errormsg):
         self.emplpnl.Hide()
