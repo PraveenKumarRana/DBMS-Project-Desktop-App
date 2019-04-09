@@ -617,7 +617,7 @@ class MainWindow(wx.Frame):
         self.homepnl.Hide()
 
     	self.SetTitle("Power Company")
-        self.upnl=NewPanel(self)
+        self.upnl=upperNewPanel(self)
         self.lpnl=lowerNewPanel(self)
         BackButton = wx.Button(self.upnl, label='Back', pos=(1000, 10),size=(100,40))
         ShowAllButton = wx.Button(self.upnl, label='Show All', pos=(10, 50),size=(100,40))
@@ -655,7 +655,7 @@ class MainWindow(wx.Frame):
         self.homepnl.Hide()
 
     	self.SetTitle("Distribution Company")
-        self.upnl=NewPanel(self)
+        self.upnl=upperNewPanel(self)
         self.lpnl=lowerNewPanel(self)
         BackButton = wx.Button(self.upnl, label='Back', pos=(1000, 10),size=(100,40))
         ShowAllButton = wx.Button(self.upnl, label='Show All', pos=(10, 50),size=(100,40))
@@ -690,7 +690,7 @@ class MainWindow(wx.Frame):
         self.homepnl.Hide()
 
     	self.SetTitle("Transmission Company")
-        self.upnl=NewPanel(self)
+        self.upnl=upperNewPanel(self)
         self.lpnl=lowerNewPanel(self)
         BackButton = wx.Button(self.upnl, label='Back', pos=(1000, 10),size=(100,40))
         ShowAllButton = wx.Button(self.upnl, label='Show All', pos=(10, 50),size=(100,40))
