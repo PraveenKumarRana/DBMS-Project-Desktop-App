@@ -72,7 +72,7 @@ class MainWindow(wx.Frame):
         self.headpnl.SetBackgroundColour("grey16")
 
         self.homepnl = NewPanel(self)
-        print w,h
+
         imr = '4r.jpg'
 
         bmp1 = wx.Image(imr, wx.BITMAP_TYPE_ANY).ConvertToBitmap()
@@ -393,10 +393,14 @@ class MainWindow(wx.Frame):
             rows = cur.fetchall()
             desc = cur.description
 
-            wx.StaticText(self.upnl, -1,"Board Name",pos=(70,100))
-            wx.StaticText(self.upnl, -1,"No. of Consumer",pos=(270,100))
-            wx.StaticText(self.upnl, -1,"State/UT",pos=(470,100))
-            wx.StaticText(self.upnl, -1,"Power Consumed",pos=(600,100))
+            l0=wx.StaticText(self.upnl, -1,"Board Name",pos=(70,100),size=(500,500))
+            l0.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+            l1=wx.StaticText(self.upnl, -1,"No. of Consumer",pos=(270,100),size=(500,500))
+            l1.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+            l2=wx.StaticText(self.upnl, -1,"State/UT",pos=(470,100),size=(500,500))
+            l2.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+            l3=wx.StaticText(self.upnl, -1,"Power Consumed",pos=(600,100),size=(500,500))
+            l3.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
 
             #print "%s %s %s %s %s" % (desc[0][0], desc[1][0],desc[2][0],desc[3][0],desc[4][0])
             i=20
@@ -697,10 +701,14 @@ class MainWindow(wx.Frame):
         t1 = wx.SearchCtrl(self.upnl,style= wx.TE_PROCESS_ENTER,pos=(570,50),size=(200,40))
         t1.SetDescriptiveText("Search by State/UT")
         t1.Bind(wx.EVT_TEXT,partial(self.pcStateSearch,t1=t1))
-        wx.StaticText(self.upnl, -1,"Name",pos=(100,100))
-        wx.StaticText(self.upnl, -1,"State",pos=(300,100))
-        wx.StaticText(self.upnl, -1,"Type",pos=(500,100))
-        wx.StaticText(self.upnl, -1,"Total power",pos=(700,100))
+        l0=wx.StaticText(self.upnl, -1,"Name",pos=(100,100),size=(500,500))
+        l0.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+        l1=wx.StaticText(self.upnl, -1,"State",pos=(300,100),size=(500,500))
+        l1.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+        l2=wx.StaticText(self.upnl, -1,"Type",pos=(500,100),size=(500,500))
+        l2.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+        l3=wx.StaticText(self.upnl, -1,"Total power",pos=(700,100),size=(500,500))
+        l3.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
         cur = con.cursor(mdb.cursors.DictCursor)
         cur.execute("SELECT * FROM powercompany ")
         rows = cur.fetchall()
@@ -735,9 +743,12 @@ class MainWindow(wx.Frame):
         t1 = wx.SearchCtrl(self.upnl,style= wx.TE_PROCESS_ENTER,pos=(570,50),size=(200,40))
         t1.SetDescriptiveText("Search by State/UT")
         t1.Bind(wx.EVT_TEXT,partial(self.dcStateSearch,t1=t1))
-        wx.StaticText(self.upnl, -1,"Name",pos=(100,100))
-        wx.StaticText(self.upnl, -1,"State",pos=(500,100))
-        wx.StaticText(self.upnl, -1,"Tenure(in years)",pos=(700,100))
+        l0=wx.StaticText(self.upnl, -1,"Name",pos=(100,100),size=(500,500))
+        l0.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+        l1=wx.StaticText(self.upnl, -1,"State",pos=(500,100),size=(500,500))
+        l1.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+        l2=wx.StaticText(self.upnl, -1,"Tenure(in years)",pos=(700,100),size=(500,500))
+        l2.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
         cur = con.cursor(mdb.cursors.DictCursor)
         cur.execute("SELECT * FROM distributioncompany ")
         rows = cur.fetchall()
@@ -770,10 +781,14 @@ class MainWindow(wx.Frame):
         t1 = wx.SearchCtrl(self.upnl,style= wx.TE_PROCESS_ENTER,pos=(570,50),size=(200,40))
         t1.SetDescriptiveText("Search by State/UT")
         t1.Bind(wx.EVT_TEXT,partial(self.tcStateSearch,t1=t1))
-        wx.StaticText(self.upnl, -1,"Name",pos=(100,100))
-        wx.StaticText(self.upnl, -1,"State",pos=(300,100))
-        wx.StaticText(self.upnl, -1,"Capacity",pos=(500,100))
-        wx.StaticText(self.upnl, -1,"Tenure(in years)",pos=(700,100))
+        l0=wx.StaticText(self.upnl, -1,"Name",pos=(100,100),size=(500,500))
+        l0.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+        l1=wx.StaticText(self.upnl, -1,"State",pos=(300,100),size=(500,500))
+        l1.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+        l2=wx.StaticText(self.upnl, -1,"Capacity",pos=(500,100),size=(500,500))
+        l2.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+        l3=wx.StaticText(self.upnl, -1,"Tenure(in years)",pos=(700,100),size=(500,500))
+        l3.SetFont(wx.Font(10,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
         cur = con.cursor(mdb.cursors.DictCursor)
         cur.execute("SELECT * FROM transmissioncompany ")
         rows = cur.fetchall()
@@ -1079,6 +1094,8 @@ class MainWindow(wx.Frame):
                     self.XXEmployee(self,t1=t1,t2=t2,errormsg=errormsg)
                 if(eboard[0][0]=='designation3'):
                     self.designation3(self,t1=t1,t2=t2,errormsg=errormsg)
+                if(eboard[0][0]=='designation1'):
+                    self.designation1(self,t1=t1,t2=t2,errormsg=errormsg)
 
             else:
                 errormsg.SetForegroundColour((255,0,0))
@@ -1087,17 +1104,100 @@ class MainWindow(wx.Frame):
             errormsg.SetForegroundColour((255,0,0))
             errormsg.SetLabel("Wrong Employee ID or Password!!")
 
+    def designation1(self,e,t1,t2,errormsg):    #updating user data
+        self.emplpnl.Hide()
+        self.emppnl=NewPanel(self)
+
+        self.SetTitle("Employee")
+        LogoutButton = wx.Button(self.emppnl, label='Logout', pos=(1270, 20),size=(80,30))
+        LogoutButton.Bind(wx.EVT_BUTTON,partial(self.EmpLogout,t1=t1,t2=t2,errormsg=errormsg))
+        cur.execute("select ename from employee where eid=%s",(t1.GetValue(),))
+        rows=cur.fetchall()
+        ProfileButton = wx.Button(self.emppnl, label='Hi '+rows[0][0], pos=(1120, 20))
+        ProfileButton.Bind(wx.EVT_BUTTON,partial(self.EmpProfile,t1=t1,t2=t2))
+
+        l1=wx.StaticText(self.emppnl, -1,"Consumer No.  :",pos=(w/2-160,115),size=(300,30))
+        l1.SetFont(wx.Font(12,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+
+        consNo = wx.TextCtrl(self.emppnl,style= wx.TE_PROCESS_ENTER,    pos=(w/2,110),size=(200,30))
+        SubmitButton = wx.Button(self.emppnl, label='Submit', pos=(w/2, 180),size=(100,35))
+        SubmitButton.Bind(wx.EVT_BUTTON,partial(self.updateConsumer,consNo=consNo))
+
+    def updateConsumer(self,e,consNo):
+
+            self.emppnl.Hide()
+            self.editConpnl=NewPanel(self)
+            cur=con.cursor(mdb.cursors.DictCursor)
+            cur.execute("select * from consumer where cid = {}".format(consNo.GetValue()))
+            rows=cur.fetchall()
+            print rows
+
+            BackButton=wx.Button(self.editConpnl, label='Back' , pos=(1000,15),size=(100,40))
+            BackButton.Bind(wx.EVT_BUTTON,partial(self.back,p1=self.editConpnl,p2=self.emppnl,title='Employee'))
+            l1=wx.StaticText(self.editConpnl, -1,"Consumer No:",pos=(120,120),size=(300,30))
+            l2 = wx.StaticText(self.editConpnl,-1,str(rows[0]['cid']) ,  pos=(320,115),size=(200,30))
+
+            l3=wx.StaticText(self.editConpnl, -1,"Name :",pos=(120,170),size=(300,30))
+            self.conName = wx.TextCtrl(self.editConpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,165),size=(300,30))
+            self.conName.AppendText(rows[0]['cname'])
+
+            l3=wx.StaticText(self.editConpnl, -1,"Mobile No. :",pos=(120,220),size=(300,30))
+            self.conPhone = wx.TextCtrl(self.editConpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,215),size=(300,30))
+            self.conPhone.AppendText(str(rows[0]['phone']))
+
+            l4=wx.StaticText(self.editConpnl, -1,"Email      :",pos=(120,270),size=(300,30))
+            self.conEmail = wx.TextCtrl(self.editConpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,265),size=(300,30))
+            self.conEmail.AppendText(rows[0]['email'])
+
+            l5=wx.StaticText(self.editConpnl, -1,"Address    :",pos=(120,320),size=(300,30))
+            self.conAddr = wx.TextCtrl(self.editConpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,315),size=(300,30))
+            self.conAddr.AppendText(rows[0]['address'])
+
+            l6=wx.StaticText(self.editConpnl, -1,"password   :",pos=(120,370),size=(300,30))
+            self.conPass = wx.TextCtrl(self.editConpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,365),size=(300,30))
+            self.conPass.AppendText(rows[0]['password'])
+
+            updateButton=wx.Button(self.editConpnl, label='Update',pos=(500, 450),size=(100,40))
+            updateButton.Bind(wx.EVT_BUTTON,self.updateConSubmit)
+            self.errorPcUpdate=wx.StaticText(self.editConpnl,-1,"" ,pos=(700,200),size=(400,50))
+
+    def updateConSubmit(self,e):
+        if(self.conName.GetValue() and self.conPhone.GetValue() and self.conEmail.GetValue() and self.conAddr.GetValue() and self.conPass.GetValue()):
+            cur = con.cursor(mdb.cursors.DictCursor)
+            cur.execute("select * from consumer")
+            rows=cur.fetchall()
+            # print(rows[0]['cid'])
+            try:
+                cur.execute("update consumer set cname=%s,phone=%s,email=%s,address=%s,password=%s  where cid =%s",(self.conName.GetValue(),str(self.conPhone.GetValue()),self.conEmail.GetValue(),self.conAddr.GetValue(),self.conPass.GetValue(),rows[0]['cid']))
+            except mdb.Error,e:
+                print "Error:%s" % (e.args[1])
+                msg=e.args[1]
+                wx.MessageBox(message=msg,caption='Info',style=wx.OK | wx.ICON_INFORMATION)
+                return
+            con.commit()
+            self.editConpnl.Hide()
+            self.emppnl.Show()
+
+        else:
+            self.errorDcUpdate.SetLabel("Please, Fill all the data")
+            self.errorDcUpdate.SetForegroundColour((255,0,0))
+            # self.designation1(self)
+            # self.conSubmitpnl=NewPanel(self)
+
+
+
+
     def designation3(self,e,t1,t2,errormsg):
         self.emplpnl.Hide()
         self.emppnl=NewPanel(self)
 
         self.SetTitle("Employee")
 
-        LogoutButton = wx.Button(self.emppnl, label='Logout', pos=(1270, 0),size=(80,30))
+        LogoutButton = wx.Button(self.emppnl, label='Logout', pos=(1270, 20),size=(80,35))
         LogoutButton.Bind(wx.EVT_BUTTON,partial(self.EmpLogout,t1=t1,t2=t2,errormsg=errormsg))
         cur.execute("select ename from employee where eid=%s",(t1.GetValue(),))
         rows=cur.fetchall()
-        ProfileButton = wx.Button(self.emppnl, label='Hi '+rows[0][0], pos=(1120, 0))
+        ProfileButton = wx.Button(self.emppnl, label='Hi '+rows[0][0], pos=(1100, 20),size=(150,35))
         ProfileButton.Bind(wx.EVT_BUTTON,partial(self.EmpProfile,t1=t1,t2=t2))
 
         l1=wx.StaticText(self.emppnl, -1,"Distribution Company",pos=(80,30),size=(300,30))
@@ -1319,7 +1419,13 @@ class MainWindow(wx.Frame):
             cur = con.cursor(mdb.cursors.DictCursor)
             cur.execute("select * from distributioncompany")
             rows=cur.fetchall()
-            cur.execute("update distributioncompany set dname=%s,state=%s,tenure=%s,tid=%s  where did =%s",(self.tDcDname.GetValue(),self.tDcState.GetValue(),str(self.tDcTenure.GetValue()),str(self.tDcTid.GetValue()),rows[self.idDc]['did']))
+            try:
+                cur.execute("update distributioncompany set dname=%s,state=%s,tenure=%s,tid=%s  where did =%s",(self.tDcDname.GetValue(),self.tDcState.GetValue(),str(self.tDcTenure.GetValue()),str(self.tDcTid.GetValue()),rows[self.idDc]['did']))
+            except mdb.Error,e:
+                print "Error:%s" % (e.args[1])
+                msg=e.args[1]
+                wx.MessageBox(message=msg,caption='Info',style=wx.OK | wx.ICON_INFORMATION)
+                return
             con.commit()
             self.editDcpnl.Hide()
             self.updateDc(self)
@@ -1333,7 +1439,13 @@ class MainWindow(wx.Frame):
             cur = con.cursor(mdb.cursors.DictCursor)
             cur.execute("select * from transmissioncompany")
             rows=cur.fetchall()
-            cur.execute("update transmissioncompany set tname=%s,state=%s,did=%s,tcapacity=%s,tenure=%s  where tid =%s",(self.tTcTname.GetValue(),self.tTcState.GetValue(),str(self.tTcDid.GetValue()),str(self.tTcTcapacity.GetValue()),str(self.tTcTenure.GetValue()),rows[self.idTc]['tid']))
+            try:
+                cur.execute("update transmissioncompany set tname=%s,state=%s,did=%s,tcapacity=%s,tenure=%s  where tid =%s",(self.tTcTname.GetValue(),self.tTcState.GetValue(),str(self.tTcDid.GetValue()),str(self.tTcTcapacity.GetValue()),str(self.tTcTenure.GetValue()),rows[self.idTc]['tid']))
+            except mdb.Error,e:
+                print "Error:%s" % (e.args[1])
+                msg=e.args[1]
+                wx.MessageBox(message=msg,caption='Info',style=wx.OK | wx.ICON_INFORMATION)
+                return
             con.commit()
             self.editTcpnl.Hide()
             self.updateTc(self)
@@ -1346,7 +1458,13 @@ class MainWindow(wx.Frame):
             cur = con.cursor(mdb.cursors.DictCursor)
             cur.execute("select * from powercompany")
             rows=cur.fetchall()
-            cur.execute("update powercompany set pname=%s,state=%s,type=%s,totalpower=%s  where pid =%s",(self.tPcPname.GetValue(),self.tPcState.GetValue(),self.tPcType.GetValue(),str(self.tPcTotalpower.GetValue()),rows[self.idPc]['pid']))
+            try:
+                cur.execute("update powercompany set pname=%s,state=%s,type=%s,totalpower=%s  where pid =%s",(self.tPcPname.GetValue(),self.tPcState.GetValue(),self.tPcType.GetValue(),str(self.tPcTotalpower.GetValue()),rows[self.idPc]['pid']))
+            except mdb.Error,e:
+                print "Error:%s" % (e.args[1])
+                msg=e.args[1]
+                wx.MessageBox(message=msg,caption='Info',style=wx.OK | wx.ICON_INFORMATION)
+                return
             con.commit()
             self.editPcpnl.Hide()
             self.updatePc(self)
@@ -1575,7 +1693,7 @@ class MainWindow(wx.Frame):
         SubmitButton.Bind(wx.EVT_BUTTON,partial(self.addTcSubmit,t11=t11,t12=t12,t13=t13,t14=t14,t15=t15,t16=t16))
 
         backButton = wx.Button(self.formpnl, label='Cancel', pos=(630, 450),size = (100,40))
-        self.p1=self.formpnlt11t11t11t11
+        self.p1=self.formpnl
         self.p2=self.emppnl
         backButton.Bind(wx.EVT_BUTTON, self.addTcCancel)
 
@@ -1671,11 +1789,11 @@ class MainWindow(wx.Frame):
         self.SetTitle("Employee")
         self.emppnl=NewPanel(self)
 
-        LogoutButton = wx.Button(self.emppnl, label='Logout', pos=(1270, 20),size=(80,30))
+        LogoutButton = wx.Button(self.emppnl, label='Logout', pos=(1270, 20),size=(80,35))
         LogoutButton.Bind(wx.EVT_BUTTON,partial(self.EmpLogout,t1=t1,t2=t2,errormsg=errormsg))
         cur.execute("select ename from employee where eid=%s",(t1.GetValue(),))
         rows=cur.fetchall()
-        ProfileButton = wx.Button(self.emppnl, label='Hi '+rows[0][0], pos=(1120, 20))
+        ProfileButton = wx.Button(self.emppnl, label='Hi '+rows[0][0], pos=(1100, 20),size=(150,35))
         ProfileButton.Bind(wx.EVT_BUTTON,partial(self.EmpProfile,t1=t1,t2=t2))
 
         cur.execute("select * from newconnection where boardname in ( select boardname from employee where eid=%s )",(t1.GetValue(),))
@@ -1779,10 +1897,10 @@ class MainWindow(wx.Frame):
     	self.SetTitle("User")
         self.custpnl=NewPanel(self)
 
-        LogoutButton = wx.Button(self.custpnl, label='Logout', pos=(1270, 20),size=(80,30))
+        LogoutButton = wx.Button(self.custpnl, label='Logout', pos=(1270, 20),size=(80,35))
         cur.execute("select cname from consumer where cid=%s",(t1.GetValue(),))
         rows=cur.fetchall()
-        ProfileButton = wx.Button(self.custpnl, label='Hi '+rows[0][0], pos=(1120, 20))
+        ProfileButton = wx.Button(self.custpnl, label='Hi '+rows[0][0], pos=(1100, 20),size=(150,35))
     	LogoutButton.Bind(wx.EVT_BUTTON,partial(self.CustLogout,t1=t1,t2=t2,errormsg=errormsg))
 
         billonEmail=wx.Button(self.custpnl, label='Bill on Email', pos=(1230, 100),size=(120,30))
