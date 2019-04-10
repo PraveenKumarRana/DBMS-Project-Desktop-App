@@ -1127,13 +1127,23 @@ class MainWindow(wx.Frame):
         SubmitButton.Bind(wx.EVT_BUTTON,partial(self.updateConsumer,consNo=consNo))
 
     def updateConsumer(self,e,consNo):
-
+        if(consNo.GetValue()):
             self.emppnl.Hide()
             self.editConpnl=NewPanel(self)
             cur=con.cursor(mdb.cursors.DictCursor)
-            cur.execute("select * from consumer where cid = {}".format(consNo.GetValue()))
+            try:
+                cur.execute("select * from consumer where cid = {}".format(consNo.GetValue()))
+            except mdb.Error,e:
+                print (e)
+                msg='\n Error'
+                wx.MessageBox(message=msg,caption='Info',style=wx.OK | wx.ICON_INFORMATION)
+                self.editConpnl.Hide()
+                self.emppnl.Show()
             rows=cur.fetchall()
             print rows
+            if(len(rows)==0):
+                self.editConpnl.Hide()
+                self.emppnl.Show()
 
             BackButton=wx.Button(self.editConpnl, label='Back' , pos=(1000,15),size=(100,40))
             BackButton.Bind(wx.EVT_BUTTON,partial(self.back,p1=self.editConpnl,p2=self.emppnl,title='Employee'))
