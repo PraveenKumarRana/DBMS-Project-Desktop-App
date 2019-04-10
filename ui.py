@@ -91,10 +91,13 @@ class MainWindow(wx.Frame):
 
         l0 = wx.StaticText(self.homepnl, -1, "Customer Login ",pos=(600,170),size=(500,500))
         l0.SetFont(wx.Font(16,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+        #l0.SetForegroundColour("white")
         errormsg = wx.StaticText(self.homepnl, -1, " ",pos=(610,340))
         l1 = wx.StaticText(self.homepnl, -1, "Customer ID : ",pos=(510,240))
+        l1.SetForegroundColour("white")
         t1 = wx.TextCtrl(self.homepnl,style= wx.TE_PROCESS_ENTER,pos=(610,230),size=(200,40))
-        l1 = wx.StaticText(self.homepnl, -1, "Password    : ",pos=(510,290))
+        l2 = wx.StaticText(self.homepnl, -1, "Password    : ",pos=(510,290))
+        l2.SetForegroundColour("white")
         t2 = wx.TextCtrl(self.homepnl,style = wx.TE_PASSWORD|wx.TE_PROCESS_ENTER,pos=(610,280),size=(200,40))
         t1.Bind(wx.EVT_TEXT_ENTER,partial(self.Login,t1=t1,t2=t2,errormsg=errormsg))
         t2.Bind(wx.EVT_TEXT_ENTER,partial(self.Login,t1=t1,t2=t2,errormsg=errormsg))
@@ -1124,13 +1127,23 @@ class MainWindow(wx.Frame):
         SubmitButton.Bind(wx.EVT_BUTTON,partial(self.updateConsumer,consNo=consNo))
 
     def updateConsumer(self,e,consNo):
-
+        if(consNo.GetValue()):
             self.emppnl.Hide()
             self.editConpnl=NewPanel(self)
             cur=con.cursor(mdb.cursors.DictCursor)
-            cur.execute("select * from consumer where cid = {}".format(consNo.GetValue()))
+            try:
+                cur.execute("select * from consumer where cid = {}".format(consNo.GetValue()))
+            except mdb.Error,e:
+                print (e)
+                msg='\n Error'
+                wx.MessageBox(message=msg,caption='Info',style=wx.OK | wx.ICON_INFORMATION)
+                self.editConpnl.Hide()
+                self.emppnl.Show()
             rows=cur.fetchall()
             print rows
+            if(len(rows)==0):
+                self.editConpnl.Hide()
+                self.emppnl.Show()
 
             BackButton=wx.Button(self.editConpnl, label='Back' , pos=(1000,15),size=(100,40))
             BackButton.Bind(wx.EVT_BUTTON,partial(self.back,p1=self.editConpnl,p2=self.emppnl,title='Employee'))
