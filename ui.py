@@ -846,7 +846,7 @@ class MainWindow(wx.Frame):
         l8 = wx.StaticText(self.formpnl, -1, " City    :   ",              pos=(100,400))
         t17 = wx.TextCtrl(self.formpnl,style= wx.TE_PROCESS_ENTER,    pos=(350,400),size=(200,30))
         msg=wx.StaticText(self.formpnl, -1, "",pos=(620,300),size=(300,300))
-        SubmitButton = wx.Button(self.formpnl, label='Submit', pos=(350, 465),size=(100,35))
+        SubmitButton = wx.Button(self.formpnl, label='Submit and Email Acknowledgement', pos=(350, 465),size=(300,35))
         SubmitButton.Bind(wx.EVT_BUTTON,partial(self.Submit,t11=t11,t12=t12,t13=t13,t14=t14,t15=t15,t17=t17,msg=msg))
         idButton = wx.Button(self.formpnl, label='chose file', pos=(700, 400),size=(100,30))
         idButton.Bind(wx.EVT_BUTTON,self.upload)
@@ -881,7 +881,7 @@ class MainWindow(wx.Frame):
             rows=cur.fetchall()
             cur = con.cursor()
             characters = string.ascii_letters + string.digits
-            self.reference_id="".join(choice(characters) for x in range(randint(8,10)))
+            reference_id="".join(choice(characters) for x in range(randint(8,10)))
 
             cur.execute("select max(cid) from consumer")
             c=cur.fetchall()
@@ -890,14 +890,14 @@ class MainWindow(wx.Frame):
             cur.execute("select max(cid) from newconnection")
             cc=cur.fetchall()
             cidd=cc[0][0]
-
+            boardname=rows[0]['boardname']
             if cid>=cidd:
             	ciid=cid+1
             else:
             	ciid=cidd+1
 
             try:
-                cur.execute("insert into newconnection values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(t11.GetValue(),t14.GetValue(),rows[0]['boardname'],self.state,self.Subdiv,self.Div,t17.GetValue(),t15.GetValue(),t13.GetValue(),self.reference_id,ciid,))
+                cur.execute("insert into newconnection values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(t11.GetValue(),t14.GetValue(),rows[0]['boardname'],self.state,self.Subdiv,self.Div,t17.GetValue(),t15.GetValue(),t13.GetValue(),reference_id,ciid,))
                 con.commit()
             except mdb.Error,e:
                 print(e)
@@ -906,38 +906,81 @@ class MainWindow(wx.Frame):
                 errorpnl=wx.Panel(self,pos=(w/2,300),size=(300,20))
                 errorpnl.SetBackgroundColour("white")
                 """
-                msg.Hide()
+                """msg.Hide()
                 msg.Show()
                 msg.SetLabel("Invalid Mobile No. !!")
-                msg.SetForegroundColour((255,0,0))
-
+                msg.SetForegroundColour((255,0,0))"""
+                wx.MessageBox(message="Invalid Mobile no. !!",caption='Info',style=wx.OK | wx.ICON_INFORMATION)
 
 
 
                 return
 
             status="pending"
-            cur.execute("insert into ncstatus values (%s,%s,%s)",(ciid,self.reference_id,status,))
+            cur.execute("insert into ncstatus values (%s,%s,%s)",(ciid,reference_id,status,))
             con.commit()
 
             #self.p1=self.formpnl
             #self.p2=self.homepnl
-            msg='\n Succesfuly Submitted !! Your reference no. is ' + self.reference_id
-            wx.MessageBox(message=msg,caption='Info',style=wx.OK | wx.ICON_INFORMATION)
-            self.back(self,p1=self.formpnl,p2=self.homepnl,title="Power Distribution System")
+            #msg='\n Succesfuly Submitted !! Your reference no. is ' + self.reference_id
+            #wx.MessageBox(message=msg,caption='Info',style=wx.OK | wx.ICON_INFORMATION)
+            #self.back(self,p1=self.formpnl,p2=self.homepnl,title="Power Distribution System")
+            self.email(reference_id=reference_id,boardname=boardname,t11=t11,t12=t12,t13=t13,t14=t14,t15=t15,t17=t17)
 
         else:
             if(t11.GetValue() and t12.GetValue() and t13.GetValue() and len(t14.GetValue())!=10 and t15.GetValue() and self.t16 ):
-                msg.Hide()
+                """msg.Hide()
                 msg.Show()
                 msg.SetLabel("Invalid Mobile no. !!")
-                msg.SetForegroundColour((255,0,0))
+                msg.SetForegroundColour((255,0,0))"""
+                wx.MessageBox(message="Invalid Mobile no. !!",caption='Info',style=wx.OK | wx.ICON_INFORMATION)
             else:
-                msg.Hide()
+                """msg.Hide()
                 msg.Show()
                 msg.SetLabel("Any field can not be empty !!")
-                msg.SetForegroundColour((255,0,0))
+                msg.SetForegroundColour((255,0,0))"""
+                wx.MessageBox(message="Any field can not be empty !!",caption='Info',style=wx.OK | wx.ICON_INFORMATION)
 
+    def email(self,reference_id,boardname,t11,t12,t13,t14,t15,t17):
+        me = "firozmohd139@gmail.com"
+        my_password = "Firoz@098"
+        you = t15.GetValue()
+
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = "Alert"
+        msg['From'] = me
+        msg['To'] = you
+
+        html ="""
+        <html>
+            <body>
+                <h1>{bname}</h1>
+                <h2>Hi {name}</h2>
+                <h2>Reference Id : {refid}</h2>
+                <p>Father name : {fname}</p>  <br>
+                <p>Installation Address : {add}</p>  <br>
+                <p>Phone no. : {pno}</p>  <br>
+                <p>E-mail : {email}</p>  <br>
+                <p>Purpose of supply : {pos}</p>  <br>
+                <p>City : {city}</p>  <br>
+            </body>
+        </html>
+        """.format(bname=boardname,name=t11.GetValue(),refid=reference_id,fname=t12.GetValue(),add=t13.GetValue(),pno=str(t14.GetValue()),email=t15.GetValue(),pos=self.t16,city=t17.GetValue())
+        mail = MIMEText(html, 'html')
+        msg.attach(mail)
+        s = smtplib.SMTP_SSL('smtp.gmail.com',465)
+        s.login(me, my_password)
+        try :
+            s.sendmail(me, you, msg.as_string())
+            s.quit()
+            msgg='\n Succesfuly Submitted !! Your reference no. is ' + reference_id
+            wx.MessageBox(message=msgg,caption='Info',style=wx.OK | wx.ICON_INFORMATION)
+            self.back(self,p1=self.formpnl,p2=self.homepnl,title="Power Distribution System")
+        except :
+            msgg='\nInvalid Email id'
+            wx.MessageBox(message=msgg,caption='Info',style=wx.OK | wx.ICON_INFORMATION)
+
+        #self.back(self,p1=self.ackpnl,p2=self.homepnl,title="Power Distribution System")
 
 
     def Cancel(self,e):
@@ -1741,42 +1784,113 @@ class MainWindow(wx.Frame):
         rows=cur.fetchall()
         ProfileButton = wx.Button(self.custpnl, label='Hi '+rows[0][0], pos=(1120, 20))
     	LogoutButton.Bind(wx.EVT_BUTTON,partial(self.CustLogout,t1=t1,t2=t2,errormsg=errormsg))
+
+        billonEmail=wx.Button(self.custpnl, label='Bill on Email', pos=(1230, 100),size=(120,30))
+        billonEmail.Bind(wx.EVT_BUTTON,partial(self.email_cust,t1=t1))
         ProfileButton.Bind(wx.EVT_BUTTON,partial(self.UserProfile,t1=t1))
 
         no_of_meter=cur.execute("select * from consumer where cid=%s",(t1.GetValue(),))
         rows_cust=cur.fetchall()
+        print no_of_meter
+        print rows_cust
         for i in range(0,no_of_meter):
-            cur.execute("select * from billinginfo where meterno=%s",(rows_cust[i][8],))
+            cur.execute("select * from billinginfo where meterno=%s",(str(rows_cust[i][8]),))
             rows_cust_bill=cur.fetchall()
-            l0 = wx.StaticText(self.custpnl, -1, str(rows_cust[i][3]),pos=(200,20+i*400),size=(1000,1000),style=wx.ALIGN_CENTER)
+            print rows_cust_bill
+            l0 = wx.StaticText(self.custpnl, -1, str(rows_cust[i][3]),pos=(200,20+i*240),size=(1000,1000),style=wx.ALIGN_CENTER)
             l0.SetFont(wx.Font(20, wx.MODERN, wx.NORMAL, wx.BOLD))
-            l1 = wx.StaticText(self.custpnl, -1, "Customer Id :     "+str(rows_cust[i][0]),pos=(100,100+i*400),size=(1000,1000))
-            l2 = wx.StaticText(self.custpnl, -1, "Name        :     "+rows_cust[i][1],pos=(100,160+i*400),size=(1000,1000))
-            l3 = wx.StaticText(self.custpnl, -1, "Address     :     "+rows_cust[i][11],pos=(100,220+i*400),size=(1000,1000))
-            l4 = wx.StaticText(self.custpnl, -1, "Division    :     "+rows_cust[i][6],pos=(100,280+i*400),size=(1000,1000))
-            l5 = wx.StaticText(self.custpnl, -1, "SubDivision :     "+rows_cust[i][5],pos=(100,340+i*400),size=(1000,1000))
-            l6 = wx.StaticText(self.custpnl, -1, "Meter No.   :     "+str(rows_cust[i][8]),pos=(100,400+i*400),size=(1000,1000))
+            l1 = wx.StaticText(self.custpnl, -1, "Customer Id :     "+str(rows_cust[i][0]),pos=(100,100+i*240),size=(900,20))
+            l2 = wx.StaticText(self.custpnl, -1, "Name        :     "+rows_cust[i][1],     pos=(100,130+i*240),size=(900,20))
+            l3 = wx.StaticText(self.custpnl, -1, "Address     :     "+rows_cust[i][11],    pos=(100,160+i*240),size=(900,20))
+            l4 = wx.StaticText(self.custpnl, -1, "Division    :     "+rows_cust[i][6],     pos=(100,190+i*240),size=(900,20))
+            l5 = wx.StaticText(self.custpnl, -1, "SubDivision :     "+rows_cust[i][5],     pos=(400,100+i*240),size=(1000,1000))
+            l6 = wx.StaticText(self.custpnl, -1, "Meter No.   :     "+str(rows_cust[i][8]),pos=(400,130+i*240),size=(1000,1000))
 
-            l7 = wx.StaticText(self.custpnl, -1, "Bill No.         :     "+str(rows_cust_bill[0][0]),pos=(700,100+i*400),size=(1000,1000))
-            l8 = wx.StaticText(self.custpnl, -1, "IssueDate        :     "+str(rows_cust_bill[0][2]),pos=(700,160+i*400),size=(1000,1000))
-            l9 = wx.StaticText(self.custpnl, -1, "Previous Reading :     "+str(rows_cust_bill[0][3]),pos=(700,220+i*400),size=(1000,1000))
-            l10 = wx.StaticText(self.custpnl, -1, "Current Reading :     "+str(rows_cust_bill[0][5]),pos=(700,280+i*400),size=(1000,1000))
-            l11 = wx.StaticText(self.custpnl, -1, "Unit Consumed   :     "+str(rows_cust_bill[0][5]-rows_cust_bill[0][3]),pos=(700,340+i*400),size=(1000,1000))
-
-            l1.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
-            l2.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
-            l3.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
-            l4.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
-            l5.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
-            l6.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
-            l7.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
-            l8.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
-            l9.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
-            l10.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
-            l11.SetFont(wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL))
+            l7 = wx.StaticText(self.custpnl, -1, "Bill No.         :     "+str(rows_cust_bill[0][0]),pos=(400,160+i*240),size=(1000,1000))
+            l8 = wx.StaticText(self.custpnl, -1, "IssueDate        :     "+str(rows_cust_bill[0][2]),pos=(400,190+i*240),size=(1000,1000))
+            l9 = wx.StaticText(self.custpnl, -1, "Previous Reading :     "+str(rows_cust_bill[0][3]),pos=(700,100+i*240),size=(1000,1000))
+            l10 = wx.StaticText(self.custpnl, -1, "Current Reading :     "+str(rows_cust_bill[0][5]),pos=(700,130+i*240),size=(1000,1000))
+            l11 = wx.StaticText(self.custpnl, -1, "Unit Consumed   :     "+str(rows_cust_bill[0][5]-rows_cust_bill[0][3]),pos=(700,160+i*240),size=(1000,1000))
+            l1.SetBackgroundColour('dark gray')
+            l2.SetBackgroundColour('dark gray')
+            l3.SetBackgroundColour('dark gray')
+            l4.SetBackgroundColour('dark gray')
 
 
     	self.custpnl.Show()
+
+    def email_cust(self,e,t1):
+        self.custpnl.Hide()
+
+    	self.SetTitle("User")
+        self.cust_email_pnl=NewPanel(self)
+        l1=wx.StaticText(self.cust_email_pnl, -1, "Provide your email :",pos=(400,258),size=(500,500))
+        self.t344 = wx.TextCtrl(self.cust_email_pnl,style= wx.TE_PROCESS_ENTER,pos=(600,250),size=(200,40))
+
+        backButton = wx.Button(self.cust_email_pnl, label='Back', pos=(1000, 10))
+    	backButton.Bind(wx.EVT_BUTTON, partial(self.back,p1=self.cust_email_pnl,p2=self.custpnl,title="Power Distribution System"))
+
+        Emailme=wx.Button(self.cust_email_pnl, label='Email me', pos=(600, 330),size=(100,30))
+        Emailme.Bind(wx.EVT_BUTTON,partial(self.email1,t1=t1))
+
+    def email1(self,e,t1):
+        no_of_meter=cur.execute("select * from consumer where cid=%s",(t1.GetValue(),))
+        rows_cust=cur.fetchall()
+
+        cur.execute("select * from billinginfo where meterno=%s",(rows_cust[0][8],))
+        rows_cust_bill=cur.fetchall()
+
+        me = "firozmohd139@gmail.com"
+        my_password = "Firoz@098"
+        you = self.t344.GetValue()
+
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = "Alert"
+        msg['From'] = me
+        msg['To'] = you
+
+        html ="""
+        <html>
+            <body>
+                <h1>{bname}</h1>
+                <h2>Hi {name}</h2>
+                <p>Bill id : {billid}</p>
+                <p>Address : {add}</p>
+                <p>Phone no. : {pno}</p>
+                <p>E-mail : {email}</p>
+                <p>division : {div}</p>
+                <p>subdivision : {subdiv}</p>
+                <p>City : {city}</p>
+                <p>IssueDate : {isdate}</p>
+                <p>Meter no. : {mtrno}</p>
+                <p>Previous Reading : {pr}</p>
+                <p>Current Reading : {cr}</p>
+            </body>
+        </html>
+        """.format(bname=rows_cust[0][3],name=rows_cust[0][1],billid=rows_cust_bill[0][0],add=rows_cust[0][11],pno=str(rows_cust[0][2]),email=rows_cust[0][10],div=rows_cust[0][6],subdiv=rows_cust[0][5],city=rows_cust[0][4],isdate=rows_cust_bill[0][2],mtrno=str(rows_cust_bill[0][4]),pr=str(rows_cust_bill[0][3]),cr=str(rows_cust_bill[0][5]))
+        part2 = MIMEText(html, 'html')
+        msg.attach(part2)
+        s = smtplib.SMTP_SSL('smtp.gmail.com',465)
+        s.login(me, my_password)
+        try :
+            s.sendmail(me, you, msg.as_string())
+            s.quit()
+            msgg='\n Check your mail'
+            wx.MessageBox(message=msgg,caption='Info',style=wx.OK | wx.ICON_INFORMATION)
+            self.back(self,p1=self.cust_email_pnl,p2=self.custpnl,title="Power Distribution System")
+        except :
+            msgg='\nInvalid Email id'
+            wx.MessageBox(message=msgg,caption='Info',style=wx.OK | wx.ICON_INFORMATION)
+
+        #self.back(self,p1=self.ackpnl,p2=self.homepnl,title="Power Distribution System")
+
+
+
+
+
+
+
+
 
     def CustLogout(self,e,t1,t2,errormsg):
         t1.Clear()
