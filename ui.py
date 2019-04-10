@@ -1903,7 +1903,7 @@ class MainWindow(wx.Frame):
         ProfileButton = wx.Button(self.custpnl, label='Hi '+rows[0][0], pos=(1100, 20),size=(150,35))
     	LogoutButton.Bind(wx.EVT_BUTTON,partial(self.CustLogout,t1=t1,t2=t2,errormsg=errormsg))
 
-        billonEmail=wx.Button(self.custpnl, label='Bill on Email', pos=(1230, 100),size=(120,30))
+        billonEmail=wx.Button(self.custpnl, label='Bill on Email', pos=(1230, 400),size=(120,30))
         billonEmail.Bind(wx.EVT_BUTTON,partial(self.email_cust,t1=t1))
         ProfileButton.Bind(wx.EVT_BUTTON,partial(self.UserProfile,t1=t1))
 
