@@ -1088,27 +1088,56 @@ class MainWindow(wx.Frame):
             BackButton=wx.Button(self.editConpnl, label='Back' , pos=(1000,15),size=(100,40))
             BackButton.Bind(wx.EVT_BUTTON,partial(self.back,p1=self.editConpnl,p2=self.emppnl,title='Employee'))
             l1=wx.StaticText(self.editConpnl, -1,"Consumer No:",pos=(120,120),size=(300,30))
-            l2 = wx.StaticText(self.editConpnl,-1,rows[0]['cid'] ,  pos=(320,115),size=(200,30))
+            l2 = wx.StaticText(self.editConpnl,-1,str(rows[0]['cid']) ,  pos=(320,115),size=(200,30))
 
             l3=wx.StaticText(self.editConpnl, -1,"Name :",pos=(120,170),size=(300,30))
             self.conName = wx.TextCtrl(self.editConpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,165),size=(300,30))
-            self.conName.AppendText(str(rows[0]['cname']))
+            self.conName.AppendText(rows[0]['cname'])
 
             l3=wx.StaticText(self.editConpnl, -1,"Mobile No. :",pos=(120,220),size=(300,30))
-            self.conPhone = wx.TextCtrl(self.editConpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,165),size=(300,30))
+            self.conPhone = wx.TextCtrl(self.editConpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,215),size=(300,30))
             self.conPhone.AppendText(str(rows[0]['phone']))
+
             l4=wx.StaticText(self.editConpnl, -1,"Email      :",pos=(120,270),size=(300,30))
-            self.conEmail = wx.TextCtrl(self.editConpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,215),size=(300,30))
+            self.conEmail = wx.TextCtrl(self.editConpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,265),size=(300,30))
             self.conEmail.AppendText(rows[0]['email'])
+
             l5=wx.StaticText(self.editConpnl, -1,"Address    :",pos=(120,320),size=(300,30))
-            self.conAddr = wx.TextCtrl(self.editConpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,265),size=(300,30))
+            self.conAddr = wx.TextCtrl(self.editConpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,315),size=(300,30))
             self.conAddr.AppendText(rows[0]['address'])
+
             l6=wx.StaticText(self.editConpnl, -1,"password   :",pos=(120,370),size=(300,30))
-            self.conPass = wx.TextCtrl(self.editConpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,315),size=(300,30))
+            self.conPass = wx.TextCtrl(self.editConpnl,style= wx.TE_PROCESS_ENTER,    pos=(320,365),size=(300,30))
             self.conPass.AppendText(rows[0]['password'])
+
             updateButton=wx.Button(self.editConpnl, label='Update',pos=(500, 450),size=(100,40))
-            #updateButton.Bind(wx.EVT_BUTTON,self.updateConSubmit)
-            #self.errorPcUpdate=wx.StaticText(self.editConpnl,-1,"" ,pos=(700,200),size=(400,50))
+            updateButton.Bind(wx.EVT_BUTTON,self.updateConSubmit)
+            self.errorPcUpdate=wx.StaticText(self.editConpnl,-1,"" ,pos=(700,200),size=(400,50))
+
+    def updateConSubmit(self,e):
+        if(self.conName.GetValue() and self.conPhone.GetValue() and self.conEmail.GetValue() and self.conAddr.GetValue() and self.conPass.GetValue()):
+            cur = con.cursor(mdb.cursors.DictCursor)
+            cur.execute("select * from consumer")
+            rows=cur.fetchall()
+            # print(rows[0]['cid'])
+            try:
+                cur.execute("update consumer set cname=%s,phone=%s,email=%s,address=%s,password=%s  where cid =%s",(self.conName.GetValue(),str(self.conPhone.GetValue()),self.conEmail.GetValue(),self.conAddr.GetValue(),self.conPass.GetValue(),rows[0]['cid']))
+            except mdb.Error,e:
+                print "Error:%s" % (e.args[1])
+                msg=e.args[1]
+                wx.MessageBox(message=msg,caption='Info',style=wx.OK | wx.ICON_INFORMATION)
+                return
+            con.commit()
+            self.editConpnl.Hide()
+            self.emppnl.Show()
+
+        else:
+            self.errorDcUpdate.SetLabel("Please, Fill all the data")
+            self.errorDcUpdate.SetForegroundColour((255,0,0))
+            # self.designation1(self)
+            # self.conSubmitpnl=NewPanel(self)
+
+
 
 
     def designation3(self,e,t1,t2,errormsg):
