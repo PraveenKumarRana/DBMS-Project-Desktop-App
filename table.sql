@@ -43,8 +43,10 @@ insert into consumer values
 	(8003,	'Peterson',	487964,	'delhi vidyut board',							'Delhi',			'subdiv3',	'divis3',	'delhi NCR',	103,	'password',	'Peterson@gmail.com',	'ps road'		),
 	(8004,	'David',	479368,	'gujarat urja vikas nigam',						'Gujarat',			'subdiv4',	'divis4',	'surat',		104,	'password',	'David@gmail.com',		'dholakpur'		),
 	(8005,	'Michael',	169893,	'Haryana power generation corporation',			'Haryana',			'subdiv5',	'divis5',	'chandpur',		105,	'password',	'Michael@gmail.com',	'pk colony'		),
-	(8006,	'Angelina',	494631,	'uttar pradesh rajya vidyut utpadan nigam',		'uttar pradesh',	'subdiv6',	'divis6',	'kanpur',		106,	'password',	'Angelina@gmail.com',	'GT road'		),
+	(8006,	'Angelina',	494631,	'Uttar Pradesh rajya vidyut utpadan nigam',		'uttar pradesh',	'subdiv6',	'divis6',	'kanpur',		106,	'password',	'Angelina@gmail.com',	'GT road'		),
 	(8007,	'selena',	494646,	'jharkhand state electricity board',			'jharkhand',		'subdiv7',	'divis7',	'ranchi',		107,	'password',	'selena@gmail.com',		'pnc colony'	),
+	(8006,	'Angelina',	494631,	'Uttar Pradesh rajya vidyut utpadan nigam',		'uttar pradesh',	'subdiv6',	'divis6',	'kanpur',		111,	'password',	'Angelina@gmail.com',	'GT road'		),
+
 	(8008,	'ellie',	216987,	'tamil nadu electricity board',					'tamil nadu',		'subdiv8',	'divis8',	'kandigai',		108,	'password',	'ellie@gmail.com',		'ghoda ghat'	),
 	(8009,	'justin',	997463,	'Bihar state power holding company limited',	'Bihar',			'subdiv9',	'divis9',	'gaya',			109,	'password',	'justin@gmail.com',		'manpur'		),
 	(8010,	'parker',	967435,	'maharastra state electricity board',			'maharastra',		'subdiv10',	'divis10',	'andheri',		110,	'password',	'parker@gmail.com',		'raj ghat'		);
@@ -124,4 +126,6 @@ insert into billinginfo values
 	(10002,	8002,	'2018-06-15',	200,	102,	250,	16,	'type',	6),
 	(10003,	8003,	'2018-10-30',	240,	103,	260,	18,	'type',	5),
 	(10004,	8004,	'2017-11-01',	350,	104,	370,	26,	'type',	9),
-(10005, 8005, '2019-01-06', 120, 105, 200, 15, 'type', 4);
+	(10006,	8006,	'2017-11-01',	350,	106,	370,	26,	'type',	9),
+	(10011,	8006,	'2017-11-01',	350,	111,	370,	26,	'type',	9),
+  (10005, 8005, '2019-01-06', 120, 105, 200, 15, 'type', 4);
